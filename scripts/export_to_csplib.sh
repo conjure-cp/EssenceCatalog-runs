@@ -6,6 +6,8 @@ shopt -s nullglob
 
 ROOT_DIR=$(pwd)
 
+rm ${ROOT_DIR}/csplib/Problems/*/models/*.essence
+
 pushd problems > /dev/null                              # go through all csplib problems in the catalog
 for prob in csplib-*;
 do
