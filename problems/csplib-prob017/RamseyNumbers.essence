@@ -27,28 +27,26 @@ letting Colour be new type enum {red, blue}
 
 letting Vertex be domain int(1..num_vertices)
 
-find graph : relation (size num_edges) of (Vertex * Vertex * Colour)
+find graph : function (size num_edges) (Vertex, Vertex) --> Colour
 
 
 $ the graph is complete
 such that
+    forAll i,j : Vertex .
+    i < j ->
+        (i,j) in defined(graph) /\
+        graph((i,j)) = graph((j,i)),
     forAll i : Vertex .
-        |graph(i,_,_)| = num_vertices - 1 /\
-        |graph(_,i,_)| = num_vertices - 1 /\
-        |graph(i,i,_)| = 0,
-    forAll i, j : Vertex , j > i . 
-        |graph(i,j,_)| = 1 /\ 
-        |graph(j,i,_)| = 1 /\
-        graph(i,j,_) = graph(j,i,_)
+        !((i,i) in defined(graph))
 
 
 $ there isn't a red-subgraph of size k
 such that
     forAll subgraph_vertices : set (size k) of Vertex .
-        !(forAll {i,j} subsetEq subgraph_vertices . graph(i,j,red))
+        !(forAll {i,j} subsetEq subgraph_vertices . graph((i,j)) = red)
 
 
 $ there isn't a blue-subgraph of size l
 such that
     forAll subgraph_vertices : set (size l) of Vertex .
-        !(forAll {i,j} subsetEq subgraph_vertices . graph(i,j,blue))
+        !(forAll {i,j} subsetEq subgraph_vertices . graph((i,j)) = blue)
