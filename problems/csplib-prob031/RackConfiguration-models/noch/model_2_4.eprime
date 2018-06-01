@@ -33,22 +33,23 @@ minimising
 such that
     and([model_Function1DPartial_Flags[q17] -> model_Function1DPartial_Flags[q17] | q17 : int(1..n_racks)]),
     and([or([model_Function1DPartial_Flags[q21] /\
-             or([plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Flags[q21, q19] /\
-                 plugged_Function1DPartialR4_Flags[q21]
-                 /\ plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Values[q21, q19] = c
-                     | q19 : int(1..let1)])
+             (or([plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Flags[q21, q19] /\
+                  plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Values[q21, q19] = c
+                      | q19 : int(1..let1)])
+              /\ plugged_Function1DPartialR4_Flags[q21])
                  | q21 : int(1..n_racks)])
              | c : int(1..n_cards)]),
     and([model_Function1DPartial_Flags[q27] /\ model_Function1DPartial_Flags[q29] ->
-         sum([toInt(and([plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Flags[q27, q23],
+         and([sum([toInt(plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Flags[q27, q23] /\
                          or([plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Flags[q29, q25] /\
                              plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Values[q29, q25] =
                              plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Values[q27, q23]
-                                 | q25 : int(1..let1)]),
-                         plugged_Function1DPartialR4_Flags[q27], plugged_Function1DPartialR4_Flags[q29];
-                             int(1..4)]))
-                  | q23 : int(1..let1)])
-         = 0 | q27 : int(1..n_racks), q29 : int(1..n_racks), q29 > q27]),
+                                 | q25 : int(1..let1)]))
+                       | q23 : int(1..let1)])
+              = 0,
+              plugged_Function1DPartialR4_Flags[q27], plugged_Function1DPartialR4_Flags[q29];
+                  int(1..3)])
+             | q27 : int(1..n_racks), q29 : int(1..n_racks), q29 > q27]),
     and([model_Function1DPartial_Flags[q32] ->
          sum([toInt(plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Flags[q32, q30] /\
                     plugged_Function1DPartialR4_Flags[q32])
@@ -62,11 +63,11 @@ such that
          /\ model_Function1DPartial_Flags[q32]
              | q32 : int(1..n_racks)]),
     and([model_Function1DPartial_Flags[q36] ->
-         sum([toInt(plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Flags[q36, q34] /\
-                    plugged_Function1DPartialR4_Flags[q36])
-                  | q34 : int(1..let1)])
-         <= max_connects_Function1D[model_Function1DPartial_Values[q36]]
-         /\ model_Function1DPartial_Flags[q36]
+         and([sum([toInt(plugged_Function1DPartialR4_Values_ExplicitVarSizeWithFlags_Flags[q36, q34])
+                       | q34 : int(1..let1)])
+              <= max_connects_Function1D[model_Function1DPartial_Values[q36]],
+              plugged_Function1DPartialR4_Flags[q36], model_Function1DPartial_Flags[q36];
+                  int(1..3)])
              | q36 : int(1..n_racks)]),
     and([model_Function1DPartial_Flags[q2] = false -> model_Function1DPartial_Values[q2] = 1 | q2 : int(1..n_racks)]),
     and([plugged_Function1DPartialR4_Flags[q5] = false ->
@@ -175,7 +176,8 @@ $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
 $  "nameGenState": [["fin", 10], ["let", 2], ["q", 37]],

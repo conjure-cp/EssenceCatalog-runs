@@ -1,14 +1,15 @@
 language ESSENCE' 1.0
 
-given nGrid: int(1..)
+given nRows: int(1..)
+given nCols: int(1..)
 given maxRules: int(1..)
 given fin1: int
-given rowRules: matrix indexed by [int(1..nGrid), int(1..maxRules)] of int(0..fin1)
+given rowRules: matrix indexed by [int(1..nRows), int(1..maxRules)] of int(0..fin1)
 given fin2: int
-given colRules: matrix indexed by [int(1..nGrid), int(1..maxRules)] of int(0..fin2)
-find grid: matrix indexed by [int(1..nGrid), int(1..nGrid)] of int(0..1)
+given colRules: matrix indexed by [int(1..nCols), int(1..maxRules)] of int(0..fin2)
+find grid: matrix indexed by [int(1..nRows), int(1..nCols)] of int(0..1)
 such that
-    and([sum([grid[i, column] | i : int(1..nGrid)]) = sum([colRules[column, j] | j : int(1..maxRules)]) /\
+    and([sum([grid[i, column] | i : int(1..nCols)]) = sum([colRules[column, j] | j : int(1..maxRules)]) /\
          or([and([colRules[column, ruleIndex] = 0 \/
                   (ruleIndex = 1 \/ startingIndexes[ruleIndex] > startingIndexes[ruleIndex - 1]) /\
                   sum([grid[i, column]
@@ -18,12 +19,12 @@ such that
                   = colRules[column, ruleIndex]
                   /\ (startingIndexes[ruleIndex] = 1 \/ grid[startingIndexes[ruleIndex] - 1, column] = 0)
                   /\
-                  (startingIndexes[ruleIndex] + colRules[column, ruleIndex] - 1 = nGrid \/
+                  (startingIndexes[ruleIndex] + colRules[column, ruleIndex] - 1 = nCols \/
                    grid[startingIndexes[ruleIndex] + colRules[column, ruleIndex], column] = 0)
                       | ruleIndex : int(1..maxRules)])
-                 | startingIndexes : matrix indexed by [int(1..maxRules)] of int(1..nGrid)])
-             | column : int(1..nGrid)]),
-    and([sum([grid[row, i] | i : int(1..nGrid)]) = sum([rowRules[row, j] | j : int(1..maxRules)]) /\
+                 | startingIndexes : matrix indexed by [int(1..maxRules)] of int(1..nCols)])
+             | column : int(1..nCols)]),
+    and([sum([grid[row, i] | i : int(1..nRows)]) = sum([rowRules[row, j] | j : int(1..maxRules)]) /\
          or([and([rowRules[row, ruleIndex] = 0 \/
                   (ruleIndex = 1 \/ startingIndexes[ruleIndex] > startingIndexes[ruleIndex - 1]) /\
                   sum([grid[row, i]
@@ -32,21 +33,27 @@ such that
                   = rowRules[row, ruleIndex]
                   /\ (startingIndexes[ruleIndex] = 1 \/ grid[row, startingIndexes[ruleIndex] - 1] = 0)
                   /\
-                  (startingIndexes[ruleIndex] + rowRules[row, ruleIndex] - 1 = nGrid \/
+                  (startingIndexes[ruleIndex] + rowRules[row, ruleIndex] - 1 = nRows \/
                    grid[row, startingIndexes[ruleIndex] + rowRules[row, ruleIndex]] = 0)
                       | ruleIndex : int(1..maxRules)])
-                 | startingIndexes : matrix indexed by [int(1..maxRules)] of int(0..nGrid)])
-             | row : int(1..nGrid)])
+                 | startingIndexes : matrix indexed by [int(1..maxRules)] of int(0..nRows)])
+             | row : int(1..nRows)])
 
 $ Conjure's
 $ {"finds": [{"Name": "grid"}],
-$  "givens": [{"Name": "nGrid"}, {"Name": "maxRules"}, {"Name": "rowRules"}, {"Name": "colRules"}],
+$  "givens": [{"Name": "nRows"}, {"Name": "nCols"}, {"Name": "maxRules"}, {"Name": "rowRules"}, {"Name": "colRules"}],
 $  "enumGivens": [],
 $  "enumLettings": [],
-$  "lettings": [[{"Name": "dGrid"},
+$  "lettings": [[{"Name": "dRows"},
 $                {"Domain": {"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                            {"Reference": [{"Name": "nGrid"},
-$                                                                           {"DeclNoRepr": ["Given", {"Name": "nGrid"},
+$                                                            {"Reference": [{"Name": "nRows"},
+$                                                                           {"DeclNoRepr": ["Given", {"Name": "nRows"},
+$                                                                                           {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
+$                                                                                           {"NoRegion": []}]}]}]}]}}],
+$               [{"Name": "dCols"},
+$                {"Domain": {"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
+$                                                            {"Reference": [{"Name": "nCols"},
+$                                                                           {"DeclNoRepr": ["Given", {"Name": "nCols"},
 $                                                                                           {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
 $                                                                                           {"NoRegion": []}]}]}]}]}}],
 $               [{"Name": "dRules"},
@@ -60,33 +67,34 @@ $  "strategyQ": {"PickFirst": []},
 $  "strategyA": {"PickAll": []},
 $  "trailCompact": [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1]],
+$                   [1, 1, 1], [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
 $  "nameGenState": [["fin", 3], ["q", 5]],
 $  "nbExtraGivens": 2,
-$  "representations": [[{"Name": "nGrid"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
+$  "representations": [[{"Name": "nRows"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
 $                      [{"Name": "maxRules"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
 $                      [{"MachineName": ["fin", 1, []]}, {"DomainInt": []}],
+$                      [{"Name": "nCols"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
 $                      [{"MachineName": ["fin", 2, []]}, {"DomainInt": []}],
 $                      [{"Name": "grid"},
 $                       {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                          {"Reference": [{"Name": "nGrid"},
+$                                                                          {"Reference": [{"Name": "nRows"},
 $                                                                                         {"DeclHasRepr": ["Given",
-$                                                                                                          {"Name": "nGrid"},
+$                                                                                                          {"Name": "nRows"},
 $                                                                                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]},
 $                                         {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                                            {"Reference": [{"Name": "nGrid"},
+$                                                                                            {"Reference": [{"Name": "nCols"},
 $                                                                                                           {"DeclHasRepr": ["Given",
-$                                                                                                                            {"Name": "nGrid"},
+$                                                                                                                            {"Name": "nCols"},
 $                                                                                                                            {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]},
 $                                                           {"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 0}},
 $                                                                                            {"Constant": {"ConstantInt": 1}}]}]}]}]}],
 $                      [{"Name": "colRules"},
 $                       {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                          {"Reference": [{"Name": "nGrid"},
+$                                                                          {"Reference": [{"Name": "nCols"},
 $                                                                                         {"DeclHasRepr": ["Given",
-$                                                                                                          {"Name": "nGrid"},
+$                                                                                                          {"Name": "nCols"},
 $                                                                                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]},
 $                                         {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
 $                                                                                            {"Reference": [{"Name": "maxRules"},
@@ -104,9 +112,9 @@ $                                                                               
 $                                                                                                                            {"DomainInt": []}]}]}]}]}]}]}],
 $                      [{"Name": "rowRules"},
 $                       {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                          {"Reference": [{"Name": "nGrid"},
+$                                                                          {"Reference": [{"Name": "nRows"},
 $                                                                                         {"DeclHasRepr": ["Given",
-$                                                                                                          {"Name": "nGrid"},
+$                                                                                                          {"Name": "nRows"},
 $                                                                                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]},
 $                                         {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
 $                                                                                            {"Reference": [{"Name": "maxRules"},
@@ -141,7 +149,10 @@ $                                                           "subForest": []}]}]}
 $                          [{"Name": "maxRules"},
 $                           [{"rootLabel": null,
 $                             "subForest": []}]],
-$                          [{"Name": "nGrid"},
+$                          [{"Name": "nCols"},
+$                           [{"rootLabel": null,
+$                             "subForest": []}]],
+$                          [{"Name": "nRows"},
 $                           [{"rootLabel": null,
 $                             "subForest": []}]],
 $                          [{"Name": "rowRules"},
@@ -149,27 +160,28 @@ $                           [{"rootLabel": null,
 $                             "subForest": [{"rootLabel": null,
 $                                            "subForest": [{"rootLabel": null,
 $                                                           "subForest": []}]}]}]]],
-$  "originalDomains": [[{"Name": "nGrid"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
+$  "originalDomains": [[{"Name": "nRows"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
+$                      [{"Name": "nCols"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
 $                      [{"Name": "maxRules"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
 $                      [{"Name": "rowRules"},
 $                       {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                          {"Reference": [{"Name": "nGrid"}, null]}]}]},
+$                                                                          {"Reference": [{"Name": "nRows"}, null]}]}]},
 $                                         {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
 $                                                                                            {"Reference": [{"Name": "maxRules"},
 $                                                                                                           null]}]}]},
 $                                                           {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 0}}}]}]}]}],
 $                      [{"Name": "colRules"},
 $                       {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                          {"Reference": [{"Name": "nGrid"}, null]}]}]},
+$                                                                          {"Reference": [{"Name": "nCols"}, null]}]}]},
 $                                         {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
 $                                                                                            {"Reference": [{"Name": "maxRules"},
 $                                                                                                           null]}]}]},
 $                                                           {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 0}}}]}]}]}],
 $                      [{"Name": "grid"},
 $                       {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                          {"Reference": [{"Name": "nGrid"}, null]}]}]},
+$                                                                          {"Reference": [{"Name": "nRows"}, null]}]}]},
 $                                         {"DomainMatrix": [{"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                                            {"Reference": [{"Name": "nGrid"},
+$                                                                                            {"Reference": [{"Name": "nCols"},
 $                                                                                                           null]}]}]},
 $                                                           {"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 0}},
 $                                                                                            {"Constant": {"ConstantInt": 1}}]}]}]}]}]],

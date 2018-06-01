@@ -29,32 +29,31 @@ minimising
              | q12 : int(1..n_racks)])
 such that
     and([model_Function1DPartial_Flags[q12] -> model_Function1DPartial_Flags[q12] | q12 : int(1..n_racks)]),
-    and([or([model_Function1DPartial_Flags[q15] /\
-             or([plugged_Function1DPartialR2_Values_Occurrence[q15, q13] /\ plugged_Function1DPartialR2_Flags[q15] /\
-                 q13 = c
-                     | q13 : int(1..n_cards)])
-                 | q15 : int(1..n_racks)])
+    and([or([model_Function1DPartial_Flags[q14] /\
+             (plugged_Function1DPartialR2_Values_Occurrence[q14, c] /\ plugged_Function1DPartialR2_Flags[q14])
+                 | q14 : int(1..n_racks)])
              | c : int(1..n_cards)]),
-    and([model_Function1DPartial_Flags[q18] /\ model_Function1DPartial_Flags[q20] ->
-         sum([toInt(and([plugged_Function1DPartialR2_Values_Occurrence[q18, q16],
-                         plugged_Function1DPartialR2_Values_Occurrence[q20, q16],
-                         plugged_Function1DPartialR2_Flags[q18], plugged_Function1DPartialR2_Flags[q20];
-                             int(1..4)]))
-                  | q16 : int(1..n_cards)])
-         = 0 | q18 : int(1..n_racks), q20 : int(1..n_racks), q20 > q18]),
-    and([model_Function1DPartial_Flags[q22] ->
-         sum([toInt(plugged_Function1DPartialR2_Values_Occurrence[q22, c] /\ plugged_Function1DPartialR2_Flags[q22]) *
+    and([model_Function1DPartial_Flags[q17] /\ model_Function1DPartial_Flags[q19] ->
+         and([sum([toInt(plugged_Function1DPartialR2_Values_Occurrence[q17, q15] /\
+                         plugged_Function1DPartialR2_Values_Occurrence[q19, q15])
+                       | q15 : int(1..n_cards)])
+              = 0,
+              plugged_Function1DPartialR2_Flags[q17], plugged_Function1DPartialR2_Flags[q19];
+                  int(1..3)])
+             | q17 : int(1..n_racks), q19 : int(1..n_racks), q19 > q17]),
+    and([model_Function1DPartial_Flags[q21] ->
+         sum([toInt(plugged_Function1DPartialR2_Values_Occurrence[q21, c] /\ plugged_Function1DPartialR2_Flags[q21]) *
               catchUndef(req_power_Function1D[ctype_Function1D[c]], 0)
                   | c : int(1..n_cards)])
-         <= max_power_Function1D[model_Function1DPartial_Values[q22]]
-         /\ model_Function1DPartial_Flags[q22]
-             | q22 : int(1..n_racks)]),
-    and([model_Function1DPartial_Flags[q25] ->
-         sum([toInt(plugged_Function1DPartialR2_Values_Occurrence[q25, q23] /\ plugged_Function1DPartialR2_Flags[q25])
-                  | q23 : int(1..n_cards)])
-         <= max_connects_Function1D[model_Function1DPartial_Values[q25]]
-         /\ model_Function1DPartial_Flags[q25]
-             | q25 : int(1..n_racks)]),
+         <= max_power_Function1D[model_Function1DPartial_Values[q21]]
+         /\ model_Function1DPartial_Flags[q21]
+             | q21 : int(1..n_racks)]),
+    and([model_Function1DPartial_Flags[q24] ->
+         and([sum([toInt(plugged_Function1DPartialR2_Values_Occurrence[q24, q22]) | q22 : int(1..n_cards)]) <=
+              max_connects_Function1D[model_Function1DPartial_Values[q24]],
+              plugged_Function1DPartialR2_Flags[q24], model_Function1DPartial_Flags[q24];
+                  int(1..3)])
+             | q24 : int(1..n_racks)]),
     and([model_Function1DPartial_Flags[q2] = false -> model_Function1DPartial_Values[q2] = 1 | q2 : int(1..n_racks)]),
     and([plugged_Function1DPartialR2_Flags[q5] = false ->
          and([plugged_Function1DPartialR2_Values_Occurrence[q5, q9] = false | q9 : int(1..n_cards)])
@@ -142,10 +141,11 @@ $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$                   [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
-$  "nameGenState": [["fin", 10], ["let", 2], ["q", 26]],
+$  "nameGenState": [["fin", 10], ["let", 2], ["q", 25]],
 $  "nbExtraGivens": 9,
 $  "representations": [[{"Name": "max_connects"},
 $                       {"DomainFunction": [{"Function_1D": []},

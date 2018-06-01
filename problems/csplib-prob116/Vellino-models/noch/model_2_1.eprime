@@ -10,123 +10,122 @@ given capacity_Function1D: matrix indexed by [int(1..3)] of int(0..fin4)
 letting let1 be sum([quantity_Function1D[m] | m : int(1..5)])
 find colour_Function1DPartial_Flags: matrix indexed by [int(1..let1)] of bool
 find colour_Function1DPartial_Values: matrix indexed by [int(1..let1)] of int(1..3)
-letting let2 be max([capacity_Function1D[q21] | q21 : int(1..3)])
+letting let2 be max([capacity_Function1D[q20] | q20 : int(1..3)])
 find contents_Function1DPartialR7_Flags: matrix indexed by [int(1..let1)] of bool
 find contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags:
         matrix indexed by [int(1..let1), int(1..let2)] of int(0..maxMaterial)
 find contents_Function1DPartialR7_Values_ExplicitWithFlags_Values:
         matrix indexed by [int(1..let1), int(1..let2)] of int(1..5)
-minimising sum([toInt(colour_Function1DPartial_Flags[q72]) | q72 : int(1..let1)])
+minimising sum([toInt(colour_Function1DPartial_Flags[q69]) | q69 : int(1..let1)])
 such that
     and([colour_Function1DPartial_Flags[b] <-> contents_Function1DPartialR7_Flags[b] | b : int(1..let1)]),
-    and([sum([toInt(contents_Function1DPartialR7_Flags[q18]) *
-              catchUndef(sum([toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q18, q16] > 0 /\
-                                    contents_Function1DPartialR7_Flags[q18])
-                              *
-                              catchUndef(toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q18, q16] =
-                                               q1),
-                                         0)
-                                  | q16 : int(1..let2)]),
+    and([sum([toInt(contents_Function1DPartialR7_Flags[q17]) *
+              catchUndef(sum([toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q17, q15] = q1) *
+                              catchUndef(contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q17, q15], 0)
+                                  | q15 : int(1..let2)]),
                          0)
-                  | q18 : int(1..let1)])
+                  | q17 : int(1..let1)])
          = quantity_Function1D[q1]
+         /\
+         and([contents_Function1DPartialR7_Flags[q17] -> contents_Function1DPartialR7_Flags[q17] | q17 : int(1..let1)])
              | q1 : int(1..5)]),
-    and([colour_Function1DPartial_Flags[q25] ->
-         sum([toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q25, q23] > 0 /\
-                    contents_Function1DPartialR7_Flags[q25])
-                  | q23 : int(1..let2)])
-         <= capacity_Function1D[colour_Function1DPartial_Values[q25]]
-         /\ colour_Function1DPartial_Flags[q25]
-             | q25 : int(1..let1)]),
-    and([colour_Function1DPartial_Flags[q31] ->
-         (colour_Function1DPartial_Values[q31] = 1 /\ colour_Function1DPartial_Flags[q31] ->
-          !or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q31, q27] > 0 /\
-               contents_Function1DPartialR7_Flags[q31]
-               /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q31, q27] = 2
-                   | q27 : int(1..let2)])
+    and([colour_Function1DPartial_Flags[q24] ->
+         and([sum([toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q24, q22] > 0) *
+                   catchUndef(contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q24, q22], 0)
+                       | q22 : int(1..let2)])
+              <= capacity_Function1D[colour_Function1DPartial_Values[q24]],
+              contents_Function1DPartialR7_Flags[q24], colour_Function1DPartial_Flags[q24];
+                  int(1..3)])
+             | q24 : int(1..let1)]),
+    and([colour_Function1DPartial_Flags[q30] ->
+         (colour_Function1DPartial_Values[q30] = 1 /\ colour_Function1DPartial_Flags[q30] ->
+          !(or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q30, q26] > 0 /\
+                contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q30, q26] = 2
+                    | q26 : int(1..let2)])
+            /\ contents_Function1DPartialR7_Flags[q30])
           /\
-          !or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q31, q29] > 0 /\
-               contents_Function1DPartialR7_Flags[q31]
-               /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q31, q29] = 3
-                   | q29 : int(1..let2)]))
-             | q31 : int(1..let1)]),
-    and([colour_Function1DPartial_Flags[q37] ->
-         (colour_Function1DPartial_Values[q37] = 3 /\ colour_Function1DPartial_Flags[q37] ->
-          !or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q37, q33] > 0 /\
-               contents_Function1DPartialR7_Flags[q37]
-               /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q37, q33] = 4
-                   | q33 : int(1..let2)])
+          !(or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q30, q28] > 0 /\
+                contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q30, q28] = 3
+                    | q28 : int(1..let2)])
+            /\ contents_Function1DPartialR7_Flags[q30]))
+             | q30 : int(1..let1)]),
+    and([colour_Function1DPartial_Flags[q36] ->
+         (colour_Function1DPartial_Values[q36] = 3 /\ colour_Function1DPartial_Flags[q36] ->
+          !(or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q36, q32] > 0 /\
+                contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q36, q32] = 4
+                    | q32 : int(1..let2)])
+            /\ contents_Function1DPartialR7_Flags[q36])
           /\
-          !or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q37, q35] > 0 /\
-               contents_Function1DPartialR7_Flags[q37]
-               /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q37, q35] = 2
-                   | q35 : int(1..let2)]))
-             | q37 : int(1..let1)]),
-    and([colour_Function1DPartial_Flags[q43] ->
-         (colour_Function1DPartial_Values[q43] = 2 /\ colour_Function1DPartial_Flags[q43] ->
-          !or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q43, q39] > 0 /\
-               contents_Function1DPartialR7_Flags[q43]
-               /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q43, q39] = 3
-                   | q39 : int(1..let2)])
+          !(or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q36, q34] > 0 /\
+                contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q36, q34] = 2
+                    | q34 : int(1..let2)])
+            /\ contents_Function1DPartialR7_Flags[q36]))
+             | q36 : int(1..let1)]),
+    and([colour_Function1DPartial_Flags[q42] ->
+         (colour_Function1DPartial_Values[q42] = 2 /\ colour_Function1DPartial_Flags[q42] ->
+          !(or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q42, q38] > 0 /\
+                contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q42, q38] = 3
+                    | q38 : int(1..let2)])
+            /\ contents_Function1DPartialR7_Flags[q42])
           /\
-          !or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q43, q41] > 0 /\
-               contents_Function1DPartialR7_Flags[q43]
-               /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q43, q41] = 1
-                   | q41 : int(1..let2)]))
-             | q43 : int(1..let1)]),
-    and([colour_Function1DPartial_Flags[q47] ->
-         (colour_Function1DPartial_Values[q47] = 1 /\ colour_Function1DPartial_Flags[q47] ->
-          sum([toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q47, q45] > 0 /\
-                     contents_Function1DPartialR7_Flags[q47])
-               * catchUndef(toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q47, q45] = 4), 0)
-                   | q45 : int(1..let2)])
-          <= 1)
-             | q47 : int(1..let1)]),
-    and([colour_Function1DPartial_Flags[q51] ->
-         (colour_Function1DPartial_Values[q51] = 2 /\ colour_Function1DPartial_Flags[q51] ->
-          sum([toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q51, q49] > 0 /\
-                     contents_Function1DPartialR7_Flags[q51])
-               * catchUndef(toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q51, q49] = 4), 0)
-                   | q49 : int(1..let2)])
-          <= 2)
-             | q51 : int(1..let1)]),
-    and([colour_Function1DPartial_Flags[q57] ->
-         (or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q57, q55] > 0 /\
-              contents_Function1DPartialR7_Flags[q57]
-              /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q57, q55] = 4
-                  | q55 : int(1..let2)])
+          !(or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q42, q40] > 0 /\
+                contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q42, q40] = 1
+                    | q40 : int(1..let2)])
+            /\ contents_Function1DPartialR7_Flags[q42]))
+             | q42 : int(1..let1)]),
+    and([colour_Function1DPartial_Flags[q45] ->
+         (colour_Function1DPartial_Values[q45] = 1 /\ colour_Function1DPartial_Flags[q45] ->
+          sum([toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q45, q43] = 4) *
+               catchUndef(contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q45, q43], 0)
+                   | q43 : int(1..let2)])
+          <= 1
+          /\ contents_Function1DPartialR7_Flags[q45])
+             | q45 : int(1..let1)]),
+    and([colour_Function1DPartial_Flags[q48] ->
+         (colour_Function1DPartial_Values[q48] = 2 /\ colour_Function1DPartial_Flags[q48] ->
+          sum([toInt(contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q48, q46] = 4) *
+               catchUndef(contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q48, q46], 0)
+                   | q46 : int(1..let2)])
+          <= 2
+          /\ contents_Function1DPartialR7_Flags[q48])
+             | q48 : int(1..let1)]),
+    and([colour_Function1DPartial_Flags[q54] ->
+         (or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q54, q52] > 0 /\
+              contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q54, q52] = 4
+                  | q52 : int(1..let2)])
+          /\ contents_Function1DPartialR7_Flags[q54]
           ->
-          or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q57, q53] > 0 /\
-              contents_Function1DPartialR7_Flags[q57]
-              /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q57, q53] = 2
-                  | q53 : int(1..let2)]))
-             | q57 : int(1..let1)]),
-    and([colour_Function1DPartial_Flags[q63] ->
-         (or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q63, q61] > 0 /\
-              contents_Function1DPartialR7_Flags[q63]
-              /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q63, q61] = 1
-                  | q61 : int(1..let2)])
+          or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q54, q50] > 0 /\
+              contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q54, q50] = 2
+                  | q50 : int(1..let2)])
+          /\ contents_Function1DPartialR7_Flags[q54])
+             | q54 : int(1..let1)]),
+    and([colour_Function1DPartial_Flags[q60] ->
+         (or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q60, q58] > 0 /\
+              contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q60, q58] = 1
+                  | q58 : int(1..let2)])
+          /\ contents_Function1DPartialR7_Flags[q60]
           ->
-          !or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q63, q59] > 0 /\
-               contents_Function1DPartialR7_Flags[q63]
-               /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q63, q59] = 5
-                   | q59 : int(1..let2)]))
-             | q63 : int(1..let1)]),
-    and([colour_Function1DPartial_Flags[q69] ->
-         (or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q69, q67] > 0 /\
-              contents_Function1DPartialR7_Flags[q69]
-              /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q69, q67] = 5
-                  | q67 : int(1..let2)])
+          !(or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q60, q56] > 0 /\
+                contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q60, q56] = 5
+                    | q56 : int(1..let2)])
+            /\ contents_Function1DPartialR7_Flags[q60]))
+             | q60 : int(1..let1)]),
+    and([colour_Function1DPartial_Flags[q66] ->
+         (or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q66, q64] > 0 /\
+              contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q66, q64] = 5
+                  | q64 : int(1..let2)])
+          /\ contents_Function1DPartialR7_Flags[q66]
           ->
-          !or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q69, q65] > 0 /\
-               contents_Function1DPartialR7_Flags[q69]
-               /\ contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q69, q65] = 2
-                   | q65 : int(1..let2)]))
-             | q69 : int(1..let1)]),
+          !(or([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q66, q62] > 0 /\
+                contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q66, q62] = 2
+                    | q62 : int(1..let2)])
+            /\ contents_Function1DPartialR7_Flags[q66]))
+             | q66 : int(1..let1)]),
     and([colour_Function1DPartial_Flags[q3] = false -> colour_Function1DPartial_Values[q3] = 1 | q3 : int(1..let1)]),
     and([contents_Function1DPartialR7_Flags[q6] = false ->
-         and([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q6, q19] = 0 | q19 : int(1..let2)]) /\
-         and([contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q6, q20] = 1 | q20 : int(1..let2)])
+         and([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q6, q18] = 0 | q18 : int(1..let2)]) /\
+         and([contents_Function1DPartialR7_Values_ExplicitWithFlags_Values[q6, q19] = 1 | q19 : int(1..let2)])
              | q6 : int(1..let1)]),
     and([contents_Function1DPartialR7_Flags[q8] ->
          and([contents_Function1DPartialR7_Values_ExplicitWithFlags_Flags[q8, q9 + 1] > 0 ->
@@ -302,10 +301,14 @@ $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
-$  "nameGenState": [["fin", 5], ["let", 3], ["q", 73]],
+$  "nameGenState": [["fin", 5], ["let", 3], ["q", 70]],
 $  "nbExtraGivens": 4,
 $  "representations": [[{"Name": "capacity"},
 $                       {"DomainFunction": [{"Function_1D": []},
