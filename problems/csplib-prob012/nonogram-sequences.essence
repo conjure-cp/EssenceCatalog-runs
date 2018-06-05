@@ -1,0 +1,49 @@
+language ESSENCE 1.3.0
+$ black-and-white nonogram, see http://www.csplib.org/Problems/prob012/
+$ specification by Andras Salamon, inspired by that of Andrew Martin
+$ Licenced under CC-BY-4.0 : http://creativecommons.org/licenses/by/4.0/
+
+$ the grid we seek to reconstruct is m rows by n columns
+given m,n : int(1..)
+letting vgrid be domain int(1..m)
+letting hgrid be domain int(1..n)
+
+$ constraints for each row/column: each is a list of integers indicating
+$ contiguous blocks of 1s in row/column, separated by at least one 0
+given r : int(1..) $ a priori length of longest sequence
+given rowRules : matrix indexed by [vgrid] of sequence (maxSize r) of int(1..n)
+given colRules : matrix indexed by [hgrid] of sequence (maxSize r) of int(1..m)
+where r = max([max([|rowRules[y]| | y:vgrid]), max([|colRules[x]| | x:hgrid])])
+
+find gram : matrix indexed by [vgrid, hgrid] of int(0..1) $ 1 = black
+
+$ column rules
+$ number of 0/1's implied by constraint should match number of 0/1's in column
+such that forAll x : hgrid .
+  (sum y : vgrid . gram[y,x]) = (sum (j,v) in colRules[x] . v)
+
+such that forAll x : hgrid .
+  $ si indicates start index of each block of contiguous 1s
+  exists si : sequence (size |colRules[x]|) of vgrid .
+    forAll (j,v) in colRules[x] . (
+      $ strictly increasing indices, also enforce a gap
+      (j = |colRules[x]| \/ si(j+1) > si(j)+v)
+      $ contiguous block of 1s
+      /\ (sum y : int(si(j)..(si(j) + v - 1)) . gram[y,x]) = v
+    )
+
+$ row rules
+$ number of 0/1's implied by constraint should match number of 0/1's in row
+such that forAll y : vgrid .
+  (sum x : hgrid . gram[y,x]) = (sum (j,v) in rowRules[y] . v)
+
+such that forAll y : vgrid .
+  $ si indicates start index of each block of contiguous 1s
+  exists si : sequence (size |rowRules[y]|) of hgrid .
+    forAll (j,v) in rowRules[y] . (
+      $ strictly increasing indices, also enforce a gap
+      (j = |rowRules[y]| \/ si(j+1) > si(j)+v)
+      $ contiguous block of 1s
+      /\ (sum x : int(si(j)..(si(j) + v - 1)) . gram[y,x]) = v
+    )
+
