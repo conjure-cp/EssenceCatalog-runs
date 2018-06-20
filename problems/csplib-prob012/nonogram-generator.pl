@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# random Nonogram generator for nonogram-sequences.essence
+# random Nonogram generator for nonogram.essence
 # parameters: rows columns density stickiness scatter seed
 # intention behind parameters:
 # density is fraction of cells containing 1s
