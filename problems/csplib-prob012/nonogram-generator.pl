@@ -7,7 +7,7 @@
 # scatter controls fraction of 1 cells initially scattered ignoring stickiness
 # seed is optional integer random seed, use to regenerate a previous instance
 #
-# example: nonogen 10 5 0.52 0.8 0.5 0.4 1024
+# example: nonogram-generator.pl 10 5 0.52 0.8 0.4 1024
 
 my ($rows,$cols,$density,$stickiness,$scatter,$seed) = @ARGV;
 if (defined($seed)) {
