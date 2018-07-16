@@ -19,7 +19,7 @@ given
     stock : function (total) Warehouse --> int(1..),
 
     $ demand for each customer
-    demand : function (total) Customer --> int(1..),
+    demand : function (total) Customer --> int(1..)
 
 letting maxStock be max(range(stock))
 letting maxDemand be max(range(demand))
@@ -38,7 +38,7 @@ such that
     forAll c : Customer .
         sum([ amount | ((t, c'), amount) <- amountTC, c = c' ]) >= demand(c)
 
-$ meet the stock
+$ stay within the stock
 such that
     forAll w : Warehouse .
         sum([ amount | ((w', t), amount) <- amountWT, w = w' ]) <= stock(w)
@@ -48,6 +48,6 @@ given maxCost : int(1..)
 $ calculate the total cost
 find totalCost : int(1..maxCost)
 such that
-    totalCost = sum([ costWT((w, t)) | ((w, t), amount) <- amountWT ])
-              + sum([ costTC((t, c)) | ((t, c), amount) <- amountTC ])
+    totalCost = sum([ costWT(key) | (key, amount) <- amountWT ])
+              + sum([ costTC(key) | (key, amount) <- amountTC ])
 
