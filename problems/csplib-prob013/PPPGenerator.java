@@ -18,7 +18,7 @@ import java.util.Random ;
 public final class PPPGenerator {
   // command line arguments
   private static int seed ;
-  private static int paramUB ;
+  private static int nBoatsUB, capacityUB ;
   
   private static Random random ;
   
@@ -42,7 +42,7 @@ public final class PPPGenerator {
    *   themselves).
    */
   private static void generateIntegerParameters() {
-    n_boats = random.nextInt(paramUB-1)+2 ;
+    n_boats = random.nextInt(nBoatsUB-1)+2 ;
     n_periods = random.nextInt(n_boats-1)+1 ;
     System.out.println("letting n_boats be "+n_boats) ;
     System.out.println("letting n_periods be "+n_periods) ;
@@ -58,7 +58,7 @@ public final class PPPGenerator {
     System.out.println("letting capacity be function(") ;
     for (int i = 1; i <= n_boats; i++) {
       // avoid 0 capacity
-      int randCapacity = random.nextInt(paramUB)+1 ;
+      int randCapacity = random.nextInt(capacityUB)+1 ;
       System.out.print(i + " --> " + randCapacity) ;
       storedCapacities[i-1] = randCapacity ;
       if (i < n_boats)
@@ -83,13 +83,13 @@ public final class PPPGenerator {
    *
    */
   public static void main (String[] args) {
-    if (args.length != 2) {
-      System.out.println("Usage: java PPPGenerator <seed> <UB>") ;
-      System.out.println("Where UB controls the parameter upper bounds") ;
+    if (args.length != 3) {
+      System.out.println("Usage: java PPPGenerator <seed> <nBoatsUB> <capacityUB>") ;
       return ;
     }
     seed = Integer.parseInt(args[0]) ;
-    paramUB = Integer.parseInt(args[1]) ;
+    nBoatsUB = Integer.parseInt(args[1]) ;
+    capacityUB = Integer.parseInt(args[2]) ;
     random = new Random(seed) ;
 
     generatePreamble() ;
