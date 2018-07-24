@@ -33,7 +33,7 @@ else
 fi
 
 if [ "${SOLVER}" == "minion" ]; then
-    SOLVER_OPTIONS="-cpulimit ${LIMIT_TIME}"
+    SOLVER_OPTIONS="-cpulimit ${LIMIT_TIME} -varorder domoverwdeg"
 elif [ "${SOLVER}" == "lingeling" ]; then
     SOLVER_OPTIONS="-t ${LIMIT_TIME} --seed 0"
 else
