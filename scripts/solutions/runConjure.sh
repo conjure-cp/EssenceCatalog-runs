@@ -33,9 +33,9 @@ else
 fi
 
 if [ "${SOLVER}" == "minion" ]; then
-    SOLVER_OPTIONS="-cpulimit ${LIMIT_TIME} -varorder domoverwdeg"
+    SOLVER_OPTIONS="-cpulimit ${LIMIT_TIME} -preprocess GAC"
 elif [ "${SOLVER}" == "lingeling" ]; then
-    SOLVER_OPTIONS="-t ${LIMIT_TIME} --seed 0"
+    SOLVER_OPTIONS="-t ${LIMIT_TIME} --seed=0"
 else
     echo "SOLVER not recognised: ${SOLVER}"
     exit 1
