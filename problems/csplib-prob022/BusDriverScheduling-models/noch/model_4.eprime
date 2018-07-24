@@ -9,6 +9,9 @@ find sched_PartitionOccurrence_NumParts: int(1..Tasks_EnumSize)
 find sched_PartitionOccurrence_WhichPart: matrix indexed by [int(1..Tasks_EnumSize)] of int(1..Tasks_EnumSize)
 find sched_PartitionOccurrence_PartSizes: matrix indexed by [int(1..Tasks_EnumSize)] of int(0..Tasks_EnumSize)
 find sched_PartitionOccurrence_FirstIndex: matrix indexed by [int(1..Tasks_EnumSize)] of int(1..Tasks_EnumSize)
+branching on
+    [sched_PartitionOccurrence_NumParts, sched_PartitionOccurrence_WhichPart, sched_PartitionOccurrence_PartSizes,
+     sched_PartitionOccurrence_FirstIndex]
 minimising sum([toInt(q24 <= sched_PartitionOccurrence_NumParts) | q24 : int(1..Tasks_EnumSize)])
 such that
     and([q11 <= sched_PartitionOccurrence_NumParts ->
@@ -55,98 +58,115 @@ $ {"finds": [{"Name": "sched"}],
 $  "givens": [{"Name": "shifts"}],
 $  "enumGivens": [{"Name": "Tasks"}],
 $  "enumLettings": [],
-$  "lettings": [[{"Name": "Tasks"},
-$                {"Domain": {"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                            {"Reference": [{"Name": "Tasks_EnumSize"},
-$                                                                           {"DeclNoRepr": ["Given",
-$                                                                                           {"Name": "Tasks_EnumSize"},
-$                                                                                           {"DomainInt": []},
-$                                                                                           {"NoRegion": []}]}]}]}]}}]],
+$  "lettings":
+$      [[{"Name": "Tasks"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"RangeBounded":
+$                        [{"Constant": {"ConstantInt": 1}},
+$                         {"Reference":
+$                              [{"Name": "Tasks_EnumSize"},
+$                               {"DeclNoRepr":
+$                                    ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}, {"NoRegion": []}]}]}]}]}}]],
 $  "unnameds": [],
 $  "strategyQ": {"PickFirst": []},
 $  "strategyA": {"PickAll": []},
-$  "trailCompact": [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 4, 4], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$                   [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 4, 4], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
 $  "nameGenState": [["fin", 3], ["q", 26]],
 $  "nbExtraGivens": 2,
-$  "representations": [[{"MachineName": ["fin", 1, []]}, {"DomainInt": []}],
-$                      [{"MachineName": ["fin", 2, []]}, {"DomainInt": []}],
-$                      [{"Name": "Tasks_EnumSize"}, {"DomainInt": []}],
-$                      [{"Name": "sched"},
-$                       {"DomainPartition": [{"Partition_Occurrence": []},
-$                                            {"isRegular": false,
-$                                             "partsNum": {"SizeAttr_MaxSize": {"Reference": [{"Name": "Tasks_EnumSize"},
-$                                                                                             {"DeclHasRepr": ["Given",
-$                                                                                                              {"Name": "Tasks_EnumSize"},
-$                                                                                                              {"DomainInt": []}]}]}},
-$                                             "partsSize": {"SizeAttr_MaxSize": {"Reference": [{"Name": "Tasks_EnumSize"},
-$                                                                                              {"DeclHasRepr": ["Given",
-$                                                                                                               {"Name": "Tasks_EnumSize"},
-$                                                                                                               {"DomainInt": []}]}]}}},
-$                                            {"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                             {"Reference": [{"Name": "Tasks_EnumSize"},
-$                                                                                            {"DeclHasRepr": ["Given",
-$                                                                                                             {"Name": "Tasks_EnumSize"},
-$                                                                                                             {"DomainInt": []}]}]}]}]}]}],
-$                      [{"Name": "shifts"},
-$                       {"DomainSet": [{"Set_Explicit": []},
-$                                      {"SizeAttr_Size": {"Reference": [{"MachineName": ["fin", 1, []]},
-$                                                                       {"DeclHasRepr": ["Given",
-$                                                                                        {"MachineName": ["fin", 1, []]},
-$                                                                                        {"DomainInt": []}]}]}},
-$                                      {"DomainSet": [{"Set_ExplicitVarSizeWithDummy": []},
-$                                                     {"SizeAttr_MaxSize": {"Reference": [{"MachineName": ["fin", 2, []]},
-$                                                                                         {"DeclHasRepr": ["Given",
-$                                                                                                          {"MachineName": ["fin",
-$                                                                                                                           2,
-$                                                                                                                           []]},
-$                                                                                                          {"DomainInt": []}]}]}},
-$                                                     {"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}},
-$                                                                                      {"Reference": [{"Name": "Tasks_EnumSize"},
-$                                                                                                     {"DeclHasRepr": ["Given",
-$                                                                                                                      {"Name": "Tasks_EnumSize"},
-$                                                                                                                      {"DomainInt": []}]}]}]}]}]}]}]],
-$  "representationsTree": [[{"Name": "Tasks_EnumSize"},
-$                           [{"rootLabel": null,
-$                             "subForest": []}]],
-$                          [{"MachineName": ["fin", 1, []]},
-$                           [{"rootLabel": null,
-$                             "subForest": []}]],
-$                          [{"MachineName": ["fin", 2, []]},
-$                           [{"rootLabel": null,
-$                             "subForest": []}]],
-$                          [{"Name": "sched"},
-$                           [{"rootLabel": {"Partition_Occurrence": []},
-$                             "subForest": [{"rootLabel": null,
-$                                            "subForest": []}]}]],
-$                          [{"Name": "shifts"},
-$                           [{"rootLabel": {"Set_Explicit": []},
-$                             "subForest": [{"rootLabel": {"Set_ExplicitVarSizeWithDummy": []},
-$                                            "subForest": [{"rootLabel": null,
-$                                                           "subForest": []}]}]}]]],
-$  "originalDomains": [[{"Name": "shifts"},
-$                       {"DomainSet": [[], {"SizeAttr_None": []},
-$                                      {"DomainSet": [[], {"SizeAttr_None": []},
-$                                                     {"DomainEnum": [{"Name": "Tasks"}, null, null]}]}]}],
-$                      [{"Name": "sched"},
-$                       {"DomainPartition": [[],
-$                                            {"isRegular": false,
-$                                             "partsNum": {"SizeAttr_MaxSize": {"Reference": [{"Name": "Tasks_EnumSize"},
-$                                                                                             {"DeclHasRepr": ["Given",
-$                                                                                                              {"Name": "Tasks_EnumSize"},
-$                                                                                                              {"DomainInt": []}]}]}},
-$                                             "partsSize": {"SizeAttr_MaxSize": {"Reference": [{"Name": "Tasks_EnumSize"},
-$                                                                                              {"DeclHasRepr": ["Given",
-$                                                                                                               {"Name": "Tasks_EnumSize"},
-$                                                                                                               {"DomainInt": []}]}]}}},
-$                                            {"DomainEnum": [{"Name": "Tasks"}, null, null]}]}]],
+$  "representations":
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": []}], [{"MachineName": ["fin", 2, []]}, {"DomainInt": []}],
+$       [{"Name": "Tasks_EnumSize"}, {"DomainInt": []}],
+$       [{"Name": "sched"},
+$        {"DomainPartition":
+$             [{"Partition_Occurrence": []},
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "Tasks_EnumSize"},
+$                              {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "Tasks_EnumSize"},
+$                              {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}}},
+$              {"DomainInt":
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": 1}},
+$                          {"Reference":
+$                               [{"Name": "Tasks_EnumSize"},
+$                                {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}]}]}]}],
+$       [{"Name": "shifts"},
+$        {"DomainSet":
+$             [{"Set_Explicit": []},
+$              {"SizeAttr_Size":
+$                   {"Reference":
+$                        [{"MachineName": ["fin", 1, []]},
+$                         {"DeclHasRepr": ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": []}]}]}},
+$              {"DomainSet":
+$                   [{"Set_ExplicitVarSizeWithDummy": []},
+$                    {"SizeAttr_MaxSize":
+$                         {"Reference":
+$                              [{"MachineName": ["fin", 2, []]},
+$                               {"DeclHasRepr": ["Given", {"MachineName": ["fin", 2, []]}, {"DomainInt": []}]}]}},
+$                    {"DomainInt":
+$                         [{"RangeBounded":
+$                               [{"Constant": {"ConstantInt": 1}},
+$                                {"Reference":
+$                                     [{"Name": "Tasks_EnumSize"},
+$                                      {"DeclHasRepr":
+$                                           ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}]}]}]}]}]],
+$  "representationsTree":
+$      [[{"Name": "Tasks_EnumSize"},
+$        [{"rootLabel": null,
+$          "subForest": []}]],
+$       [{"MachineName": ["fin", 1, []]},
+$        [{"rootLabel": null,
+$          "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]},
+$        [{"rootLabel": null,
+$          "subForest": []}]],
+$       [{"Name": "sched"},
+$        [{"rootLabel": {"Partition_Occurrence": []},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": []}]}]],
+$       [{"Name": "shifts"},
+$        [{"rootLabel": {"Set_Explicit": []},
+$          "subForest":
+$              [{"rootLabel": {"Set_ExplicitVarSizeWithDummy": []},
+$                "subForest":
+$                    [{"rootLabel": null,
+$                      "subForest": []}]}]}]]],
+$  "originalDomains":
+$      [[{"Name": "shifts"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_None": []},
+$              {"DomainSet": [[], {"SizeAttr_None": []}, {"DomainEnum": [{"Name": "Tasks"}, null, null]}]}]}],
+$       [{"Name": "sched"},
+$        {"DomainPartition":
+$             [[],
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "Tasks_EnumSize"},
+$                              {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "Tasks_EnumSize"},
+$                              {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}}},
+$              {"DomainEnum": [{"Name": "Tasks"}, null, null]}]}]],
 $  "questionAnswered": []}
