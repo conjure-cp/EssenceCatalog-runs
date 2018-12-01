@@ -1,4 +1,7 @@
 
+THIS REPOSITORY IS A WORK IN PROGRESS AT THE MOMENT!
+
+
 This repository is for problem specifications written in Essence.
 
 Each problem may contain a README file containing notes and findings about the problem.
