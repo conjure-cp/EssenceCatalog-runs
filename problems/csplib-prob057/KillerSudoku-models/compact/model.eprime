@@ -12,7 +12,7 @@ letting let3 be gridSize * gridSize
 find solutionGrid: matrix indexed by [int(1..let1), int(1..let2)] of int(1..let3)
 branching on [solutionGrid]
 such that
-    and([allDiff(solutionGrid[.., i, ..]) /\ allDiff(solutionGrid[i, ..]) | i : int(1..gridSize * gridSize)]),
+    and([allDiff(solutionGrid[.., i]) /\ allDiff(solutionGrid[i, ..]) | i : int(1..gridSize * gridSize)]),
     and([or([and([numberMapping_Function1D[boxColumn + (boxRow - 1) * gridSize] =
                   solutionGrid[gridColumn * gridSize + boxColumn, gridRow * gridSize + boxRow]
                       | boxColumn : int(1..gridSize), boxRow : int(1..gridSize)])
@@ -36,91 +36,122 @@ $  "lettings":
 $      [[{"Name": "dHintGrid"},
 $        {"Domain":
 $             {"DomainInt":
-$                  [{"RangeBounded":
-$                        [{"Constant": {"ConstantInt": 1}},
-$                         {"Reference":
-$                              [{"Name": "numHints"},
-$                               {"DeclNoRepr":
-$                                    ["Given", {"Name": "numHints"},
-$                                     {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
-$                                     {"NoRegion": []}]}]}]}]}}],
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "numHints"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "numHints"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
 $       [{"Name": "dIndivHint"},
 $        {"Domain":
 $             {"DomainInt":
-$                  [{"RangeBounded":
-$                        [{"Constant": {"ConstantInt": 1}},
-$                         {"Reference":
-$                              [{"Name": "maxHintCells"},
-$                               {"DeclNoRepr":
-$                                    ["Given", {"Name": "maxHintCells"},
-$                                     {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
-$                                     {"NoRegion": []}]}]}]}]}}],
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "maxHintCells"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "maxHintCells"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
 $       [{"Name": "dSolutionGrid"},
 $        {"Domain":
 $             {"DomainInt":
-$                  [{"RangeBounded":
-$                        [{"Constant": {"ConstantInt": 1}},
-$                         {"Op":
-$                              {"MkOpProduct":
-$                                   {"AbstractLiteral":
-$                                        {"AbsLitMatrix":
-$                                             [{"DomainInt":
-$                                                   [{"RangeBounded":
-$                                                         [{"Constant": {"ConstantInt": 1}},
-$                                                          {"Constant": {"ConstantInt": 2}}]}]},
-$                                              [{"Reference":
-$                                                    [{"Name": "gridSize"},
-$                                                     {"DeclNoRepr":
-$                                                          ["Given", {"Name": "gridSize"},
-$                                                           {"DomainInt":
-$                                                                [{"RangeLowerBounded":
-$                                                                      {"Constant": {"ConstantInt": 1}}}]},
-$                                                           {"NoRegion": []}]}]},
-$                                               {"Reference":
-$                                                    [{"Name": "gridSize"},
-$                                                     {"DeclNoRepr":
-$                                                          ["Given", {"Name": "gridSize"},
-$                                                           {"DomainInt":
-$                                                                [{"RangeLowerBounded":
-$                                                                      {"Constant": {"ConstantInt": 1}}}]},
-$                                                           {"NoRegion": []}]}]}]]}}}}]}]}}],
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Op":
+$                               {"MkOpProduct":
+$                                    {"AbstractLiteral":
+$                                         {"AbsLitMatrix":
+$                                              [{"DomainInt":
+$                                                    [{"TagInt": []},
+$                                                     [{"RangeBounded":
+$                                                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                            {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                               [{"Reference":
+$                                                     [{"Name": "gridSize"},
+$                                                      {"DeclNoRepr":
+$                                                           ["Given", {"Name": "gridSize"},
+$                                                            {"DomainInt":
+$                                                                 [{"TagInt": []},
+$                                                                  [{"RangeLowerBounded":
+$                                                                        {"Constant":
+$                                                                             {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                                            {"NoRegion": []}]}]},
+$                                                {"Reference":
+$                                                     [{"Name": "gridSize"},
+$                                                      {"DeclNoRepr":
+$                                                           ["Given", {"Name": "gridSize"},
+$                                                            {"DomainInt":
+$                                                                 [{"TagInt": []},
+$                                                                  [{"RangeLowerBounded":
+$                                                                        {"Constant":
+$                                                                             {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                                            {"NoRegion": []}]}]}]]}}}}]}]]}}],
 $       [{"Name": "dHintFormat"},
 $        {"Domain":
-$             {"DomainInt": [{"RangeBounded": [{"Constant": {"ConstantInt": 1}}, {"Constant": {"ConstantInt": 2}}]}]}}],
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]}}],
 $       [{"Name": "hintSumIndex"},
 $        {"Op":
 $             {"MkOpSum":
 $                  {"AbstractLiteral":
 $                       {"AbsLitMatrix":
 $                            [{"DomainInt":
-$                                  [{"RangeBounded":
-$                                        [{"Constant": {"ConstantInt": 1}}, {"Constant": {"ConstantInt": 2}}]}]},
+$                                  [{"TagInt": []},
+$                                   [{"RangeBounded":
+$                                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                          {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
 $                             [{"Reference":
 $                                   [{"Name": "maxHintCells"},
 $                                    {"DeclNoRepr":
 $                                         ["Given", {"Name": "maxHintCells"},
-$                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
 $                                          {"NoRegion": []}]}]},
-$                              {"Constant": {"ConstantInt": 1}}]]}}}}],
+$                              {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]]}}}}],
 $       [{"MachineName": ["let", 1, []]},
 $        {"Op":
 $             {"MkOpProduct":
 $                  {"AbstractLiteral":
 $                       {"AbsLitMatrix":
 $                            [{"DomainInt":
-$                                  [{"RangeBounded":
-$                                        [{"Constant": {"ConstantInt": 1}}, {"Constant": {"ConstantInt": 2}}]}]},
+$                                  [{"TagInt": []},
+$                                   [{"RangeBounded":
+$                                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                          {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
 $                             [{"Reference":
 $                                   [{"Name": "gridSize"},
 $                                    {"DeclNoRepr":
 $                                         ["Given", {"Name": "gridSize"},
-$                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
 $                                          {"NoRegion": []}]}]},
 $                              {"Reference":
 $                                   [{"Name": "gridSize"},
 $                                    {"DeclNoRepr":
 $                                         ["Given", {"Name": "gridSize"},
-$                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
 $                                          {"NoRegion": []}]}]}]]}}}}],
 $       [{"MachineName": ["let", 2, []]},
 $        {"Op":
@@ -128,19 +159,27 @@ $             {"MkOpProduct":
 $                  {"AbstractLiteral":
 $                       {"AbsLitMatrix":
 $                            [{"DomainInt":
-$                                  [{"RangeBounded":
-$                                        [{"Constant": {"ConstantInt": 1}}, {"Constant": {"ConstantInt": 2}}]}]},
+$                                  [{"TagInt": []},
+$                                   [{"RangeBounded":
+$                                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                          {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
 $                             [{"Reference":
 $                                   [{"Name": "gridSize"},
 $                                    {"DeclNoRepr":
 $                                         ["Given", {"Name": "gridSize"},
-$                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
 $                                          {"NoRegion": []}]}]},
 $                              {"Reference":
 $                                   [{"Name": "gridSize"},
 $                                    {"DeclNoRepr":
 $                                         ["Given", {"Name": "gridSize"},
-$                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
 $                                          {"NoRegion": []}]}]}]]}}}}],
 $       [{"MachineName": ["let", 3, []]},
 $        {"Op":
@@ -148,19 +187,27 @@ $             {"MkOpProduct":
 $                  {"AbstractLiteral":
 $                       {"AbsLitMatrix":
 $                            [{"DomainInt":
-$                                  [{"RangeBounded":
-$                                        [{"Constant": {"ConstantInt": 1}}, {"Constant": {"ConstantInt": 2}}]}]},
+$                                  [{"TagInt": []},
+$                                   [{"RangeBounded":
+$                                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                          {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
 $                             [{"Reference":
 $                                   [{"Name": "gridSize"},
 $                                    {"DeclNoRepr":
 $                                         ["Given", {"Name": "gridSize"},
-$                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
 $                                          {"NoRegion": []}]}]},
 $                              {"Reference":
 $                                   [{"Name": "gridSize"},
 $                                    {"DeclNoRepr":
 $                                         ["Given", {"Name": "gridSize"},
-$                                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
 $                                          {"NoRegion": []}]}]}]]}}}}]],
 $  "unnameds": [],
 $  "strategyQ": {"PickFirst": []},
@@ -173,151 +220,201 @@ $  "trailRewrites": [],
 $  "nameGenState": [["fin", 2], ["let", 4], ["q", 6]],
 $  "nbExtraGivens": 1,
 $  "representations":
-$      [[{"Name": "maxHintCells"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "numHints"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"MachineName": ["fin", 1, []]}, {"DomainInt": []}],
-$       [{"Name": "gridSize"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
+$      [[{"Name": "maxHintCells"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "numHints"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "gridSize"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
 $       [{"Name": "solutionGrid"},
 $        {"DomainMatrix":
 $             [{"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}},
-$                          {"Reference":
-$                               [{"MachineName": ["let", 1, []]},
-$                                {"Alias":
-$                                     {"Op":
-$                                          {"MkOpProduct":
-$                                               {"AbstractLiteral":
-$                                                    {"AbsLitMatrix":
-$                                                         [{"DomainInt":
-$                                                               [{"RangeBounded":
-$                                                                     [{"Constant": {"ConstantInt": 1}},
-$                                                                      {"Constant": {"ConstantInt": 2}}]}]},
-$                                                          [{"Reference":
-$                                                                [{"Name": "gridSize"},
-$                                                                 {"DeclHasRepr":
-$                                                                      ["Given", {"Name": "gridSize"},
-$                                                                       {"DomainInt":
-$                                                                            [{"RangeLowerBounded":
-$                                                                                  {"Constant":
-$                                                                                       {"ConstantInt": 1}}}]}]}]},
-$                                                           {"Reference":
-$                                                                [{"Name": "gridSize"},
-$                                                                 {"DeclHasRepr":
-$                                                                      ["Given", {"Name": "gridSize"},
-$                                                                       {"DomainInt":
-$                                                                            [{"RangeLowerBounded":
-$                                                                                  {"Constant":
-$                                                                                       {"ConstantInt":
-$                                                                                            1}}}]}]}]}]]}}}}}]}]}]},
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"MachineName": ["let", 1, []]},
+$                                 {"Alias":
+$                                      {"Op":
+$                                           {"MkOpProduct":
+$                                                {"AbstractLiteral":
+$                                                     {"AbsLitMatrix":
+$                                                          [{"DomainInt":
+$                                                                [{"TagInt": []},
+$                                                                 [{"RangeBounded":
+$                                                                       [{"Constant":
+$                                                                             {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                        {"Constant":
+$                                                                             {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                           [{"Reference":
+$                                                                 [{"Name": "gridSize"},
+$                                                                  {"DeclHasRepr":
+$                                                                       ["Given", {"Name": "gridSize"},
+$                                                                        {"DomainInt":
+$                                                                             [{"TagInt": []},
+$                                                                              [{"RangeLowerBounded":
+$                                                                                    {"Constant":
+$                                                                                         {"ConstantInt":
+$                                                                                              [{"TagInt": []},
+$                                                                                               1]}}}]]}]}]},
+$                                                            {"Reference":
+$                                                                 [{"Name": "gridSize"},
+$                                                                  {"DeclHasRepr":
+$                                                                       ["Given", {"Name": "gridSize"},
+$                                                                        {"DomainInt":
+$                                                                             [{"TagInt": []},
+$                                                                              [{"RangeLowerBounded":
+$                                                                                    {"Constant":
+$                                                                                         {"ConstantInt":
+$                                                                                              [{"TagInt": []},
+$                                                                                               1]}}}]]}]}]}]]}}}}}]}]}]]},
 $              {"DomainMatrix":
 $                   [{"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}},
-$                                {"Reference":
-$                                     [{"MachineName": ["let", 2, []]},
-$                                      {"Alias":
-$                                           {"Op":
-$                                                {"MkOpProduct":
-$                                                     {"AbstractLiteral":
-$                                                          {"AbsLitMatrix":
-$                                                               [{"DomainInt":
-$                                                                     [{"RangeBounded":
-$                                                                           [{"Constant": {"ConstantInt": 1}},
-$                                                                            {"Constant": {"ConstantInt": 2}}]}]},
-$                                                                [{"Reference":
-$                                                                      [{"Name": "gridSize"},
-$                                                                       {"DeclHasRepr":
-$                                                                            ["Given", {"Name": "gridSize"},
-$                                                                             {"DomainInt":
-$                                                                                  [{"RangeLowerBounded":
-$                                                                                        {"Constant":
-$                                                                                             {"ConstantInt": 1}}}]}]}]},
-$                                                                 {"Reference":
-$                                                                      [{"Name": "gridSize"},
-$                                                                       {"DeclHasRepr":
-$                                                                            ["Given", {"Name": "gridSize"},
-$                                                                             {"DomainInt":
-$                                                                                  [{"RangeLowerBounded":
-$                                                                                        {"Constant":
-$                                                                                             {"ConstantInt":
-$                                                                                                  1}}}]}]}]}]]}}}}}]}]}]},
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"MachineName": ["let", 2, []]},
+$                                       {"Alias":
+$                                            {"Op":
+$                                                 {"MkOpProduct":
+$                                                      {"AbstractLiteral":
+$                                                           {"AbsLitMatrix":
+$                                                                [{"DomainInt":
+$                                                                      [{"TagInt": []},
+$                                                                       [{"RangeBounded":
+$                                                                             [{"Constant":
+$                                                                                   {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                              {"Constant":
+$                                                                                   {"ConstantInt":
+$                                                                                        [{"TagInt": []}, 2]}}]}]]},
+$                                                                 [{"Reference":
+$                                                                       [{"Name": "gridSize"},
+$                                                                        {"DeclHasRepr":
+$                                                                             ["Given", {"Name": "gridSize"},
+$                                                                              {"DomainInt":
+$                                                                                   [{"TagInt": []},
+$                                                                                    [{"RangeLowerBounded":
+$                                                                                          {"Constant":
+$                                                                                               {"ConstantInt":
+$                                                                                                    [{"TagInt": []},
+$                                                                                                     1]}}}]]}]}]},
+$                                                                  {"Reference":
+$                                                                       [{"Name": "gridSize"},
+$                                                                        {"DeclHasRepr":
+$                                                                             ["Given", {"Name": "gridSize"},
+$                                                                              {"DomainInt":
+$                                                                                   [{"TagInt": []},
+$                                                                                    [{"RangeLowerBounded":
+$                                                                                          {"Constant":
+$                                                                                               {"ConstantInt":
+$                                                                                                    [{"TagInt": []},
+$                                                                                                     1]}}}]]}]}]}]]}}}}}]}]}]]},
 $                    {"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}},
-$                                {"Reference":
-$                                     [{"MachineName": ["let", 3, []]},
-$                                      {"Alias":
-$                                           {"Op":
-$                                                {"MkOpProduct":
-$                                                     {"AbstractLiteral":
-$                                                          {"AbsLitMatrix":
-$                                                               [{"DomainInt":
-$                                                                     [{"RangeBounded":
-$                                                                           [{"Constant": {"ConstantInt": 1}},
-$                                                                            {"Constant": {"ConstantInt": 2}}]}]},
-$                                                                [{"Reference":
-$                                                                      [{"Name": "gridSize"},
-$                                                                       {"DeclHasRepr":
-$                                                                            ["Given", {"Name": "gridSize"},
-$                                                                             {"DomainInt":
-$                                                                                  [{"RangeLowerBounded":
-$                                                                                        {"Constant":
-$                                                                                             {"ConstantInt": 1}}}]}]}]},
-$                                                                 {"Reference":
-$                                                                      [{"Name": "gridSize"},
-$                                                                       {"DeclHasRepr":
-$                                                                            ["Given", {"Name": "gridSize"},
-$                                                                             {"DomainInt":
-$                                                                                  [{"RangeLowerBounded":
-$                                                                                        {"Constant":
-$                                                                                             {"ConstantInt":
-$                                                                                                  1}}}]}]}]}]]}}}}}]}]}]}]}]}],
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"MachineName": ["let", 3, []]},
+$                                       {"Alias":
+$                                            {"Op":
+$                                                 {"MkOpProduct":
+$                                                      {"AbstractLiteral":
+$                                                           {"AbsLitMatrix":
+$                                                                [{"DomainInt":
+$                                                                      [{"TagInt": []},
+$                                                                       [{"RangeBounded":
+$                                                                             [{"Constant":
+$                                                                                   {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                              {"Constant":
+$                                                                                   {"ConstantInt":
+$                                                                                        [{"TagInt": []}, 2]}}]}]]},
+$                                                                 [{"Reference":
+$                                                                       [{"Name": "gridSize"},
+$                                                                        {"DeclHasRepr":
+$                                                                             ["Given", {"Name": "gridSize"},
+$                                                                              {"DomainInt":
+$                                                                                   [{"TagInt": []},
+$                                                                                    [{"RangeLowerBounded":
+$                                                                                          {"Constant":
+$                                                                                               {"ConstantInt":
+$                                                                                                    [{"TagInt": []},
+$                                                                                                     1]}}}]]}]}]},
+$                                                                  {"Reference":
+$                                                                       [{"Name": "gridSize"},
+$                                                                        {"DeclHasRepr":
+$                                                                             ["Given", {"Name": "gridSize"},
+$                                                                              {"DomainInt":
+$                                                                                   [{"TagInt": []},
+$                                                                                    [{"RangeLowerBounded":
+$                                                                                          {"Constant":
+$                                                                                               {"ConstantInt":
+$                                                                                                    [{"TagInt": []},
+$                                                                                                     1]}}}]]}]}]}]]}}}}}]}]}]]}]}]}],
 $       [{"Name": "hintMatrix"},
 $        {"DomainMatrix":
 $             [{"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}},
-$                          {"Reference":
-$                               [{"Name": "numHints"},
-$                                {"DeclHasRepr":
-$                                     ["Given", {"Name": "numHints"},
-$                                      {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]},
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "numHints"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "numHints"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
 $              {"DomainMatrix":
 $                   [{"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}},
-$                                {"Reference":
-$                                     [{"Name": "hintSumIndex"},
-$                                      {"Alias":
-$                                           {"Op":
-$                                                {"MkOpSum":
-$                                                     {"AbstractLiteral":
-$                                                          {"AbsLitMatrix":
-$                                                               [{"DomainInt":
-$                                                                     [{"RangeBounded":
-$                                                                           [{"Constant": {"ConstantInt": 1}},
-$                                                                            {"Constant": {"ConstantInt": 2}}]}]},
-$                                                                [{"Reference":
-$                                                                      [{"Name": "maxHintCells"},
-$                                                                       {"DeclHasRepr":
-$                                                                            ["Given", {"Name": "maxHintCells"},
-$                                                                             {"DomainInt":
-$                                                                                  [{"RangeLowerBounded":
-$                                                                                        {"Constant":
-$                                                                                             {"ConstantInt": 1}}}]}]}]},
-$                                                                 {"Constant": {"ConstantInt": 1}}]]}}}}}]}]}]},
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "hintSumIndex"},
+$                                       {"Alias":
+$                                            {"Op":
+$                                                 {"MkOpSum":
+$                                                      {"AbstractLiteral":
+$                                                           {"AbsLitMatrix":
+$                                                                [{"DomainInt":
+$                                                                      [{"TagInt": []},
+$                                                                       [{"RangeBounded":
+$                                                                             [{"Constant":
+$                                                                                   {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                              {"Constant":
+$                                                                                   {"ConstantInt":
+$                                                                                        [{"TagInt": []}, 2]}}]}]]},
+$                                                                 [{"Reference":
+$                                                                       [{"Name": "maxHintCells"},
+$                                                                        {"DeclHasRepr":
+$                                                                             ["Given", {"Name": "maxHintCells"},
+$                                                                              {"DomainInt":
+$                                                                                   [{"TagInt": []},
+$                                                                                    [{"RangeLowerBounded":
+$                                                                                          {"Constant":
+$                                                                                               {"ConstantInt":
+$                                                                                                    [{"TagInt": []},
+$                                                                                                     1]}}}]]}]}]},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt":
+$                                                                            [{"TagInt": []}, 1]}}]]}}}}}]}]}]]},
 $                    {"DomainMatrix":
 $                         [{"DomainInt":
-$                               [{"RangeBounded": [{"Constant": {"ConstantInt": 1}}, {"Constant": {"ConstantInt": 2}}]}]},
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                       {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
 $                          {"DomainInt":
-$                               [{"RangeBounded":
-$                                     [{"Constant": {"ConstantInt": 0}},
-$                                      {"Reference":
-$                                           [{"MachineName": ["fin", 1, []]},
-$                                            {"DeclHasRepr":
-$                                                 ["Given", {"MachineName": ["fin", 1, []]},
-$                                                  {"DomainInt": []}]}]}]}]}]}]}]}]],
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                                       {"Reference":
+$                                            [{"MachineName": ["fin", 1, []]},
+$                                             {"DeclHasRepr":
+$                                                  ["Given", {"MachineName": ["fin", 1, []]},
+$                                                   {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}]}]}]],
 $  "representationsTree":
 $      [[{"MachineName": ["fin", 1, []]},
 $        [{"rootLabel": null,
@@ -348,33 +445,50 @@ $                "subForest":
 $                    [{"rootLabel": null,
 $                      "subForest": []}]}]}]]],
 $  "originalDomains":
-$      [[{"Name": "gridSize"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "numHints"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "maxHintCells"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
+$      [[{"Name": "gridSize"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "numHints"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "maxHintCells"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
 $       [{"Name": "hintMatrix"},
 $        {"DomainMatrix":
 $             [{"DomainInt":
-$                   [{"RangeBounded": [{"Constant": {"ConstantInt": 1}}, {"Reference": [{"Name": "numHints"}, null]}]}]},
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "numHints"}, null]}]}]]},
 $              {"DomainMatrix":
 $                   [{"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}}, {"Reference": [{"Name": "hintSumIndex"}, null]}]}]},
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "hintSumIndex"}, null]}]}]]},
 $                    {"DomainMatrix":
 $                         [{"DomainInt":
-$                               [{"RangeBounded": [{"Constant": {"ConstantInt": 1}}, {"Constant": {"ConstantInt": 2}}]}]},
-$                          {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 0}}}]}]}]}]}],
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                       {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                          {"DomainInt":
+$                               [{"TagInt": []},
+$                                [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 0]}}}]]}]}]}]}],
 $       [{"Name": "solutionGrid"},
 $        {"DomainMatrix":
 $             [{"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}}, {"Reference": [{"MachineName": ["let", 1, []]}, null]}]}]},
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"MachineName": ["let", 1, []]}, null]}]}]]},
 $              {"DomainMatrix":
 $                   [{"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}},
-$                                {"Reference": [{"MachineName": ["let", 2, []]}, null]}]}]},
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"MachineName": ["let", 2, []]}, null]}]}]]},
 $                    {"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}},
-$                                {"Reference": [{"MachineName": ["let", 3, []]}, null]}]}]}]}]}]],
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"MachineName": ["let", 3, []]}, null]}]}]]}]}]}]],
 $  "questionAnswered": []}

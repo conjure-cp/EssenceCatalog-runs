@@ -76,19 +76,17 @@ such that
          <= col_per_slab
              | q31 : int(1..2 ** n_orders * nbSizes)]),
     and([q1 + 1 <= cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Marker ->
-         cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_1_Occurrence[q1, ..] <lex
-         cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_1_Occurrence[q1 + 1, ..]
-         \/
-         and([cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_1_Occurrence[q1, q9] ->
-              cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_1_Occurrence[q1 + 1, q9]
-                  | q9 : int(1..n_orders)])
-         /\
-         and([cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_1_Occurrence[q1 + 1, q10] ->
-              cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_1_Occurrence[q1, q10]
-                  | q10 : int(1..n_orders)])
-         /\
-         cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_2[q1] <
-         cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_2[q1 + 1]
+         flatten([[toInt(cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_1_Occurrence
+                             [q1, q9])
+                       | q9 : int(1..n_orders)],
+                  [cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_2[q1]; int(1)];
+                      int(1..2)])
+         <lex
+         flatten([[toInt(cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_1_Occurrence
+                             [q1 + 1, q10])
+                       | q10 : int(1..n_orders)],
+                  [cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_2[q1 + 1]; int(1)];
+                      int(1..2)])
              | q1 : int(1..2 ** n_orders * nbSizes - 1)]),
     and([q2 > cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Marker ->
          and([cut_FunctionAsRelationR2_RelationAsSetR2_ExplicitVarSizeWithMarkerR2_Values_1_Occurrence[q2, q11] = false
@@ -127,36 +125,48 @@ $  "lettings":
 $      [[{"Name": "sizes"},
 $        {"Domain":
 $             {"DomainInt":
-$                  [{"RangeBounded":
-$                        [{"Constant": {"ConstantInt": 1}},
-$                         {"Reference":
-$                              [{"Name": "nbSizes"},
-$                               {"DeclNoRepr":
-$                                    ["Given", {"Name": "nbSizes"},
-$                                     {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
-$                                     {"NoRegion": []}]}]}]}]}}],
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "nbSizes"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "nbSizes"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
 $       [{"Name": "Colour"},
 $        {"Domain":
 $             {"DomainInt":
-$                  [{"RangeBounded":
-$                        [{"Constant": {"ConstantInt": 1}},
-$                         {"Reference":
-$                              [{"Name": "n_colours"},
-$                               {"DeclNoRepr":
-$                                    ["Given", {"Name": "n_colours"},
-$                                     {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
-$                                     {"NoRegion": []}]}]}]}]}}],
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_colours"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_colours"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
 $       [{"Name": "Order"},
 $        {"Domain":
 $             {"DomainInt":
-$                  [{"RangeBounded":
-$                        [{"Constant": {"ConstantInt": 1}},
-$                         {"Reference":
-$                              [{"Name": "n_orders"},
-$                               {"DeclNoRepr":
-$                                    ["Given", {"Name": "n_orders"},
-$                                     {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
-$                                     {"NoRegion": []}]}]}]}]}}]],
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_orders"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_orders"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
 $  "unnameds": [],
 $  "strategyQ": {"PickFirst": []},
 $  "strategyA": {"PickAll": []},
@@ -176,20 +186,21 @@ $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1,
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$       [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
 $  "nameGenState": [["fin", 4], ["q", 40]],
 $  "nbExtraGivens": 3,
 $  "representations":
-$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": []}],
-$       [{"Name": "n_orders"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": []}], [{"MachineName": ["fin", 3, []]}, {"DomainInt": []}],
-$       [{"Name": "n_colours"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "nbSizes"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_orders"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_colours"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "nbSizes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
 $       [{"Name": "cut"},
 $        {"DomainFunction":
 $             [{"Function_AsRelation": {"Relation_AsSet": {"Set_ExplicitVarSizeWithMarker": []}}},
@@ -197,71 +208,95 @@ $              [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_
 $              {"DomainSet":
 $                   [{"Set_Occurrence": []}, {"SizeAttr_None": []},
 $                    {"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}},
-$                                {"Reference":
-$                                     [{"Name": "n_orders"},
-$                                      {"DeclHasRepr":
-$                                           ["Given", {"Name": "n_orders"},
-$                                            {"DomainInt":
-$                                                 [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]}]},
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "n_orders"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "n_orders"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]},
 $              {"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}},
-$                          {"Reference":
-$                               [{"Name": "nbSizes"},
-$                                {"DeclHasRepr":
-$                                     ["Given", {"Name": "nbSizes"},
-$                                      {"DomainInt":
-$                                           [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]}]}],
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "nbSizes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "nbSizes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
 $       [{"Name": "ordSize"},
 $        {"DomainFunction":
 $             [{"Function_1D": []},
 $              [{"SizeAttr_Size":
 $                    {"Reference":
 $                         [{"MachineName": ["fin", 1, []]},
-$                          {"DeclHasRepr": ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": []}]}]}},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
 $               "PartialityAttr_Total", "JectivityAttr_None"],
 $              {"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}},
-$                          {"Reference":
-$                               [{"Name": "n_orders"},
-$                                {"DeclHasRepr":
-$                                     ["Given", {"Name": "n_orders"},
-$                                      {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]},
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_orders"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_orders"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
 $              {"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}},
-$                          {"Reference":
-$                               [{"MachineName": ["fin", 2, []]},
-$                                {"DeclHasRepr": ["Given", {"MachineName": ["fin", 2, []]}, {"DomainInt": []}]}]}]}]}]}],
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 2, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 2, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
 $       [{"Name": "ordCol"},
 $        {"DomainFunction":
 $             [{"Function_1D": []},
 $              [{"SizeAttr_Size":
 $                    {"Reference":
 $                         [{"MachineName": ["fin", 3, []]},
-$                          {"DeclHasRepr": ["Given", {"MachineName": ["fin", 3, []]}, {"DomainInt": []}]}]}},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
 $               "PartialityAttr_Total", "JectivityAttr_None"],
 $              {"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}},
-$                          {"Reference":
-$                               [{"Name": "n_orders"},
-$                                {"DeclHasRepr":
-$                                     ["Given", {"Name": "n_orders"},
-$                                      {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]},
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_orders"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_orders"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
 $              {"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}},
-$                          {"Reference":
-$                               [{"Name": "n_colours"},
-$                                {"DeclHasRepr":
-$                                     ["Given", {"Name": "n_colours"},
-$                                      {"DomainInt":
-$                                           [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]}]}],
-$       [{"Name": "col_per_slab"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]],
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_colours"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_colours"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "col_per_slab"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]],
 $  "representationsTree":
 $      [[{"Name": "col_per_slab"},
 $        [{"rootLabel": null,
@@ -308,33 +343,50 @@ $                "subForest": []},
 $               {"rootLabel": null,
 $                "subForest": []}]}]]],
 $  "originalDomains":
-$      [[{"Name": "n_colours"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "n_orders"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "col_per_slab"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "nbSizes"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
+$      [[{"Name": "n_colours"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n_orders"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "col_per_slab"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "nbSizes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
 $       [{"Name": "ordSize"},
 $        {"DomainFunction":
 $             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
 $              {"DomainInt":
-$                   [{"RangeBounded": [{"Constant": {"ConstantInt": 1}}, {"Reference": [{"Name": "n_orders"}, null]}]}]},
-$              {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}],
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_orders"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}],
 $       [{"Name": "ordCol"},
 $        {"DomainFunction":
 $             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
 $              {"DomainInt":
-$                   [{"RangeBounded": [{"Constant": {"ConstantInt": 1}}, {"Reference": [{"Name": "n_orders"}, null]}]}]},
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_orders"}, null]}]}]]},
 $              {"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}}, {"Reference": [{"Name": "n_colours"}, null]}]}]}]}],
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_colours"}, null]}]}]]}]}],
 $       [{"Name": "cut"},
 $        {"DomainFunction":
 $             [[], [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
 $              {"DomainSet":
 $                   [[], {"SizeAttr_None": []},
 $                    {"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}}, {"Reference": [{"Name": "n_orders"}, null]}]}]}]},
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "n_orders"}, null]}]}]]}]},
 $              {"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}}, {"Reference": [{"Name": "nbSizes"}, null]}]}]}]}]],
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "nbSizes"}, null]}]}]]}]}]],
 $  "questionAnswered": []}

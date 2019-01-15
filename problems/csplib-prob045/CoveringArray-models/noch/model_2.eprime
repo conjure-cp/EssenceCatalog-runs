@@ -6,11 +6,11 @@ given t: int(1..)
 given g: int(2..)
 where k >= t
 where b >= g ** t
-find CoverTest_ExplicitWithRepetitionR9_Flag: int(b)
-find CoverTest_ExplicitWithRepetitionR9_Values_Function1D: matrix indexed by [int(1..b), int(1..k)] of int(1..g)
-branching on [CoverTest_ExplicitWithRepetitionR9_Flag, CoverTest_ExplicitWithRepetitionR9_Values_Function1D]
+find CoverTest_ExplicitWithRepetitionR10_Flag: int(b)
+find CoverTest_ExplicitWithRepetitionR10_Values_Function1D: matrix indexed by [int(1..b), int(1..k)] of int(1..g)
+branching on [CoverTest_ExplicitWithRepetitionR10_Flag, CoverTest_ExplicitWithRepetitionR10_Values_Function1D]
 such that
-    and([or([and([CoverTest_ExplicitWithRepetitionR9_Values_Function1D
+    and([or([and([CoverTest_ExplicitWithRepetitionR10_Values_Function1D
                       [q16, testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q18]]
                   = testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q18]
                       | q18 : int(1..k * g),
@@ -24,14 +24,15 @@ such that
                                                                                                                         *
                                                                                                                         g)] of int(1..g),
                and([q1 + 1 <= testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker ->
-                    testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q1] <
-                    testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q1 + 1]
-                    \/
-                    testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q1] =
-                    testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q1 + 1]
-                    /\
-                    testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q1] <
-                    testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q1 + 1]
+                    flatten([[testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q1]; int(1)],
+                             [testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q1]; int(1)];
+                                 int(1..2)])
+                    <lex
+                    flatten([[testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q1 + 1];
+                                  int(1)],
+                             [testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q1 + 1];
+                                  int(1)];
+                                 int(1..2)])
                         | q1 : int(1..k * g - 1)]),
                and([q2 > testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker ->
                     testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q2] = 1 /\
@@ -45,10 +46,10 @@ such that
                sum([1   | q15 : int(1..k * g),
                           q15 <= testcase_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker])
                = t]),
-    and([CoverTest_ExplicitWithRepetitionR9_Values_Function1D[q6, ..] <=lex
-         CoverTest_ExplicitWithRepetitionR9_Values_Function1D[q6 + 1, ..]
+    and([CoverTest_ExplicitWithRepetitionR10_Values_Function1D[q6, ..] <=lex
+         CoverTest_ExplicitWithRepetitionR10_Values_Function1D[q6 + 1, ..]
              | q6 : int(1..b - 1), q6 + 1 <= b]),
-    and([and([CoverTest_ExplicitWithRepetitionR9_Values_Function1D[q7, q12] = 1 | q12 : int(1..k)])
+    and([and([CoverTest_ExplicitWithRepetitionR10_Values_Function1D[q7, q12] = 1 | q12 : int(1..k)])
              | q7 : int(1..b), q7 > b])
 
 $ Conjure's
@@ -60,25 +61,33 @@ $  "lettings":
 $      [[{"Name": "alphabet"},
 $        {"Domain":
 $             {"DomainInt":
-$                  [{"RangeBounded":
-$                        [{"Constant": {"ConstantInt": 1}},
-$                         {"Reference":
-$                              [{"Name": "g"},
-$                               {"DeclNoRepr":
-$                                    ["Given", {"Name": "g"},
-$                                     {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 2}}}]},
-$                                     {"NoRegion": []}]}]}]}]}}],
+$                  [{"TagUnnamed": "alphabet"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "g"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "g"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
 $       [{"Name": "switches"},
 $        {"Domain":
 $             {"DomainInt":
-$                  [{"RangeBounded":
-$                        [{"Constant": {"ConstantInt": 1}},
-$                         {"Reference":
-$                              [{"Name": "k"},
-$                               {"DeclNoRepr":
-$                                    ["Given", {"Name": "k"},
-$                                     {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]},
-$                                     {"NoRegion": []}]}]}]}]}}]],
+$                  [{"TagUnnamed": "switches"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "k"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "k"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
 $  "unnameds":
 $      [[{"Name": "alphabet"}, {"Reference": [{"Name": "g"}, null]}],
 $       [{"Name": "switches"}, {"Reference": [{"Name": "k"}, null]}]],
@@ -89,16 +98,20 @@ $      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 2, 2], [1, 1,
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
 $  "nameGenState": [["q", 19]],
 $  "nbExtraGivens": 0,
 $  "representations":
-$      [[{"Name": "k"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "t"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "b"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "g"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 2}}}]}],
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "t"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "b"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "g"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}}]]}],
 $       [{"Name": "CoverTest"},
 $        {"DomainMSet":
 $             [{"MSet_ExplicitWithRepetition": []},
@@ -107,29 +120,37 @@ $                    {"Reference":
 $                         [{"Name": "b"},
 $                          {"DeclHasRepr":
 $                               ["Given", {"Name": "b"},
-$                                {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}},
+$                                {"DomainInt":
+$                                     [{"TagInt": []},
+$                                      [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}},
 $               {"OccurAttr_None": []}],
 $              {"DomainFunction":
 $                   [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
 $                    {"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}},
-$                                {"Reference":
-$                                     [{"Name": "k"},
-$                                      {"DeclHasRepr":
-$                                           ["Given", {"Name": "k"},
-$                                            {"DomainInt":
-$                                                 [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}]}]}]}]},
+$                         [{"TagUnnamed": "switches"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "k"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "k"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
 $                    {"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}},
-$                                {"Reference":
-$                                     [{"Name": "g"},
-$                                      {"DeclHasRepr":
-$                                           ["Given", {"Name": "g"},
-$                                            {"DomainInt":
-$                                                 [{"RangeLowerBounded":
-$                                                       {"Constant": {"ConstantInt": 2}}}]}]}]}]}]}]}]}]],
+$                         [{"TagUnnamed": "alphabet"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "g"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "g"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 2]}}}]]}]}]}]}]]}]}]}]],
 $  "representationsTree":
 $      [[{"Name": "CoverTest"},
 $        [{"rootLabel": {"MSet_ExplicitWithRepetition": []},
@@ -153,10 +174,14 @@ $       [{"Name": "t"},
 $        [{"rootLabel": null,
 $          "subForest": []}]]],
 $  "originalDomains":
-$      [[{"Name": "k"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "b"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "t"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 1}}}]}],
-$       [{"Name": "g"}, {"DomainInt": [{"RangeLowerBounded": {"Constant": {"ConstantInt": 2}}}]}],
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "b"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "t"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "g"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}}]]}],
 $       [{"Name": "CoverTest"},
 $        {"DomainMSet":
 $             [[], [{"SizeAttr_Size": {"Reference": [{"Name": "b"}, null]}}, {"OccurAttr_None": []}],

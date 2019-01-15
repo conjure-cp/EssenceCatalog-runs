@@ -48,14 +48,15 @@ such that
          sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Marker[q27] >= 1
              | q27 : int(1..Tasks_EnumSize)]),
     and([q4 + 1 <= sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Marker ->
-         sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Marker[q4] <
-         sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Marker[q4 + 1]
-         \/
-         sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Marker[q4] =
-         sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Marker[q4 + 1]
-         /\
-         sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Values[q4, ..] <lex
-         sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Values[q4 + 1, ..]
+         flatten([[sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Marker[q4];
+                       int(1)],
+                  sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Values[q4, ..];
+                      int(1..2)])
+         <lex
+         flatten([[sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Marker[q4 + 1];
+                       int(1)],
+                  sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Values[q4 + 1, ..];
+                      int(1..2)])
              | q4 : int(1..Tasks_EnumSize - 1)]),
     and([q5 > sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Marker ->
          sched_PartitionAsSet_ExplicitVarSizeWithMarkerR5_Values_ExplicitVarSizeWithMarker_Marker[q5] = 0 /\
@@ -91,12 +92,14 @@ $  "lettings":
 $      [[{"Name": "Tasks"},
 $        {"Domain":
 $             {"DomainInt":
-$                  [{"RangeBounded":
-$                        [{"Constant": {"ConstantInt": 1}},
-$                         {"Reference":
-$                              [{"Name": "Tasks_EnumSize"},
-$                               {"DeclNoRepr":
-$                                    ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}, {"NoRegion": []}]}]}]}]}}]],
+$                  [{"TagEnum": "Tasks"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagEnum": "Tasks"}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "Tasks_EnumSize"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagEnum": "Tasks"}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
 $  "unnameds": [],
 $  "strategyQ": {"PickFirst": []},
 $  "strategyA": {"PickAll": []},
@@ -107,15 +110,15 @@ $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1,
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
 $  "nameGenState": [["fin", 3], ["q", 31]],
 $  "nbExtraGivens": 2,
 $  "representations":
-$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": []}], [{"MachineName": ["fin", 2, []]}, {"DomainInt": []}],
-$       [{"Name": "Tasks_EnumSize"}, {"DomainInt": []}],
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagEnum": "Tasks"}, []]}],
 $       [{"Name": "sched"},
 $        {"DomainPartition":
 $             [{"Partition_AsSet": [{"Set_ExplicitVarSizeWithMarker": []}, {"Set_ExplicitVarSizeWithMarker": []}]},
@@ -124,38 +127,47 @@ $               "partsNum":
 $                   {"SizeAttr_MaxSize":
 $                        {"Reference":
 $                             [{"Name": "Tasks_EnumSize"},
-$                              {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagEnum": "Tasks"}, []]}]}]}},
 $               "partsSize":
 $                   {"SizeAttr_MaxSize":
 $                        {"Reference":
 $                             [{"Name": "Tasks_EnumSize"},
-$                              {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}}},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagEnum": "Tasks"}, []]}]}]}}},
 $              {"DomainInt":
-$                   [{"RangeBounded":
-$                         [{"Constant": {"ConstantInt": 1}},
-$                          {"Reference":
-$                               [{"Name": "Tasks_EnumSize"},
-$                                {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}]}]}]}],
+$                   [{"TagEnum": "Tasks"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "Tasks"}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "Tasks_EnumSize"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "Tasks_EnumSize"},
+$                                       {"DomainInt": [{"TagEnum": "Tasks"}, []]}]}]}]}]]}]}],
 $       [{"Name": "shifts"},
 $        {"DomainSet":
 $             [{"Set_Explicit": []},
 $              {"SizeAttr_Size":
 $                   {"Reference":
 $                        [{"MachineName": ["fin", 1, []]},
-$                         {"DeclHasRepr": ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": []}]}]}},
+$                         {"DeclHasRepr":
+$                              ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
 $              {"DomainSet":
 $                   [{"Set_ExplicitVarSizeWithDummy": []},
 $                    {"SizeAttr_MaxSize":
 $                         {"Reference":
 $                              [{"MachineName": ["fin", 2, []]},
-$                               {"DeclHasRepr": ["Given", {"MachineName": ["fin", 2, []]}, {"DomainInt": []}]}]}},
+$                               {"DeclHasRepr":
+$                                    ["Given", {"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
 $                    {"DomainInt":
-$                         [{"RangeBounded":
-$                               [{"Constant": {"ConstantInt": 1}},
-$                                {"Reference":
-$                                     [{"Name": "Tasks_EnumSize"},
-$                                      {"DeclHasRepr":
-$                                           ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}]}]}]}]}]],
+$                         [{"TagEnum": "Tasks"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "Tasks"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "Tasks_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "Tasks_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "Tasks"}, []]}]}]}]}]]}]}]}]],
 $  "representationsTree":
 $      [[{"Name": "Tasks_EnumSize"},
 $        [{"rootLabel": null,
@@ -192,11 +204,13 @@ $               "partsNum":
 $                   {"SizeAttr_MaxSize":
 $                        {"Reference":
 $                             [{"Name": "Tasks_EnumSize"},
-$                              {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
 $               "partsSize":
 $                   {"SizeAttr_MaxSize":
 $                        {"Reference":
 $                             [{"Name": "Tasks_EnumSize"},
-$                              {"DeclHasRepr": ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": []}]}]}}},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagInt": []}, []]}]}]}}},
 $              {"DomainEnum": [{"Name": "Tasks"}, null, null]}]}]],
 $  "questionAnswered": []}
