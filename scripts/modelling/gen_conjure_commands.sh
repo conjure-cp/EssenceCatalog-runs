@@ -14,8 +14,13 @@ pushd problems > /dev/null                              # go through all problem
 for prob in *; do
     pushd "${prob}" > /dev/null
     for essence in *.essence; do                        # go through all essence files for this problem
-        echo "scripts/modelling/runConjure.sh ${prob} ${essence} compact" >> ${CMD_FILE}
-        echo "scripts/modelling/runConjure.sh ${prob} ${essence} noch"    >> ${CMD_FILE}
+        echo "scripts/modelling/runConjure.sh ${prob} ${essence} 00_compact"                    >> ${CMD_FILE}
+        echo "scripts/modelling/runConjure.sh ${prob} ${essence} 01_noch_lvlPruned"             >> ${CMD_FILE}
+        echo "scripts/modelling/runConjure.sh ${prob} ${essence} 02_noch_lvlFlat"               >> ${CMD_FILE}
+        echo "scripts/modelling/runConjure.sh ${prob} ${essence} 03_full_lvlPruned_paramSparse" >> ${CMD_FILE}
+        echo "scripts/modelling/runConjure.sh ${prob} ${essence} 04_full_lvlPruned_paramAll"    >> ${CMD_FILE}
+        echo "scripts/modelling/runConjure.sh ${prob} ${essence} 05_full_lvlFlat_paramSparse"   >> ${CMD_FILE}
+        echo "scripts/modelling/runConjure.sh ${prob} ${essence} 06_full_lvlFlat_paramAll"      >> ${CMD_FILE}
     done
     popd > /dev/null
 done
@@ -26,4 +31,3 @@ popd > /dev/null
 # -d consider only blanks and alphanumeric characters
 # -f ignore case
 LC_ALL=C sort -df ${CMD_FILE} -o ${CMD_FILE}
-

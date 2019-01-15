@@ -12,10 +12,20 @@ ESSENCE_FULL="problems/${PROBLEM}/${ESSENCE}"
 TARGET_DIR="problems/${PROBLEM}/${ESSENCE_BASE}-models/${CONJURE_MODE}"
 mkdir -p "${TARGET_DIR}"
 
-if [ "${CONJURE_MODE}" == "compact" ]; then
+if [ "${CONJURE_MODE}" == "00_compact" ]; then
     FLAGS="-ac --smart-filenames --channelling=no"
-elif [ "${CONJURE_MODE}" == "noch" ]; then
+elif [ "${CONJURE_MODE}" == "01_noch_lvlPruned" ]; then
     FLAGS="-ax --smart-filenames --channelling=no --representations-givens=s --representations-auxiliaries=c --representations-quantifieds=c --representations-cuts=c"
+elif [ "${CONJURE_MODE}" == "02_noch_lvlFlat" ]; then
+    FLAGS="-ax --smart-filenames --channelling=no --representations-givens=s --representations-auxiliaries=c --representations-quantifieds=c --representations-cuts=c --representation-levels=no"
+elif [ "${CONJURE_MODE}" == "03_full_lvlPruned_paramSparse" ]; then
+    FLAGS="-ax --smart-filenames --representation-levels=yes --representations-givens=s"
+elif [ "${CONJURE_MODE}" == "04_full_lvlPruned_paramAll" ]; then
+    FLAGS="-ax --smart-filenames --representation-levels=yes --representations-givens=x"
+elif [ "${CONJURE_MODE}" == "05_full_lvlFlat_paramSparse" ]; then
+    FLAGS="-ax --smart-filenames --representation-levels=no --representations-givens=s"
+elif [ "${CONJURE_MODE}" == "06_full_lvlFlat_paramAll" ]; then
+    FLAGS="-ax --smart-filenames --representation-levels=no --representations-givens=x"
 else
     echo "CONJURE_MODE not recognised: ${CONJURE_MODE}"
     exit 1
