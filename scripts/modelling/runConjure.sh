@@ -20,7 +20,7 @@ elif [ "${CONJURE_MODE}" == "01_noch_lvlPruned" ]; then
     GENERATE_MODELS=true
 elif [ "${CONJURE_MODE}" == "02_noch_lvlFlat" ]; then
     FLAGS="-ax --smart-filenames --channelling=no --representations-givens=s --representations-auxiliaries=c --representations-quantifieds=c --representations-cuts=c --representation-levels=no"
-    GENERATE_MODELS=true
+    GENERATE_MODELS=false
 elif [ "${CONJURE_MODE}" == "03_full_lvlPruned_paramSparse" ]; then
     FLAGS="-ax --smart-filenames --representation-levels=yes --representations-givens=s"
     GENERATE_MODELS=false
