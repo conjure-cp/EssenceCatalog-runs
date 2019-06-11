@@ -1,0 +1,155 @@
+language ESSENCE' 1.0
+
+given n: int
+find edges_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of bool
+find degrees_Function1D: matrix indexed by [int(1..n)] of int(1..n)
+branching on [degrees_Function1D]
+such that
+    and([degrees_Function1D[i] =
+         sum([toInt(or([edges_RelationAsMatrix[q22_1, q22_2] /\ (q22_1 = i /\ q22_2 = j)
+                            | q22_1 : int(1..n), q22_2 : int(1..n)]))
+                  | j : int(1..n)])
+             | i : int(1..n)]),
+    and([degrees_Function1D[i - 1] >= degrees_Function1D[i] | i : int(2..n)]),
+    and([sum([toInt(or([edges_RelationAsMatrix[q10_1, q10_2] /\ (q10_1 = i /\ q10_2 = j)
+                            | q10_1 : int(1..n), q10_2 : int(1..n)])),
+              toInt(or([edges_RelationAsMatrix[q12_1, q12_2] /\ (q12_1 = i /\ q12_2 = k)
+                            | q12_1 : int(1..n), q12_2 : int(1..n)])),
+              toInt(or([edges_RelationAsMatrix[q14_1, q14_2] /\ (q14_1 = i /\ q14_2 = l)
+                            | q14_1 : int(1..n), q14_2 : int(1..n)])),
+              toInt(or([edges_RelationAsMatrix[q16_1, q16_2] /\ (q16_1 = j /\ q16_2 = k)
+                            | q16_1 : int(1..n), q16_2 : int(1..n)])),
+              toInt(or([edges_RelationAsMatrix[q18_1, q18_2] /\ (q18_1 = j /\ q18_2 = l)
+                            | q18_1 : int(1..n), q18_2 : int(1..n)])),
+              toInt(or([edges_RelationAsMatrix[q20_1, q20_2] /\ (q20_1 = k /\ q20_2 = l)
+                            | q20_1 : int(1..n), q20_2 : int(1..n)]));
+                  int(1..6)])
+         <= 4
+             | i : int(1..n), j : int(1..n), k : int(1..n), l : int(1..n), i < j /\ j < k /\ k < l]),
+    and([degrees_Function1D[i] % 3 = 0 | i : int(1..n)]),
+    sum([degrees_Function1D[i] | i : int(1..n)]) % 12 = 0,
+    and([!edges_RelationAsMatrix[q2, q2] | q2 : int(1..n)]),
+    and([edges_RelationAsMatrix[q2, q3] -> edges_RelationAsMatrix[q3, q2] | q2 : int(1..n), q3 : int(1..n)])
+
+$ Conjure's
+$ {"finds": [{"Name": "edges"}, {"Name": "degrees"}],
+$  "givens": [{"Name": "n"}],
+$  "enumGivens": [],
+$  "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "NODE"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [],
+$  "strategyQ": {"PickFirst": []},
+$  "strategyA": {"Compact": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "trailVerbose": [],
+$  "trailRewrites": [],
+$  "nameGenState": [["q", 23]],
+$  "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "degrees"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr": ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "edges"},
+$        {"DomainRelation":
+$             [{"Relation_AsMatrix": []}, [{"SizeAttr_None": []}, ["BinRelAttr_Irreflexive", "BinRelAttr_Symmetric"]],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n"},
+$                                  {"DeclHasRepr": ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n"},
+$                                  {"DeclHasRepr":
+$                                       ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]]}]],
+$  "representationsTree":
+$      [[{"Name": "degrees"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": []},
+$               {"rootLabel": null,
+$                "subForest": []}]}]],
+$       [{"Name": "edges"},
+$        [{"rootLabel": {"Relation_AsMatrix": []},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": []},
+$               {"rootLabel": null,
+$                "subForest": []}]}]],
+$       [{"Name": "n"},
+$        [{"rootLabel": null,
+$          "subForest": []}]]],
+$  "originalDomains":
+$      [[{"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "edges"},
+$        {"DomainRelation":
+$             [[], [{"SizeAttr_None": []}, ["BinRelAttr_Irreflexive", "BinRelAttr_Symmetric"]],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n"}, null]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n"}, null]}]}]]}]]}],
+$       [{"Name": "degrees"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}, {"Reference": [{"Name": "n"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n"}, null]}]}]]}]}]],
+$  "questionAnswered": []}

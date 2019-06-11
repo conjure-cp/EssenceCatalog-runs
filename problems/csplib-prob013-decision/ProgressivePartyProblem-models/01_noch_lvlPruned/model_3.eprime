@@ -15,28 +15,28 @@ find sched_ExplicitR10_Function1D: matrix indexed by [int(1..n_periods), int(1..
 branching on
     [hosts_ExplicitVarSizeWithMarker_Marker, hosts_ExplicitVarSizeWithMarker_Values, sched_ExplicitR10_Function1D]
 such that
-    and([and([or([q13 <= hosts_ExplicitVarSizeWithMarker_Marker /\
-                  hosts_ExplicitVarSizeWithMarker_Values[q13] = sched_ExplicitR10_Function1D[q8, q11]
-                      | q13 : int(1..o)])
-                  | q11 : int(1..n_boats)])
+    and([and([or([q15 <= hosts_ExplicitVarSizeWithMarker_Marker /\
+                  hosts_ExplicitVarSizeWithMarker_Values[q15] = sched_ExplicitR10_Function1D[q10, q13]
+                      | q15 : int(1..o)])
+                  | q13 : int(1..n_boats)])
          /\
-         and([q15 <= hosts_ExplicitVarSizeWithMarker_Marker ->
-              or([sched_ExplicitR10_Function1D[q8, q18] = hosts_ExplicitVarSizeWithMarker_Values[q15]
-                      | q18 : int(1..n_boats)])
-                  | q15 : int(1..o)])
-             | q8 : int(1..n_periods)]),
-    and([and([q20 <= hosts_ExplicitVarSizeWithMarker_Marker ->
-              sched_ExplicitR10_Function1D[q19, hosts_ExplicitVarSizeWithMarker_Values[q20]] =
-              hosts_ExplicitVarSizeWithMarker_Values[q20]
-                  | q20 : int(1..o)])
-             | q19 : int(1..n_periods)]),
+         and([q17 <= hosts_ExplicitVarSizeWithMarker_Marker ->
+              or([sched_ExplicitR10_Function1D[q10, q20] = hosts_ExplicitVarSizeWithMarker_Values[q17]
+                      | q20 : int(1..n_boats)])
+                  | q17 : int(1..o)])
+             | q10 : int(1..n_periods)]),
     and([and([q22 <= hosts_ExplicitVarSizeWithMarker_Marker ->
-              sum([toInt(sched_ExplicitR10_Function1D[q21, q24] = hosts_ExplicitVarSizeWithMarker_Values[q22]) *
-                   catchUndef(crew_Function1D[q24], 0)
-                       | q24 : int(1..n_boats)])
-              <= capacity_Function1D[hosts_ExplicitVarSizeWithMarker_Values[q22]]
+              sched_ExplicitR10_Function1D[q21, hosts_ExplicitVarSizeWithMarker_Values[q22]] =
+              hosts_ExplicitVarSizeWithMarker_Values[q22]
                   | q22 : int(1..o)])
              | q21 : int(1..n_periods)]),
+    and([and([q24 <= hosts_ExplicitVarSizeWithMarker_Marker ->
+              sum([toInt(sched_ExplicitR10_Function1D[q23, q26] = hosts_ExplicitVarSizeWithMarker_Values[q24]) *
+                   catchUndef(crew_Function1D[q26], 0)
+                       | q26 : int(1..n_boats)])
+              <= capacity_Function1D[hosts_ExplicitVarSizeWithMarker_Values[q24]]
+                  | q24 : int(1..o)])
+             | q23 : int(1..n_periods)]),
     and([b1 < b2 ->
          sum([toInt(sched_ExplicitR10_Function1D[q7, b1] = sched_ExplicitR10_Function1D[q7, b2])
                   | q7 : int(1..n_periods)])
@@ -49,7 +49,8 @@ such that
              | q2 : int(1..o)]),
     1 <= hosts_ExplicitVarSizeWithMarker_Marker,
     hosts_ExplicitVarSizeWithMarker_Marker <= o,
-    and([sched_ExplicitR10_Function1D[q4, ..] <lex sched_ExplicitR10_Function1D[q4 + 1, ..]
+    and([flatten([[sched_ExplicitR10_Function1D[q4, q8]; int(1)] | q8 : int(1..n_boats)]) <lex
+         flatten([[sched_ExplicitR10_Function1D[q4 + 1, q9]; int(1)] | q9 : int(1..n_boats)])
              | q4 : int(1..n_periods - 1)])
 
 $ Conjure's
@@ -83,10 +84,10 @@ $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1,
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
-$  "nameGenState": [["fin", 5], ["q", 25]],
+$  "nameGenState": [["fin", 5], ["q", 27]],
 $  "nbExtraGivens": 4,
 $  "representations":
 $      [[{"Name": "n_boats"},

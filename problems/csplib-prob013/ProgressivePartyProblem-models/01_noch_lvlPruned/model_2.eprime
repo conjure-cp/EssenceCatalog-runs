@@ -11,29 +11,29 @@ given crew_Function1D: matrix indexed by [int(1..n_boats)] of int(1..fin4)
 find hosts_ExplicitVarSizeWithDummy: matrix indexed by [int(1..n_boats)] of int(1..n_boats + 1)
 find sched_ExplicitR10_Function1D: matrix indexed by [int(1..n_periods), int(1..n_boats)] of int(1..n_boats)
 branching on [hosts_ExplicitVarSizeWithDummy, sched_ExplicitR10_Function1D]
-minimising sum([toInt(hosts_ExplicitVarSizeWithDummy[q27] != n_boats + 1) | q27 : int(1..n_boats)])
+minimising sum([toInt(hosts_ExplicitVarSizeWithDummy[q29] != n_boats + 1) | q29 : int(1..n_boats)])
 such that
-    and([and([or([hosts_ExplicitVarSizeWithDummy[q14] != n_boats + 1 /\
-                  hosts_ExplicitVarSizeWithDummy[q14] = sched_ExplicitR10_Function1D[q9, q12]
-                      | q14 : int(1..n_boats)])
-                  | q12 : int(1..n_boats)])
+    and([and([or([hosts_ExplicitVarSizeWithDummy[q16] != n_boats + 1 /\
+                  hosts_ExplicitVarSizeWithDummy[q16] = sched_ExplicitR10_Function1D[q11, q14]
+                      | q16 : int(1..n_boats)])
+                  | q14 : int(1..n_boats)])
          /\
-         and([hosts_ExplicitVarSizeWithDummy[q16] != n_boats + 1 ->
-              or([sched_ExplicitR10_Function1D[q9, q19] = hosts_ExplicitVarSizeWithDummy[q16] | q19 : int(1..n_boats)])
-                  | q16 : int(1..n_boats)])
-             | q9 : int(1..n_periods)]),
-    and([and([hosts_ExplicitVarSizeWithDummy[q21] != n_boats + 1 ->
-              sched_ExplicitR10_Function1D[q20, hosts_ExplicitVarSizeWithDummy[q21]] =
-              hosts_ExplicitVarSizeWithDummy[q21]
-                  | q21 : int(1..n_boats)])
-             | q20 : int(1..n_periods)]),
+         and([hosts_ExplicitVarSizeWithDummy[q18] != n_boats + 1 ->
+              or([sched_ExplicitR10_Function1D[q11, q21] = hosts_ExplicitVarSizeWithDummy[q18] | q21 : int(1..n_boats)])
+                  | q18 : int(1..n_boats)])
+             | q11 : int(1..n_periods)]),
     and([and([hosts_ExplicitVarSizeWithDummy[q23] != n_boats + 1 ->
-              sum([toInt(sched_ExplicitR10_Function1D[q22, q25] = hosts_ExplicitVarSizeWithDummy[q23]) *
-                   catchUndef(crew_Function1D[q25], 0)
-                       | q25 : int(1..n_boats)])
-              <= capacity_Function1D[hosts_ExplicitVarSizeWithDummy[q23]]
+              sched_ExplicitR10_Function1D[q22, hosts_ExplicitVarSizeWithDummy[q23]] =
+              hosts_ExplicitVarSizeWithDummy[q23]
                   | q23 : int(1..n_boats)])
              | q22 : int(1..n_periods)]),
+    and([and([hosts_ExplicitVarSizeWithDummy[q25] != n_boats + 1 ->
+              sum([toInt(sched_ExplicitR10_Function1D[q24, q27] = hosts_ExplicitVarSizeWithDummy[q25]) *
+                   catchUndef(crew_Function1D[q27], 0)
+                       | q27 : int(1..n_boats)])
+              <= capacity_Function1D[hosts_ExplicitVarSizeWithDummy[q25]]
+                  | q25 : int(1..n_boats)])
+             | q24 : int(1..n_periods)]),
     and([b1 < b2 ->
          sum([toInt(sched_ExplicitR10_Function1D[q8, b1] = sched_ExplicitR10_Function1D[q8, b2])
                   | q8 : int(1..n_periods)])
@@ -45,7 +45,8 @@ such that
     and([hosts_ExplicitVarSizeWithDummy[q2] = n_boats + 1 -> hosts_ExplicitVarSizeWithDummy[q2 + 1] = n_boats + 1
              | q2 : int(1..n_boats - 1)]),
     1 <= sum([toInt(hosts_ExplicitVarSizeWithDummy[q3] != n_boats + 1) | q3 : int(1..n_boats)]),
-    and([sched_ExplicitR10_Function1D[q5, ..] <lex sched_ExplicitR10_Function1D[q5 + 1, ..]
+    and([flatten([[sched_ExplicitR10_Function1D[q5, q9]; int(1)] | q9 : int(1..n_boats)]) <lex
+         flatten([[sched_ExplicitR10_Function1D[q5 + 1, q10]; int(1)] | q10 : int(1..n_boats)])
              | q5 : int(1..n_periods - 1)])
 
 $ Conjure's
@@ -80,10 +81,10 @@ $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1,
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
-$  "nameGenState": [["fin", 5], ["q", 28]],
+$  "nameGenState": [["fin", 5], ["q", 30]],
 $  "nbExtraGivens": 4,
 $  "representations":
 $      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],

@@ -38,8 +38,9 @@ else
     exit 1
 fi
 
+conjure modelling ${FLAGS} ${ESSENCE_FULL} -o ${TARGET_DIR} --estimate-number-of-models > ${TARGET_DIR}/estimate.txt
+
 if ${GENERATE_MODELS}; then
     conjure modelling ${FLAGS} ${ESSENCE_FULL} -o ${TARGET_DIR}
 fi
 
-conjure modelling ${FLAGS} ${ESSENCE_FULL} -o ${TARGET_DIR} --estimate-number-of-models > ${TARGET_DIR}/estimate.txt

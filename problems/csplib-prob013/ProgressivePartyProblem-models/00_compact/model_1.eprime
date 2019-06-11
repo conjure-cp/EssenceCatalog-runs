@@ -11,27 +11,28 @@ given crew_Function1D: matrix indexed by [int(1..n_boats)] of int(1..fin4)
 find hosts_Occurrence: matrix indexed by [int(1..n_boats)] of bool
 find sched_ExplicitR10_Function1D: matrix indexed by [int(1..n_periods), int(1..n_boats)] of int(1..n_boats)
 branching on [hosts_Occurrence, sched_ExplicitR10_Function1D]
-minimising sum([toInt(hosts_Occurrence[q18]) | q18 : int(1..n_boats)])
+minimising sum([toInt(hosts_Occurrence[q20]) | q20 : int(1..n_boats)])
 such that
-    and([and([hosts_Occurrence[sched_ExplicitR10_Function1D[q6, q9]] | q9 : int(1..n_boats)]) /\
-         and([hosts_Occurrence[q10] -> or([sched_ExplicitR10_Function1D[q6, q13] = q10 | q13 : int(1..n_boats)])
-                  | q10 : int(1..n_boats)])
-             | q6 : int(1..n_periods)]),
-    and([and([hosts_Occurrence[h] -> sched_ExplicitR10_Function1D[q14, h] = h | h : int(1..n_boats)])
-             | q14 : int(1..n_periods)]),
+    and([and([hosts_Occurrence[sched_ExplicitR10_Function1D[q8, q11]] | q11 : int(1..n_boats)]) /\
+         and([hosts_Occurrence[q12] -> or([sched_ExplicitR10_Function1D[q8, q15] = q12 | q15 : int(1..n_boats)])
+                  | q12 : int(1..n_boats)])
+             | q8 : int(1..n_periods)]),
+    and([and([hosts_Occurrence[h] -> sched_ExplicitR10_Function1D[q16, h] = h | h : int(1..n_boats)])
+             | q16 : int(1..n_periods)]),
     and([and([hosts_Occurrence[h] ->
-              sum([toInt(sched_ExplicitR10_Function1D[q15, q17] = h) * catchUndef(crew_Function1D[q17], 0)
-                       | q17 : int(1..n_boats)])
+              sum([toInt(sched_ExplicitR10_Function1D[q17, q19] = h) * catchUndef(crew_Function1D[q19], 0)
+                       | q19 : int(1..n_boats)])
               <= capacity_Function1D[h]
                   | h : int(1..n_boats)])
-             | q15 : int(1..n_periods)]),
+             | q17 : int(1..n_periods)]),
     and([b1 < b2 ->
          sum([toInt(sched_ExplicitR10_Function1D[q5, b1] = sched_ExplicitR10_Function1D[q5, b2])
                   | q5 : int(1..n_periods)])
          <= 1
              | b1 : int(1..n_boats), b2 : int(1..n_boats)]),
     1 <= sum([toInt(hosts_Occurrence[q1]) | q1 : int(1..n_boats)]),
-    and([sched_ExplicitR10_Function1D[q2, ..] <lex sched_ExplicitR10_Function1D[q2 + 1, ..]
+    and([flatten([[sched_ExplicitR10_Function1D[q2, q6]; int(1)] | q6 : int(1..n_boats)]) <lex
+         flatten([[sched_ExplicitR10_Function1D[q2 + 1, q7]; int(1)] | q7 : int(1..n_boats)])
              | q2 : int(1..n_periods - 1)])
 
 $ Conjure's
@@ -65,10 +66,10 @@ $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1,
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
 $  "trailVerbose": [],
 $  "trailRewrites": [],
-$  "nameGenState": [["fin", 5], ["q", 19]],
+$  "nameGenState": [["fin", 5], ["q", 21]],
 $  "nbExtraGivens": 4,
 $  "representations":
 $      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
