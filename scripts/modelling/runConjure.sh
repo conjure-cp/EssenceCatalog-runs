@@ -40,7 +40,7 @@ fi
 
 conjure modelling ${FLAGS} ${ESSENCE_FULL} -o ${TARGET_DIR} --estimate-number-of-models > ${TARGET_DIR}/estimate.txt
 
-conjure ide --dump-representations > ${TARGET_DIR}/representations.txt
+conjure ide --dump-representations ${ESSENCE_FULL} > ${TARGET_DIR}/representations.txt
 
 if ${GENERATE_MODELS}; then
     conjure modelling ${FLAGS} ${ESSENCE_FULL} -o ${TARGET_DIR}
