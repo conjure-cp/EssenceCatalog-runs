@@ -21,6 +21,7 @@ if (( ${nb_commands} > 0 )) ; then
     find problems -name '*.eprime-solution' -delete
     find problems -name '*.solution' -delete
     parallel                                                \
+        --no-notice                                         \
         -j"${nb_cores}"                                     \
         --eta                                               \
         --results logs/gnuparallel/solutions-results        \

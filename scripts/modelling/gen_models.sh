@@ -16,6 +16,7 @@ if (( ${nb_commands} > 0 )) ; then
     find problems -name '*.eprime' -delete
     mkdir -p logs/gnuparallel
     parallel                                                \
+        --no-notice                                         \
         -j"${nb_cores}"                                     \
         --eta                                               \
         --results logs/gnuparallel/modelling-results        \
