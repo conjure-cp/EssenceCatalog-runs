@@ -15,6 +15,7 @@ mkdir -p "${TARGET_DIR}"
 if [ "${CONJURE_MODE}" == "00_compact" ]; then
     FLAGS="-ac --smart-filenames --channelling=no"
     GENERATE_MODELS=true
+    conjure ide --dump-representations ${ESSENCE_FULL} > ${TARGET_DIR}/representations.json
 elif [ "${CONJURE_MODE}" == "01_noch_lvlPruned" ]; then
     FLAGS="-ax --smart-filenames --channelling=no --representations-givens=s --representations-auxiliaries=c --representations-quantifieds=c --representations-cuts=c"
     GENERATE_MODELS=true
@@ -39,8 +40,6 @@ else
 fi
 
 conjure modelling ${FLAGS} ${ESSENCE_FULL} -o ${TARGET_DIR} --estimate-number-of-models > ${TARGET_DIR}/estimate.txt
-
-conjure ide --dump-representations ${ESSENCE_FULL} > ${TARGET_DIR}/representations.json
 
 if ${GENERATE_MODELS}; then
     conjure modelling ${FLAGS} ${ESSENCE_FULL} -o ${TARGET_DIR}
