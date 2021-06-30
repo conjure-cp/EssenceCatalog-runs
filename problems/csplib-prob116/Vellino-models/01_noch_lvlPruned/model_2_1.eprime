@@ -1,0 +1,1004 @@
+language ESSENCE' 1.0
+
+given maxMaterial: int
+given fin1: int
+given fin2: int
+given quantity_Function1D: matrix indexed by [int(1..5)] of int(0..fin2)
+given fin3: int
+given fin4: int
+given capacity_Function1D: matrix indexed by [int(1..3)] of int(0..fin4)
+letting let1 be sum([quantity_Function1D[m] | m : int(1..5)])
+find colour_FunctionNDPartialDummy: matrix indexed by [int(1..let1)] of int(0..3)
+letting let2 be max([capacity_Function1D[q19] | q19 : int(1..3)])
+find contents_Function1DPartialR8_Flags: matrix indexed by [int(1..let1)] of bool
+find contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags:
+        matrix indexed by [int(1..let1), int(1..let2)] of int(0..maxMaterial)
+find contents_Function1DPartialR8_Values_ExplicitWithFlags_Values:
+        matrix indexed by [int(1..let1), int(1..let2)] of int(1..5)
+branching on
+    [colour_FunctionNDPartialDummy, contents_Function1DPartialR8_Flags,
+     contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags,
+     contents_Function1DPartialR8_Values_ExplicitWithFlags_Values]
+minimising sum([toInt(colour_FunctionNDPartialDummy[q68] != 0) | q68 : int(1..let1)])
+such that
+    and([colour_FunctionNDPartialDummy[b] != 0 <-> contents_Function1DPartialR8_Flags[b] | b : int(1..let1)]),
+    and([sum([toInt(contents_Function1DPartialR8_Flags[q16]) *
+              catchUndef(sum([toInt(contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q16, q14] = q1) *
+                              catchUndef(contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q16, q14], 0)
+                                  | q14 : int(1..let2)]),
+                         0)
+                  | q16 : int(1..let1)])
+         = quantity_Function1D[q1]
+         /\
+         and([contents_Function1DPartialR8_Flags[q16] -> contents_Function1DPartialR8_Flags[q16] | q16 : int(1..let1)])
+             | q1 : int(1..5)]),
+    and([colour_FunctionNDPartialDummy[q23] != 0 ->
+         sum([toInt(contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q23, q21] > 0) *
+              catchUndef(contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q23, q21], 0)
+                  | q21 : int(1..let2)])
+         <= capacity_Function1D[colour_FunctionNDPartialDummy[q23]]
+         /\ contents_Function1DPartialR8_Flags[q23]
+             | q23 : int(1..let1)]),
+    and([colour_FunctionNDPartialDummy[q29] != 0 ->
+         (colour_FunctionNDPartialDummy[q29] = 1 ->
+          !(or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q29, q25] > 0 /\
+                contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q29, q25] = 2
+                    | q25 : int(1..let2)])
+            /\ contents_Function1DPartialR8_Flags[q29])
+          /\
+          !(or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q29, q27] > 0 /\
+                contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q29, q27] = 3
+                    | q27 : int(1..let2)])
+            /\ contents_Function1DPartialR8_Flags[q29]))
+             | q29 : int(1..let1)]),
+    and([colour_FunctionNDPartialDummy[q35] != 0 ->
+         (colour_FunctionNDPartialDummy[q35] = 3 ->
+          !(or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q35, q31] > 0 /\
+                contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q35, q31] = 4
+                    | q31 : int(1..let2)])
+            /\ contents_Function1DPartialR8_Flags[q35])
+          /\
+          !(or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q35, q33] > 0 /\
+                contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q35, q33] = 2
+                    | q33 : int(1..let2)])
+            /\ contents_Function1DPartialR8_Flags[q35]))
+             | q35 : int(1..let1)]),
+    and([colour_FunctionNDPartialDummy[q41] != 0 ->
+         (colour_FunctionNDPartialDummy[q41] = 2 ->
+          !(or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q41, q37] > 0 /\
+                contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q41, q37] = 3
+                    | q37 : int(1..let2)])
+            /\ contents_Function1DPartialR8_Flags[q41])
+          /\
+          !(or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q41, q39] > 0 /\
+                contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q41, q39] = 1
+                    | q39 : int(1..let2)])
+            /\ contents_Function1DPartialR8_Flags[q41]))
+             | q41 : int(1..let1)]),
+    and([colour_FunctionNDPartialDummy[q44] != 0 ->
+         (colour_FunctionNDPartialDummy[q44] = 1 ->
+          sum([toInt(contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q44, q42] = 4) *
+               catchUndef(contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q44, q42], 0)
+                   | q42 : int(1..let2)])
+          <= 1
+          /\ contents_Function1DPartialR8_Flags[q44])
+             | q44 : int(1..let1)]),
+    and([colour_FunctionNDPartialDummy[q47] != 0 ->
+         (colour_FunctionNDPartialDummy[q47] = 2 ->
+          sum([toInt(contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q47, q45] = 4) *
+               catchUndef(contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q47, q45], 0)
+                   | q45 : int(1..let2)])
+          <= 2
+          /\ contents_Function1DPartialR8_Flags[q47])
+             | q47 : int(1..let1)]),
+    and([colour_FunctionNDPartialDummy[q53] != 0 ->
+         (or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q53, q51] > 0 /\
+              contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q53, q51] = 4
+                  | q51 : int(1..let2)])
+          /\ contents_Function1DPartialR8_Flags[q53]
+          ->
+          or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q53, q49] > 0 /\
+              contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q53, q49] = 2
+                  | q49 : int(1..let2)])
+          /\ contents_Function1DPartialR8_Flags[q53])
+             | q53 : int(1..let1)]),
+    and([colour_FunctionNDPartialDummy[q59] != 0 ->
+         (or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q59, q57] > 0 /\
+              contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q59, q57] = 1
+                  | q57 : int(1..let2)])
+          /\ contents_Function1DPartialR8_Flags[q59]
+          ->
+          !(or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q59, q55] > 0 /\
+                contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q59, q55] = 5
+                    | q55 : int(1..let2)])
+            /\ contents_Function1DPartialR8_Flags[q59]))
+             | q59 : int(1..let1)]),
+    and([colour_FunctionNDPartialDummy[q65] != 0 ->
+         (or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q65, q63] > 0 /\
+              contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q65, q63] = 5
+                  | q63 : int(1..let2)])
+          /\ contents_Function1DPartialR8_Flags[q65]
+          ->
+          !(or([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q65, q61] > 0 /\
+                contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q65, q61] = 2
+                    | q61 : int(1..let2)])
+            /\ contents_Function1DPartialR8_Flags[q65]))
+             | q65 : int(1..let1)]),
+    and([contents_Function1DPartialR8_Flags[q5] = false ->
+         and([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q5, q17] = 0 | q17 : int(1..let2)]) /\
+         and([contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q5, q18] = 1 | q18 : int(1..let2)])
+             | q5 : int(1..let1)]),
+    and([contents_Function1DPartialR8_Flags[q7] ->
+         and([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q7, q8 + 1] > 0 ->
+              contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q7, q8] <
+              contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q7, q8 + 1]
+                  | q8 : int(1..let2 - 1)])
+             | q7 : int(1..let1)]),
+    and([contents_Function1DPartialR8_Flags[q7] ->
+         and([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q7, q9] = 0 ->
+              contents_Function1DPartialR8_Values_ExplicitWithFlags_Values[q7, q9] = 1
+                  | q9 : int(1..let2)])
+             | q7 : int(1..let1)]),
+    and([contents_Function1DPartialR8_Flags[q7] ->
+         and([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q7, q10 + 1] > 0 ->
+              contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q7, q10] > 0
+                  | q10 : int(1..let2 - 1)])
+             | q7 : int(1..let1)]),
+    and([contents_Function1DPartialR8_Flags[q7] ->
+         sum([contents_Function1DPartialR8_Values_ExplicitWithFlags_Flags[q7, q12] | q12 : int(1..let2)]) <= let2
+             | q7 : int(1..let1)])
+
+$ Conjure's
+$ {"finds": [{"Name": "colour"}, {"Name": "contents"}],
+$  "givens": [{"Name": "maxMaterial"}, {"Name": "quantity"}, {"Name": "capacity"}], "enumGivens": [],
+$  "enumLettings":
+$      [{"LettingDomainDefnEnum":
+$            [{"Name": "Material"},
+$             [{"Name": "glass"}, {"Name": "plastic"}, {"Name": "steel"}, {"Name": "wood"}, {"Name": "copper"}]]},
+$       {"LettingDomainDefnEnum": [{"Name": "Colour"}, [{"Name": "red"}, {"Name": "green"}, {"Name": "blue"}]]}],
+$  "lettings":
+$      [[{"Name": "Material"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagEnum": "Material"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagEnum": "Material"}, 1]}},
+$                          {"Constant": {"ConstantInt": [{"TagEnum": "Material"}, 5]}}]}]]}}],
+$       [{"Name": "Colour"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagEnum": "Colour"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagEnum": "Colour"}, 1]}},
+$                          {"Constant": {"ConstantInt": [{"TagEnum": "Colour"}, 3]}}]}]]}}],
+$       [{"MachineName": ["let", 1, []]},
+$        {"Op":
+$             {"MkOpSum":
+$                  {"Comprehension":
+$                       [{"Op":
+$                             {"MkOpImage":
+$                                  [{"Reference":
+$                                        [{"Name": "quantity"},
+$                                         {"DeclNoRepr":
+$                                              ["Given", {"Name": "quantity"},
+$                                               {"DomainFunction":
+$                                                    [[],
+$                                                     [{"SizeAttr_Size":
+$                                                           {"Reference":
+$                                                                [{"MachineName": ["fin", 1, []]},
+$                                                                 {"DeclNoRepr":
+$                                                                      ["Given", {"MachineName": ["fin", 1, []]},
+$                                                                       {"DomainInt": [{"TagInt": []}, []]},
+$                                                                       {"NoRegion": []}]}]}},
+$                                                      "PartialityAttr_Total", "JectivityAttr_None"],
+$                                                     {"DomainInt":
+$                                                          [{"TagEnum": "Material"},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant":
+$                                                                       {"ConstantInt": [{"TagEnum": "Material"}, 1]}},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt":
+$                                                                            [{"TagEnum": "Material"}, 5]}}]}]]},
+$                                                     {"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                                                                  {"Reference":
+$                                                                       [{"MachineName": ["fin", 2, []]},
+$                                                                        {"DeclNoRepr":
+$                                                                             ["Given", {"MachineName": ["fin", 2, []]},
+$                                                                              {"DomainInt": [{"TagInt": []}, []]},
+$                                                                              {"NoRegion": []}]}]}]}]]}]},
+$                                               {"NoRegion": []}]}]},
+$                                   {"Reference":
+$                                        [{"Name": "m"},
+$                                         {"DeclNoRepr":
+$                                              ["Quantified", {"Name": "m"},
+$                                               {"DomainInt":
+$                                                    [{"TagEnum": "Material"},
+$                                                     [{"RangeBounded":
+$                                                           [{"Constant": {"ConstantInt": [{"TagEnum": "Material"}, 1]}},
+$                                                            {"Constant":
+$                                                                 {"ConstantInt": [{"TagEnum": "Material"}, 5]}}]}]]},
+$                                               {"NoRegion": []}]}]}]}},
+$                        [{"Generator":
+$                              {"GenDomainNoRepr":
+$                                   [{"Single": {"Name": "m"}},
+$                                    {"DomainInt":
+$                                         [{"TagEnum": "Material"},
+$                                          [{"RangeBounded":
+$                                                [{"Constant": {"ConstantInt": [{"TagEnum": "Material"}, 1]}},
+$                                                 {"Constant":
+$                                                      {"ConstantInt": [{"TagEnum": "Material"}, 5]}}]}]]}]}}]]}}}],
+$       [{"Name": "Bin"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagUnnamed": "Bin"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"MachineName": ["let", 1, []]},
+$                                {"Alias":
+$                                     {"Op":
+$                                          {"MkOpSum":
+$                                               {"Comprehension":
+$                                                    [{"Op":
+$                                                          {"MkOpImage":
+$                                                               [{"Reference":
+$                                                                     [{"Name": "quantity"},
+$                                                                      {"DeclNoRepr":
+$                                                                           ["Given", {"Name": "quantity"},
+$                                                                            {"DomainFunction":
+$                                                                                 [[],
+$                                                                                  [{"SizeAttr_Size":
+$                                                                                        {"Reference":
+$                                                                                             [{"MachineName":
+$                                                                                                   ["fin", 1, []]},
+$                                                                                              {"DeclNoRepr":
+$                                                                                                   ["Given",
+$                                                                                                    {"MachineName":
+$                                                                                                         ["fin", 1, []]},
+$                                                                                                    {"DomainInt":
+$                                                                                                         [{"TagInt": []},
+$                                                                                                          []]},
+$                                                                                                    {"NoRegion":
+$                                                                                                         []}]}]}},
+$                                                                                   "PartialityAttr_Total",
+$                                                                                   "JectivityAttr_None"],
+$                                                                                  {"DomainInt":
+$                                                                                       [{"TagEnum": "Material"},
+$                                                                                        [{"RangeBounded":
+$                                                                                              [{"Constant":
+$                                                                                                    {"ConstantInt":
+$                                                                                                         [{"TagEnum":
+$                                                                                                               "Material"},
+$                                                                                                          1]}},
+$                                                                                               {"Constant":
+$                                                                                                    {"ConstantInt":
+$                                                                                                         [{"TagEnum":
+$                                                                                                               "Material"},
+$                                                                                                          5]}}]}]]},
+$                                                                                  {"DomainInt":
+$                                                                                       [{"TagInt": []},
+$                                                                                        [{"RangeBounded":
+$                                                                                              [{"Constant":
+$                                                                                                    {"ConstantInt":
+$                                                                                                         [{"TagInt": []},
+$                                                                                                          0]}},
+$                                                                                               {"Reference":
+$                                                                                                    [{"MachineName":
+$                                                                                                          ["fin", 2,
+$                                                                                                           []]},
+$                                                                                                     {"DeclNoRepr":
+$                                                                                                          ["Given",
+$                                                                                                           {"MachineName":
+$                                                                                                                ["fin",
+$                                                                                                                 2, []]},
+$                                                                                                           {"DomainInt":
+$                                                                                                                [{"TagInt":
+$                                                                                                                      []},
+$                                                                                                                 []]},
+$                                                                                                           {"NoRegion":
+$                                                                                                                []}]}]}]}]]}]},
+$                                                                            {"NoRegion": []}]}]},
+$                                                                {"Reference":
+$                                                                     [{"Name": "m"},
+$                                                                      {"DeclNoRepr":
+$                                                                           ["Quantified", {"Name": "m"},
+$                                                                            {"DomainInt":
+$                                                                                 [{"TagEnum": "Material"},
+$                                                                                  [{"RangeBounded":
+$                                                                                        [{"Constant":
+$                                                                                              {"ConstantInt":
+$                                                                                                   [{"TagEnum":
+$                                                                                                         "Material"},
+$                                                                                                    1]}},
+$                                                                                         {"Constant":
+$                                                                                              {"ConstantInt":
+$                                                                                                   [{"TagEnum":
+$                                                                                                         "Material"},
+$                                                                                                    5]}}]}]]},
+$                                                                            {"NoRegion": []}]}]}]}},
+$                                                     [{"Generator":
+$                                                           {"GenDomainNoRepr":
+$                                                                [{"Single": {"Name": "m"}},
+$                                                                 {"DomainInt":
+$                                                                      [{"TagEnum": "Material"},
+$                                                                       [{"RangeBounded":
+$                                                                             [{"Constant":
+$                                                                                   {"ConstantInt":
+$                                                                                        [{"TagEnum": "Material"}, 1]}},
+$                                                                              {"Constant":
+$                                                                                   {"ConstantInt":
+$                                                                                        [{"TagEnum": "Material"},
+$                                                                                         5]}}]}]]}]}}]]}}}}]}]}]]}}],
+$       [{"MachineName": ["let", 2, []]},
+$        {"Op":
+$             {"MkOpMax":
+$                  {"Op":
+$                       {"MkOpRange":
+$                            {"Reference":
+$                                 [{"Name": "capacity"},
+$                                  {"DeclNoRepr":
+$                                       ["Given", {"Name": "capacity"},
+$                                        {"DomainFunction":
+$                                             [[],
+$                                              [{"SizeAttr_Size":
+$                                                    {"Reference":
+$                                                         [{"MachineName": ["fin", 3, []]},
+$                                                          {"DeclNoRepr":
+$                                                               ["Given", {"MachineName": ["fin", 3, []]},
+$                                                                {"DomainInt": [{"TagInt": []}, []]},
+$                                                                {"NoRegion": []}]}]}},
+$                                               "PartialityAttr_Total", "JectivityAttr_None"],
+$                                              {"DomainInt":
+$                                                   [{"TagEnum": "Colour"},
+$                                                    [{"RangeBounded":
+$                                                          [{"Constant": {"ConstantInt": [{"TagEnum": "Colour"}, 1]}},
+$                                                           {"Constant":
+$                                                                {"ConstantInt": [{"TagEnum": "Colour"}, 3]}}]}]]},
+$                                              {"DomainInt":
+$                                                   [{"TagInt": []},
+$                                                    [{"RangeBounded":
+$                                                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                                                           {"Reference":
+$                                                                [{"MachineName": ["fin", 4, []]},
+$                                                                 {"DeclNoRepr":
+$                                                                      ["Given", {"MachineName": ["fin", 4, []]},
+$                                                                       {"DomainInt": [{"TagInt": []}, []]},
+$                                                                       {"NoRegion": []}]}]}]}]]}]},
+$                                        {"NoRegion": []}]}]}}}}}]],
+$  "unnameds": [[{"Name": "Bin"}, {"Reference": [{"MachineName": ["let", 1, []]}, null]}]],
+$  "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 2, 2],
+$       [1, 1, 1], [1, 1, 3], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "trailVerbose": [], "trailRewrites": [], "nameGenState": [["fin", 5], ["let", 3], ["q", 69]], "nbExtraGivens": 4,
+$  "representations":
+$      [[{"Name": "capacity"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 3, []]},
+$                          {"DeclNoRepr":
+$                               ["Given", {"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]},
+$                                {"NoRegion": []}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagEnum": "Colour"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "Colour"}, 1]}},
+$                           {"Constant": {"ConstantInt": [{"TagEnum": "Colour"}, 3]}}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 4, []]},
+$                                 {"DeclNoRepr":
+$                                      ["Given", {"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]},
+$                                       {"NoRegion": []}]}]}]}]]}]}],
+$       [{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "quantity"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 1, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagEnum": "Material"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "Material"}, 1]}},
+$                           {"Constant": {"ConstantInt": [{"TagEnum": "Material"}, 5]}}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 2, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 2, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "maxMaterial"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "colour"},
+$        {"DomainFunction":
+$             [{"Function_NDPartialDummy": []}, [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagUnnamed": "Bin"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"MachineName": ["let", 1, []]},
+$                                 {"Alias":
+$                                      {"Op":
+$                                           {"MkOpSum":
+$                                                {"Comprehension":
+$                                                     [{"Op":
+$                                                           {"MkOpImage":
+$                                                                [{"Reference":
+$                                                                      [{"Name": "quantity"},
+$                                                                       {"DeclHasRepr":
+$                                                                            ["Given", {"Name": "quantity"},
+$                                                                             {"DomainFunction":
+$                                                                                  [{"Function_1D": []},
+$                                                                                   [{"SizeAttr_Size":
+$                                                                                         {"Reference":
+$                                                                                              [{"MachineName":
+$                                                                                                    ["fin", 1, []]},
+$                                                                                               {"DeclHasRepr":
+$                                                                                                    ["Given",
+$                                                                                                     {"MachineName":
+$                                                                                                          ["fin", 1,
+$                                                                                                           []]},
+$                                                                                                     {"DomainInt":
+$                                                                                                          [{"TagInt":
+$                                                                                                                []},
+$                                                                                                           []]}]}]}},
+$                                                                                    "PartialityAttr_Total",
+$                                                                                    "JectivityAttr_None"],
+$                                                                                   {"DomainInt":
+$                                                                                        [{"TagEnum": "Material"},
+$                                                                                         [{"RangeBounded":
+$                                                                                               [{"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagEnum":
+$                                                                                                                "Material"},
+$                                                                                                           1]}},
+$                                                                                                {"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagEnum":
+$                                                                                                                "Material"},
+$                                                                                                           5]}}]}]]},
+$                                                                                   {"DomainInt":
+$                                                                                        [{"TagInt": []},
+$                                                                                         [{"RangeBounded":
+$                                                                                               [{"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagInt":
+$                                                                                                                []},
+$                                                                                                           0]}},
+$                                                                                                {"Reference":
+$                                                                                                     [{"MachineName":
+$                                                                                                           ["fin", 2,
+$                                                                                                            []]},
+$                                                                                                      {"DeclHasRepr":
+$                                                                                                           ["Given",
+$                                                                                                            {"MachineName":
+$                                                                                                                 ["fin",
+$                                                                                                                  2,
+$                                                                                                                  []]},
+$                                                                                                            {"DomainInt":
+$                                                                                                                 [{"TagInt":
+$                                                                                                                       []},
+$                                                                                                                  []]}]}]}]}]]}]}]}]},
+$                                                                 {"Reference":
+$                                                                      [{"Name": "m"},
+$                                                                       {"DeclHasRepr":
+$                                                                            ["Quantified", {"Name": "m"},
+$                                                                             {"DomainInt":
+$                                                                                  [{"TagEnum": "Material"},
+$                                                                                   [{"RangeBounded":
+$                                                                                         [{"Constant":
+$                                                                                               {"ConstantInt":
+$                                                                                                    [{"TagEnum":
+$                                                                                                          "Material"},
+$                                                                                                     1]}},
+$                                                                                          {"Constant":
+$                                                                                               {"ConstantInt":
+$                                                                                                    [{"TagEnum":
+$                                                                                                          "Material"},
+$                                                                                                     5]}}]}]]}]}]}]}},
+$                                                      [{"Generator":
+$                                                            {"GenDomainHasRepr":
+$                                                                 [{"Name": "m"},
+$                                                                  {"DomainInt":
+$                                                                       [{"TagEnum": "Material"},
+$                                                                        [{"RangeBounded":
+$                                                                              [{"Constant":
+$                                                                                    {"ConstantInt":
+$                                                                                         [{"TagEnum": "Material"}, 1]}},
+$                                                                               {"Constant":
+$                                                                                    {"ConstantInt":
+$                                                                                         [{"TagEnum": "Material"},
+$                                                                                          5]}}]}]]}]}}]]}}}}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagEnum": "Colour"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "Colour"}, 1]}},
+$                           {"Constant": {"ConstantInt": [{"TagEnum": "Colour"}, 3]}}]}]]}]}],
+$       [{"Name": "contents"},
+$        {"DomainFunction":
+$             [{"Function_1DPartial": []}, [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagUnnamed": "Bin"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"MachineName": ["let", 1, []]},
+$                                 {"Alias":
+$                                      {"Op":
+$                                           {"MkOpSum":
+$                                                {"Comprehension":
+$                                                     [{"Op":
+$                                                           {"MkOpImage":
+$                                                                [{"Reference":
+$                                                                      [{"Name": "quantity"},
+$                                                                       {"DeclHasRepr":
+$                                                                            ["Given", {"Name": "quantity"},
+$                                                                             {"DomainFunction":
+$                                                                                  [{"Function_1D": []},
+$                                                                                   [{"SizeAttr_Size":
+$                                                                                         {"Reference":
+$                                                                                              [{"MachineName":
+$                                                                                                    ["fin", 1, []]},
+$                                                                                               {"DeclHasRepr":
+$                                                                                                    ["Given",
+$                                                                                                     {"MachineName":
+$                                                                                                          ["fin", 1,
+$                                                                                                           []]},
+$                                                                                                     {"DomainInt":
+$                                                                                                          [{"TagInt":
+$                                                                                                                []},
+$                                                                                                           []]}]}]}},
+$                                                                                    "PartialityAttr_Total",
+$                                                                                    "JectivityAttr_None"],
+$                                                                                   {"DomainInt":
+$                                                                                        [{"TagEnum": "Material"},
+$                                                                                         [{"RangeBounded":
+$                                                                                               [{"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagEnum":
+$                                                                                                                "Material"},
+$                                                                                                           1]}},
+$                                                                                                {"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagEnum":
+$                                                                                                                "Material"},
+$                                                                                                           5]}}]}]]},
+$                                                                                   {"DomainInt":
+$                                                                                        [{"TagInt": []},
+$                                                                                         [{"RangeBounded":
+$                                                                                               [{"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagInt":
+$                                                                                                                []},
+$                                                                                                           0]}},
+$                                                                                                {"Reference":
+$                                                                                                     [{"MachineName":
+$                                                                                                           ["fin", 2,
+$                                                                                                            []]},
+$                                                                                                      {"DeclHasRepr":
+$                                                                                                           ["Given",
+$                                                                                                            {"MachineName":
+$                                                                                                                 ["fin",
+$                                                                                                                  2,
+$                                                                                                                  []]},
+$                                                                                                            {"DomainInt":
+$                                                                                                                 [{"TagInt":
+$                                                                                                                       []},
+$                                                                                                                  []]}]}]}]}]]}]}]}]},
+$                                                                 {"Reference":
+$                                                                      [{"Name": "m"},
+$                                                                       {"DeclHasRepr":
+$                                                                            ["Quantified", {"Name": "m"},
+$                                                                             {"DomainInt":
+$                                                                                  [{"TagEnum": "Material"},
+$                                                                                   [{"RangeBounded":
+$                                                                                         [{"Constant":
+$                                                                                               {"ConstantInt":
+$                                                                                                    [{"TagEnum":
+$                                                                                                          "Material"},
+$                                                                                                     1]}},
+$                                                                                          {"Constant":
+$                                                                                               {"ConstantInt":
+$                                                                                                    [{"TagEnum":
+$                                                                                                          "Material"},
+$                                                                                                     5]}}]}]]}]}]}]}},
+$                                                      [{"Generator":
+$                                                            {"GenDomainHasRepr":
+$                                                                 [{"Name": "m"},
+$                                                                  {"DomainInt":
+$                                                                       [{"TagEnum": "Material"},
+$                                                                        [{"RangeBounded":
+$                                                                              [{"Constant":
+$                                                                                    {"ConstantInt":
+$                                                                                         [{"TagEnum": "Material"}, 1]}},
+$                                                                               {"Constant":
+$                                                                                    {"ConstantInt":
+$                                                                                         [{"TagEnum": "Material"},
+$                                                                                          5]}}]}]]}]}}]]}}}}]}]}]]},
+$              {"DomainMSet":
+$                   [{"MSet_ExplicitWithFlags": []},
+$                    [{"SizeAttr_MaxSize":
+$                          {"Reference":
+$                               [{"MachineName": ["let", 2, []]},
+$                                {"Alias":
+$                                     {"Op":
+$                                          {"MkOpMax":
+$                                               {"Comprehension":
+$                                                    [{"Op":
+$                                                          {"MkOpIndexing":
+$                                                               [{"Reference":
+$                                                                     [{"MachineName": ["q", 2, []]},
+$                                                                      {"InComprehension":
+$                                                                           {"GenInExpr":
+$                                                                                [{"Single":
+$                                                                                      {"MachineName": ["q", 2, []]}},
+$                                                                                 {"Reference":
+$                                                                                      [{"Name": "capacity"},
+$                                                                                       {"DeclHasRepr":
+$                                                                                            ["Given",
+$                                                                                             {"Name": "capacity"},
+$                                                                                             {"DomainFunction":
+$                                                                                                  [{"Function_1D": []},
+$                                                                                                   [{"SizeAttr_Size":
+$                                                                                                         {"Reference":
+$                                                                                                              [{"MachineName":
+$                                                                                                                    ["fin",
+$                                                                                                                     3,
+$                                                                                                                     []]},
+$                                                                                                               {"DeclHasRepr":
+$                                                                                                                    ["Given",
+$                                                                                                                     {"MachineName":
+$                                                                                                                          ["fin",
+$                                                                                                                           3,
+$                                                                                                                           []]},
+$                                                                                                                     {"DomainInt":
+$                                                                                                                          [{"TagInt":
+$                                                                                                                                []},
+$                                                                                                                           []]}]}]}},
+$                                                                                                    "PartialityAttr_Total",
+$                                                                                                    "JectivityAttr_None"],
+$                                                                                                   {"DomainInt":
+$                                                                                                        [{"TagEnum":
+$                                                                                                              "Colour"},
+$                                                                                                         [{"RangeBounded":
+$                                                                                                               [{"Constant":
+$                                                                                                                     {"ConstantInt":
+$                                                                                                                          [{"TagEnum":
+$                                                                                                                                "Colour"},
+$                                                                                                                           1]}},
+$                                                                                                                {"Constant":
+$                                                                                                                     {"ConstantInt":
+$                                                                                                                          [{"TagEnum":
+$                                                                                                                                "Colour"},
+$                                                                                                                           3]}}]}]]},
+$                                                                                                   {"DomainInt":
+$                                                                                                        [{"TagInt": []},
+$                                                                                                         [{"RangeBounded":
+$                                                                                                               [{"Constant":
+$                                                                                                                     {"ConstantInt":
+$                                                                                                                          [{"TagInt":
+$                                                                                                                                []},
+$                                                                                                                           0]}},
+$                                                                                                                {"Reference":
+$                                                                                                                     [{"MachineName":
+$                                                                                                                           ["fin",
+$                                                                                                                            4,
+$                                                                                                                            []]},
+$                                                                                                                      {"DeclHasRepr":
+$                                                                                                                           ["Given",
+$                                                                                                                            {"MachineName":
+$                                                                                                                                 ["fin",
+$                                                                                                                                  4,
+$                                                                                                                                  []]},
+$                                                                                                                            {"DomainInt":
+$                                                                                                                                 [{"TagInt":
+$                                                                                                                                       []},
+$                                                                                                                                  []]}]}]}]}]]}]}]}]}]}}]},
+$                                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}},
+$                                                     [{"Generator":
+$                                                           {"GenInExpr":
+$                                                                [{"Single": {"MachineName": ["q", 2, []]}},
+$                                                                 {"Reference":
+$                                                                      [{"Name": "capacity"},
+$                                                                       {"DeclHasRepr":
+$                                                                            ["Given", {"Name": "capacity"},
+$                                                                             {"DomainFunction":
+$                                                                                  [{"Function_1D": []},
+$                                                                                   [{"SizeAttr_Size":
+$                                                                                         {"Reference":
+$                                                                                              [{"MachineName":
+$                                                                                                    ["fin", 3, []]},
+$                                                                                               {"DeclHasRepr":
+$                                                                                                    ["Given",
+$                                                                                                     {"MachineName":
+$                                                                                                          ["fin", 3,
+$                                                                                                           []]},
+$                                                                                                     {"DomainInt":
+$                                                                                                          [{"TagInt":
+$                                                                                                                []},
+$                                                                                                           []]}]}]}},
+$                                                                                    "PartialityAttr_Total",
+$                                                                                    "JectivityAttr_None"],
+$                                                                                   {"DomainInt":
+$                                                                                        [{"TagEnum": "Colour"},
+$                                                                                         [{"RangeBounded":
+$                                                                                               [{"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagEnum":
+$                                                                                                                "Colour"},
+$                                                                                                           1]}},
+$                                                                                                {"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagEnum":
+$                                                                                                                "Colour"},
+$                                                                                                           3]}}]}]]},
+$                                                                                   {"DomainInt":
+$                                                                                        [{"TagInt": []},
+$                                                                                         [{"RangeBounded":
+$                                                                                               [{"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagInt":
+$                                                                                                                []},
+$                                                                                                           0]}},
+$                                                                                                {"Reference":
+$                                                                                                     [{"MachineName":
+$                                                                                                           ["fin", 4,
+$                                                                                                            []]},
+$                                                                                                      {"DeclHasRepr":
+$                                                                                                           ["Given",
+$                                                                                                            {"MachineName":
+$                                                                                                                 ["fin",
+$                                                                                                                  4,
+$                                                                                                                  []]},
+$                                                                                                            {"DomainInt":
+$                                                                                                                 [{"TagInt":
+$                                                                                                                       []},
+$                                                                                                                  []]}]}]}]}]]}]}]}]}]}}]]}}}}]}},
+$                     {"OccurAttr_MaxOccur":
+$                          {"Reference":
+$                               [{"Name": "maxMaterial"},
+$                                {"DeclHasRepr":
+$                                     ["Given", {"Name": "maxMaterial"}, {"DomainInt": [{"TagInt": []}, []]}]}]}}],
+$                    {"DomainInt":
+$                         [{"TagEnum": "Material"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "Material"}, 1]}},
+$                                 {"Constant": {"ConstantInt": [{"TagEnum": "Material"}, 5]}}]}]]}]}]}]],
+$  "representationsTree":
+$      [[{"Name": "capacity"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "colour"},
+$        [{"rootLabel": {"Function_NDPartialDummy": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "contents"},
+$        [{"rootLabel": {"Function_1DPartial": []},
+$          "subForest":
+$              [{"rootLabel": null, "subForest": []},
+$               {"rootLabel": {"MSet_ExplicitWithFlags": []}, "subForest": [{"rootLabel": null, "subForest": []}]}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 4, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "maxMaterial"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "quantity"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "maxMaterial"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "quantity"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainEnum": [{"Name": "Material"}, null, null]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 0]}}}]]}]}],
+$       [{"Name": "capacity"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainEnum": [{"Name": "Colour"}, null, null]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 0]}}}]]}]}],
+$       [{"Name": "colour"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainReference": [{"Name": "Bin"}, null]}, {"DomainEnum": [{"Name": "Colour"}, null, null]}]}],
+$       [{"Name": "contents"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainReference": [{"Name": "Bin"}, null]},
+$              {"DomainMSet":
+$                   [[],
+$                    [{"SizeAttr_MaxSize": {"Reference": [{"MachineName": ["let", 2, []]}, null]}},
+$                     {"OccurAttr_MaxOccur": {"Reference": [{"Name": "maxMaterial"}, null]}}],
+$                    {"DomainEnum": [{"Name": "Material"}, null, null]}]}]}]],
+$  "trailGeneralised":
+$      [[611483690604618983, -1599742896590042079], [-5637242827344055692, -8112450597396923468],
+$       [7238102192680239354, 5238552569545547600], [1157928669855580214, -3819119139686618749],
+$       [-8292377565603730003, 2711271146226917958], [3018849612959747324, 2956311871174755500],
+$       [-4796442667100820294, -7615851856176211764], [-2633689885113566560, -7656163734535823839],
+$       [3162100274937342813, -453158055538987510], [-7256885993440326434, -5514398062173613617],
+$       [-5106588958356776046, 2447811628522045047], [7138689972162748109, -5743836685189663189],
+$       [7208089140137200174, 1799163178529483383], [-8505957843327058857, 1799163178529483383],
+$       [7634499367012521607, 1799163178529483383], [73682786346940430, 1799163178529483383],
+$       [-6479476876670832899, 1799163178529483383], [-5643476180603138103, 1799163178529483383],
+$       [4176423101160111983, -1671419166136748953], [-9749417047804630, -449757327698730060],
+$       [-2709964028958410465, 2956311871174755500], [-8979239683116956903, 6693616925057832498],
+$       [924322575811617545, -1105717822634530808], [-7736257058940775707, -1393805192062545616],
+$       [-1520063467071459536, -659192238966828862], [-5537888628769343812, 1046201663081112380],
+$       [-2574846650308389745, -2515771428623076588], [3255912171235052041, -5498327017393974520],
+$       [3362459346604654039, 6235317994829962968], [-2265657814792289039, -7779386604625531880],
+$       [5410664537342870615, 669810466115201458], [7002869040873171746, 8123384286300897584],
+$       [968898425731962394, -7112629336081605390], [4538403855748106428, 249363829864134063],
+$       [-579908990273154734, -6742311059804480606], [-5931015139812972962, -8085225498774126944],
+$       [2184267207586173742, 249363829864134063], [-8898520649611005827, 3297534528538631391],
+$       [4152063543440551696, 6125764164513561787], [-7573775473578459494, 6125764164513561787],
+$       [-4239975532881622937, 6125764164513561787], [4346438021560103385, 6125764164513561787],
+$       [-6551710584584860522, 6125764164513561787], [6987496911536771154, 6125764164513561787],
+$       [-314391305934497079, 8176305225148834729], [3296915524646532510, 609807298624310716],
+$       [-1572609278335606185, 2956311871174755500], [1470924093097827473, 7046507320858892106],
+$       [-152068674663063531, 2979398826517017002], [6155258929171321284, 2208595892522056684],
+$       [4521703507682974735, -3910650002676953322], [-1167618841604217429, -1854180491948929964],
+$       [4662167112421429370, 955713416191007602], [-4075856307886933585, 7733615324968562416],
+$       [-7284668822334202459, -5765779302370482686], [8930590357384603447, 3977010730295705724],
+$       [101908519142566104, -2124690697313068868], [-8476864058262943449, -6742311059804480606],
+$       [-2947272231081276987, -8085225498774126944], [3534501530024447047, 249363829864134063],
+$       [1387840014253810901, -7154919078346841302], [-3100599920921476483, -4187813469553367512],
+$       [-970275563956379991, 249363829864134063], [-8582359334723970483, -6271683638914046721],
+$       [6601168928657396020, -2439572134975960369], [6491040600923672424, -2439572134975960369],
+$       [-7743242829878396643, -2439572134975960369], [5230597052175936983, -2439572134975960369],
+$       [-6297058225870505927, -2439572134975960369], [-362076391111680946, -2439572134975960369],
+$       [-8359929197645398835, 3045474848547138357], [-7226972608832941642, 3322027358552499700],
+$       [5912048996567756551, 2956311871174755500], [-5201547709900767751, -6035814124894928616],
+$       [415424965516854741, 1812727326450732866], [-3870341317741590774, -2225099814785840836],
+$       [-125061562561637437, 1707150627400023756], [-862166204906066627, -1607627552335108328],
+$       [-8437975106610342821, 2567949195069752204], [-1754221566974885354, -5453092977909925088],
+$       [6268649412199170479, 5274381221662086632], [5152269122748246681, -4649245740377876656],
+$       [-5669219112395990025, 6647327322059708326], [5174278338031156425, 8123384286300897584],
+$       [-16089184655580087, -7112629336081605390], [537099011954992399, 249363829864134063],
+$       [-426412036284609916, 2378894293655850728], [8701898931272987204, -1553998728059034370],
+$       [-5667969271485959768, 249363829864134063], [-1079462180068280221, -2242529723305911419],
+$       [6617571624372321444, -7495719035194430325], [4077695943280737619, -7495719035194430325],
+$       [-7138939581554268089, -7495719035194430325], [-7467718593884486990, -7495719035194430325],
+$       [-7732567171240436505, 8633681972641093477], [-6823698441337913496, -239876902327246484],
+$       [3181908109352773013, 2956311871174755500], [774069563819197647, -4012508628566752122],
+$       [4133907010806683055, 8622163293781735626], [-4092557670329139387, 7671689928677784730],
+$       [4645665296239830645, 5280686555909078854], [-1277892461455957669, 1311985317873620426],
+$       [-8123275254498709086, -1628658811994531198], [8428075805404918480, 3401420432886975618],
+$       [-9167361868761773168, -6994505573849979072], [6693914345111973046, 249363829864134063],
+$       [1553083519612961583, 5439453147528757965], [-207203542352354909, -7594329693473016699],
+$       [-8839151425562958857, 1831079236637217765], [5847227855337920588, 1831079236637217765],
+$       [-8091214247810077106, 1831079236637217765], [-5090614189688547792, 1831079236637217765],
+$       [6509172318493557215, -69910496958519085], [7330310275155795332, -3568862465947275434],
+$       [8282269335597089193, 2956311871174755500], [-8775930728552991141, 7009216528438296590],
+$       [-6844646176270150579, -87869662202777311], [5856325251334927324, -1539978929929237814],
+$       [2320830855554538584, 5678292950787618580], [-3315352509455337181, -1210118792530055416],
+$       [-5931765801192929496, 3045105193824791876], [125943350004175741, -8357862506753371839],
+$       [6163169758576885877, -6994505573849979072], [-5641603226519660889, 249363829864134063],
+$       [-5949882010867919516, 5439453147528757965], [2255583311673334541, -3123469429294610161],
+$       [4703185258612046942, 995172950645380951], [72397677220218386, 995172950645380951],
+$       [-8227120012172637491, 995172950645380951], [4181955007591357567, 995172950645380951],
+$       [-3513699959993615879, 995172950645380951], [4697430058188633928, 995172950645380951],
+$       [4296854102668975339, 995172950645380951], [3317557716137492667, -7029430287599228909],
+$       [-6596223274689175406, 9026760447239605876], [-408407280964766177, 2956311871174755500],
+$       [3593168702213189353, 4914006765105571552], [-1759499664338522511, -977715653022945496],
+$       [875398510663628820, 5721253827695531776], [-8236718535104646320, 5156339305361730082],
+$       [6957588158631929102, 443230178585010052], [-7438452991620013707, 7215150373740884188],
+$       [4216062663893907548, -7154919078346841302], [-2672279606851973114, -4187813469553367512],
+$       [4433995266220193604, 249363829864134063], [-4248190934143423311, 6445077194163734864],
+$       [-5120899473145196725, 8950933778246796378], [-5666039328965436991, 3031520955850338604],
+$       [-553922434819135572, 2794261623828290642], [240046676688146033, 4310952414613724950],
+$       [7336898186748329807, 472258895827034800], [-7168857569085494585, 249363829864134063],
+$       [1672349624716178884, 5439453147528757965], [818446837112101065, 244377602979804675],
+$       [5940060222756929340, 4591239752651064619], [4348841770501297023, 4591239752651064619],
+$       [-1985148741585334279, 4591239752651064619], [7894511122926762461, 4591239752651064619],
+$       [3937588815177975112, 4591239752651064619], [-7603791031592789464, 4591239752651064619],
+$       [3820865615098734867, 4591239752651064619], [2459278608107471049, 8780400306373216701],
+$       [-5194103907369383474, 1473859254327126796], [-1985892974662282461, 2956311871174755500],
+$       [7572495649979822951, 3125411312255691180], [-6317789420158657255, -712483415932345568],
+$       [-4620674200440553420, -2467161456360459360], [-8941702802817843852, -3570195605933084952],
+$       [4192508211647643650, -3575966876398946864], [2544968755525408164, -6756316232993424650],
+$       [-7231875535217046617, 8123384286300897584], [-3163976503637265041, -7112629336081605390],
+$       [-3684329358628873595, 249363829864134063], [-704822907168326403, -3808547841813240644],
+$       [-2913089975086763927, 6786928202391281804], [-8663728209858044401, 7058021977300461896],
+$       [9064121200088000185, 253661212724521672], [557382204095773688, 2378894293655850728],
+$       [-6007483533635807016, -1553998728059034370], [-7628356372303902860, 249363829864134063],
+$       [3541671797992825818, 5439453147528757965], [1596314894363549717, -4286786256957254561],
+$       [8400913146013753444, -8424476957215821761], [5836552379135370742, -8424476957215821761],
+$       [-1956989021141368693, -8424476957215821761], [8954137986532174766, -8424476957215821761],
+$       [4006610263363661709, -8424476957215821761], [3925617059595668615, -8424476957215821761],
+$       [-5153013154521537054, -8424476957215821761], [-7764490304972258085, 4149836801066995211],
+$       [4749479744482665306, 5918709260205547348], [5685508094690506063, 2956311871174755500],
+$       [3960321294570753801, 3296312637386029112], [5744443495441166785, -4676016589813927740],
+$       [297423974264338284, 2459028765587219740], [3224774633085630098, 3150858743419314238],
+$       [-642307788817983708, 9151181821577233580], [5917635551132924765, 1485688555360931388],
+$       [2958687479991500510, 4310952414613724950], [-7430702465507370540, 472258895827034800],
+$       [-3360552742141962650, 249363829864134063], [-2018819435828191584, -9038741513127933376],
+$       [4653389650810526096, 2482702816366266120], [959085031209518266, -210230424163679136],
+$       [5582988717293498066, 61063846942469374], [1073231231049771091, 8123384286300897584],
+$       [6079274677199414499, -7112629336081605390], [9029945045143576363, 249363829864134063],
+$       [-4630566135246901123, 5439453147528757965], [8038334995624572507, -7636832714150379131],
+$       [-8273319907038389502, 9040306260467423099], [6808163885597749181, 9040306260467423099],
+$       [1267557655951215880, 9040306260467423099], [-4158396466239297573, 9040306260467423099],
+$       [2705850844561013499, 3661941189611908961], [5865603160388141736, 7447376900905372924],
+$       [-3760582555659357279, 2956311871174755500], [-820471812464371405, -5673770988802536344],
+$       [9010816514545712115, -3836348631886677176], [-8027925790160514194, -4994502273588764818],
+$       [-176465309423374561, 704608383451107556], [7555161568191047043, 5706778466679774201],
+$       [1311098521887019916, 1516583494955064425], [7602557636569080453, 4252430913618565346],
+$       [-1078574107542823633, 2505310067953445770], [-6121135505632603159, 7428260861410101386],
+$       [-95922396421824565, 5439453147528757965], [-5652441807686903261, 2803811917318849878],
+$       [-7841130248080365306, -645988537786834794], [-2963981652866951756, 249363829864134063],
+$       [-7062886286840266721, -5733884538158876209], [-1153818407267945984, 2956311871174755500],
+$       [-8208460561632566573, 8767583779333795954], [5278470262620430384, -8890183257059028684],
+$       [7982073760599133359, -4054724979526414274], [-7307133832345925583, 1421258916564213750],
+$       [4832752137047981190, -7166359079570376136], [-4463834998305699660, 2332983349234178699],
+$       [4053893737190485701, 7286658547289592258], [3945084584446817226, 4435507313698303582],
+$       [-7326048497232312429, 1957074505230866081], [7911805747637544981, -5165465249950272475],
+$       [-9136948388913046249, -7324682296044072974], [5973046546762004669, 2616519149669181449],
+$       [-7414569416946001198, -3744409876873087609], [5833205220007037789, 4381253384719785570],
+$       [1170049872016893374, -1157537070964736123], [-6070720228539356297, 2588225522945981690],
+$       [4363455212265438539, -7939513774563815627], [5315904142772176699, 6102126331364267265],
+$       [4433063360038316954, -4565107506492377449], [7900661074643750211, -6926999272990016204],
+$       [-4998995512658946471, -9152794463135868851], [-8733517703377379527, 2524126894077356654],
+$       [-1671892479709818092, 4872377795362843000], [7175673946607182593, 1353578579932156926],
+$       [-4798821769617415657, 8065697280395697634], [4167217271288410615, -3151186293547119328],
+$       [1558356392587738473, 8099769877878797164], [-2463088231289744926, 6006147947877917096],
+$       [-5731870346960269447, 6872345136638831032], [2658406016746726629, 4640087245029185651],
+$       [7697439409511111324, 1865819158868847140], [5830450381225281887, 1865819158868847140],
+$       [-559844193727297238, 1865819158868847140], [-7706390507466470974, -3703759483160496577],
+$       [-3083381263321083076, 2534100641800886203], [-6140409268867368438, 8896605051887222614],
+$       [1649799143665164169, 665016632880088081], [-7423281730464819129, -7397774748311104330],
+$       [-1392102453890450021, 1737743860689275508], [8130536713793318082, -3777705317321548531],
+$       [-8051074377230398790, -1964578803823198858], [-3849815333733772564, -9211750015327474909],
+$       [-1570981671137939021, -5625385744456990537], [1150147188813115470, 2949782967122175802],
+$       [-4402436547241611773, 382591187202558247], [1620589121720272941, 1185628247634663157],
+$       [5538973978205412489, -7809102271802771769], [-7585699855892836912, 5297353272529455367],
+$       [-1087682674326322374, 853401727285586997], [-36312913505387440, -3700184427211778437],
+$       [-7513108054276879857, -267401824316209541], [-7054977139467973086, 7694520093783479643],
+$       [8993613185948270769, 6246029443405160411], [-5263258970776982241, -5051792995994291160],
+$       [-4401291102531412933, -1713639679268012530]]}

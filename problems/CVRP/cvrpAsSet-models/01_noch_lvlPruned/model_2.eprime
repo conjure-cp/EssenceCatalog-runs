@@ -9,163 +9,160 @@ given fin4: int
 given costs_FunctionND: matrix indexed by [int(0..numberLocations), int(0..numberLocations)] of int(0..fin4)
 given vehicleCapacity: int
 letting maxTotalCost be sum([costs_FunctionND[0, i] | i : int(1..numberLocations)]) * 2
-letting totalOrderWeight be sum([orderWeights_Function1D[q57] | q57 : int(1..numberLocations)])
+letting totalOrderWeight be sum([orderWeights_Function1D[q56] | q56 : int(1..numberLocations)])
 letting minVehicles be totalOrderWeight / vehicleCapacity + toInt(totalOrderWeight % vehicleCapacity != 0)
-find plan_ExplicitVarSizeWithFlagsR15_Flags: matrix indexed by [int(1..numberLocations)] of bool
-find plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length:
+find plan_ExplicitVarSizeWithFlagsR16_Flags: matrix indexed by [int(1..numberLocations)] of bool
+find plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length:
         matrix indexed by [int(1..numberLocations)] of int(0..numberLocations)
-find plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values:
+find plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values:
         matrix indexed by [int(1..numberLocations), int(1..numberLocations)] of int(1..numberLocations)
 find optVar: int(0..maxTotalCost)
 branching on
-    [plan_ExplicitVarSizeWithFlagsR15_Flags, plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length,
-     plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values, optVar]
+    [plan_ExplicitVarSizeWithFlagsR16_Flags, plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length,
+     plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values, optVar]
 minimising optVar
 such that
     optVar =
-    sum([toInt(plan_ExplicitVarSizeWithFlagsR15_Flags[q35]) *
+    sum([toInt(plan_ExplicitVarSizeWithFlagsR16_Flags[q34]) *
          catchUndef(sum([toInt(q1 <=
-                               sum([toInt(q38 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
-                                        | q38 : int(1..numberLocations)]))
+                               sum([toInt(q37 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
+                                        | q37 : int(1..numberLocations)]))
                          *
                          catchUndef(costs_FunctionND
-                                        [sum([toInt(q36 <=
-                                                    plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
+                                        [sum([toInt(q35 <=
+                                                    plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
                                               *
-                                              catchUndef(plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values
-                                                             [q35, q36],
+                                              catchUndef(plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values
+                                                             [q34, q35],
                                                          0)
-                                                  | q36 : int(1..numberLocations), q36 = q1 - 1]),
-                                         sum([toInt(q37 <=
-                                                    plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
+                                                  | q35 : int(1..numberLocations), q35 = q1 - 1]),
+                                         sum([toInt(q36 <=
+                                                    plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
                                               *
-                                              catchUndef(plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values
-                                                             [q35, q37],
+                                              catchUndef(plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values
+                                                             [q34, q36],
                                                          0)
-                                                  | q37 : int(1..numberLocations), q37 = q1])],
+                                                  | q36 : int(1..numberLocations), q36 = q1])],
                                     0)
                              | q1 : int(2..numberLocations)])
                     +
                     costs_FunctionND
                         [0,
-                         sum([toInt(q39 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35]) *
-                              catchUndef(plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q35, q39], 0)
-                                  | q39 : int(1..numberLocations), q39 = 1])]
+                         sum([toInt(q38 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34]) *
+                              catchUndef(plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values[q34, q38], 0)
+                                  | q38 : int(1..numberLocations), q38 = 1])]
                     +
                     costs_FunctionND
-                        [sum([toInt(q40 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35] /\
-                                    q40 =
-                                    sum([toInt(q41 <=
-                                               plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
-                                             | q41 : int(1..numberLocations)]))
-                              * catchUndef(plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q35, q40], 0)
-                                  | q40 : int(1..numberLocations)]),
+                        [sum([toInt(q39 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34] /\
+                                    q39 =
+                                    sum([toInt(q40 <=
+                                               plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
+                                             | q40 : int(1..numberLocations)]))
+                              * catchUndef(plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values[q34, q39], 0)
+                                  | q39 : int(1..numberLocations)]),
                          0],
                     0)
-             | q35 : int(1..numberLocations)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q35] ->
+             | q34 : int(1..numberLocations)]),
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q34] ->
          and([q1 <=
-              sum([toInt(q43 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
-                       | q43 : int(1..numberLocations)])
+              sum([toInt(q42 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
+                       | q42 : int(1..numberLocations)])
               ->
               or([q7 <=
-                  sum([toInt(q42 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
-                           | q42 : int(1..numberLocations)])
+                  sum([toInt(q41 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
+                           | q41 : int(1..numberLocations)])
                   /\ q7 = q1 - 1
                       | q7 : int(1..numberLocations)])
                   | q1 : int(2..numberLocations)])
-             | q35 : int(1..numberLocations)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q35] ->
+             | q34 : int(1..numberLocations)]),
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q34] ->
          and([q1 <=
-              sum([toInt(q45 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
-                       | q45 : int(1..numberLocations)])
+              sum([toInt(q44 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
+                       | q44 : int(1..numberLocations)])
               ->
               or([q10 <=
-                  sum([toInt(q44 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
-                           | q44 : int(1..numberLocations)])
+                  sum([toInt(q43 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
+                           | q43 : int(1..numberLocations)])
                   /\ q10 = q1
                       | q10 : int(1..numberLocations)])
                   | q1 : int(2..numberLocations)])
-             | q35 : int(1..numberLocations)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q35] ->
+             | q34 : int(1..numberLocations)]),
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q34] ->
          or([q15 <=
-             sum([toInt(q46 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
-                      | q46 : int(1..numberLocations)])
+             sum([toInt(q45 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
+                      | q45 : int(1..numberLocations)])
              /\ q15 = 1
                  | q15 : int(1..numberLocations)])
-             | q35 : int(1..numberLocations)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q35] ->
+             | q34 : int(1..numberLocations)]),
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q34] ->
          or([q20 <=
-             sum([toInt(q48 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
-                      | q48 : int(1..numberLocations)])
+             sum([toInt(q47 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
+                      | q47 : int(1..numberLocations)])
              /\
              q20 =
-             sum([toInt(q47 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q35])
-                      | q47 : int(1..numberLocations)])
+             sum([toInt(q46 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q34])
+                      | q46 : int(1..numberLocations)])
                  | q20 : int(1..numberLocations)])
-             | q35 : int(1..numberLocations)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q49] ->
-         sum([toInt(q51 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q49]) *
+             | q34 : int(1..numberLocations)]),
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q48] ->
+         sum([toInt(q50 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q48]) *
               catchUndef(orderWeights_Function1D
-                             [plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q49, q51]],
+                             [plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values[q48, q50]],
                          0)
-                  | q51 : int(1..numberLocations)])
+                  | q50 : int(1..numberLocations)])
          <= vehicleCapacity
-             | q49 : int(1..numberLocations)]),
-    alldifferent_except([toInt(q54 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q52] /\
-                               plan_ExplicitVarSizeWithFlagsR15_Flags[q52])
-                         * catchUndef(plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q52, q54], 0)
-                             | q52 : int(1..numberLocations), q54 : int(1..numberLocations)],
+             | q48 : int(1..numberLocations)]),
+    alldifferent_except([toInt(q53 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q51] /\
+                               plan_ExplicitVarSizeWithFlagsR16_Flags[q51])
+                         * catchUndef(plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values[q51, q53], 0)
+                             | q51 : int(1..numberLocations), q53 : int(1..numberLocations)],
                         0),
-    sum([toInt(plan_ExplicitVarSizeWithFlagsR15_Flags[q55]) *
-         catchUndef(plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q55], 0)
-             | q55 : int(1..numberLocations)])
+    sum([toInt(plan_ExplicitVarSizeWithFlagsR16_Flags[q54]) *
+         catchUndef(plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q54], 0)
+             | q54 : int(1..numberLocations)])
     = numberLocations,
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q23 + 1] ->
-         flatten([[plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q23]; int(1)],
-                  [plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q23, q32]
-                       | q32 : int(1..numberLocations)];
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q23 + 1] ->
+         flatten([[plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q23]; int(1)],
+                  [plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values[q23, q31]
+                       | q31 : int(1..numberLocations)];
                       int(1..2)])
          <lex
-         flatten([[plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q23 + 1]; int(1)],
-                  [plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q23 + 1, q33]
-                       | q33 : int(1..numberLocations)];
+         flatten([[plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q23 + 1]; int(1)],
+                  [plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values[q23 + 1, q32]
+                       | q32 : int(1..numberLocations)];
                       int(1..2)])
              | q23 : int(1..numberLocations - 1)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q24] = false ->
-         plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q24] = 0 /\
-         and([plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q24, q34] = 1
-                  | q34 : int(1..numberLocations)])
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q24] = false ->
+         plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q24] = 0 /\
+         and([plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values[q24, q33] = 1
+                  | q33 : int(1..numberLocations)])
              | q24 : int(1..numberLocations)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q25 + 1] -> plan_ExplicitVarSizeWithFlagsR15_Flags[q25]
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q25 + 1] -> plan_ExplicitVarSizeWithFlagsR16_Flags[q25]
              | q25 : int(1..numberLocations - 1)]),
-    minVehicles <= sum([toInt(plan_ExplicitVarSizeWithFlagsR15_Flags[q26]) | q26 : int(1..numberLocations)]),
-    sum([toInt(plan_ExplicitVarSizeWithFlagsR15_Flags[q26]) | q26 : int(1..numberLocations)]) <= numberLocations,
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q27] ->
-         and([q28 > plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q27] ->
-              plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q27, q28] = 1
+    minVehicles <= sum([toInt(plan_ExplicitVarSizeWithFlagsR16_Flags[q26]) | q26 : int(1..numberLocations)]),
+    sum([toInt(plan_ExplicitVarSizeWithFlagsR16_Flags[q26]) | q26 : int(1..numberLocations)]) <= numberLocations,
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q27] ->
+         and([q28 > plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q27] ->
+              plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values[q27, q28] = 1
                   | q28 : int(1..numberLocations)])
              | q27 : int(1..numberLocations)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q27] ->
-         1 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q27]
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q27] ->
+         1 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q27]
              | q27 : int(1..numberLocations)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q27] ->
-         plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q27] <= numberLocations
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q27] ->
+         plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q27] <= numberLocations
              | q27 : int(1..numberLocations)]),
-    and([plan_ExplicitVarSizeWithFlagsR15_Flags[q27] ->
-         and([q29 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q27] /\
-              q30 <= plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Length[q27]
-              ->
-              plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q27, q29] !=
-              plan_ExplicitVarSizeWithFlagsR15_Values_ExplicitBounded_Values[q27, q30]
-                  | q29 : int(1..numberLocations), q30 : int(1..numberLocations), q29 < q30])
+    and([plan_ExplicitVarSizeWithFlagsR16_Flags[q27] ->
+         alldifferent_except([toInt(q29 <= plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Length[q27]) *
+                              catchUndef(plan_ExplicitVarSizeWithFlagsR16_Values_ExplicitBounded_Values[q27, q29], 0)
+                                  | q29 : int(1..numberLocations)],
+                             0)
              | q27 : int(1..numberLocations)])
 
 $ Conjure's
 $ {"finds": [{"Name": "plan"}, {"Name": "optVar"}],
 $  "givens": [{"Name": "numberLocations"}, {"Name": "orderWeights"}, {"Name": "costs"}, {"Name": "vehicleCapacity"}],
-$  "enumGivens": [],
-$  "enumLettings": [],
+$  "enumGivens": [], "enumLettings": [],
 $  "lettings":
 $      [[{"Name": "locDomain"},
 $        {"Domain":
@@ -796,9 +793,7 @@ $                                                                         ["Give
 $                                                                          {"DomainInt": [{"TagInt": []}, []]},
 $                                                                          {"NoRegion": []}]}]}]}},
 $                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 0]}}]}}}}]]}}}}]],
-$  "unnameds": [],
-$  "strategyQ": {"PickFirst": []},
-$  "strategyA": {"PickAll": []},
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
 $  "trailCompact":
 $      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
@@ -818,11 +813,8 @@ $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1,
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
 $       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
-$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
-$  "trailVerbose": [],
-$  "trailRewrites": [],
-$  "nameGenState": [["fin", 5], ["q", 58]],
-$  "nbExtraGivens": 4,
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "trailVerbose": [], "trailRewrites": [], "nameGenState": [["fin", 5], ["q", 57]], "nbExtraGivens": 4,
 $  "representations":
 $      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
 $       [{"Name": "numberLocations"}, {"DomainInt": [{"TagInt": []}, []]}],
@@ -1467,48 +1459,22 @@ $      [[{"Name": "costs"},
 $        [{"rootLabel": {"Function_ND": []},
 $          "subForest":
 $              [{"rootLabel": null,
-$                "subForest":
-$                    [{"rootLabel": null,
-$                      "subForest": []},
-$                     {"rootLabel": null,
-$                      "subForest": []}]},
-$               {"rootLabel": null,
-$                "subForest": []}]}]],
-$       [{"MachineName": ["fin", 1, []]},
-$        [{"rootLabel": null,
-$          "subForest": []}]],
-$       [{"MachineName": ["fin", 2, []]},
-$        [{"rootLabel": null,
-$          "subForest": []}]],
-$       [{"MachineName": ["fin", 3, []]},
-$        [{"rootLabel": null,
-$          "subForest": []}]],
-$       [{"MachineName": ["fin", 4, []]},
-$        [{"rootLabel": null,
-$          "subForest": []}]],
-$       [{"Name": "numberLocations"},
-$        [{"rootLabel": null,
-$          "subForest": []}]],
-$       [{"Name": "optVar"},
-$        [{"rootLabel": null,
-$          "subForest": []}]],
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 4, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "numberLocations"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "optVar"}, [{"rootLabel": null, "subForest": []}]],
 $       [{"Name": "orderWeights"},
 $        [{"rootLabel": {"Function_1D": []},
-$          "subForest":
-$              [{"rootLabel": null,
-$                "subForest": []},
-$               {"rootLabel": null,
-$                "subForest": []}]}]],
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
 $       [{"Name": "plan"},
 $        [{"rootLabel": {"Set_ExplicitVarSizeWithFlags": []},
 $          "subForest":
-$              [{"rootLabel": {"Sequence_ExplicitBounded": []},
-$                "subForest":
-$                    [{"rootLabel": null,
-$                      "subForest": []}]}]}]],
-$       [{"Name": "vehicleCapacity"},
-$        [{"rootLabel": null,
-$          "subForest": []}]]],
+$              [{"rootLabel": {"Sequence_ExplicitBounded": []}, "subForest": [{"rootLabel": null, "subForest": []}]}]}]],
+$       [{"Name": "vehicleCapacity"}, [{"rootLabel": null, "subForest": []}]]],
 $  "originalDomains":
 $      [[{"Name": "numberLocations"}, {"DomainInt": [{"TagInt": []}, []]}],
 $       [{"Name": "orderWeights"},
@@ -1560,4 +1526,98 @@ $             [{"TagInt": []},
 $              [{"RangeBounded":
 $                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
 $                     {"Reference": [{"Name": "maxTotalCost"}, null]}]}]]}]],
-$  "questionAnswered": []}
+$  "trailGeneralised":
+$      [[-6908079010104027190, -9196740109116919610], [-9080849166773670333, -5296734508237410931],
+$       [2645894109949328785, 1563004828956632470], [-6871202014985371684, -9216485176276696846],
+$       [-1149715729567993664, -226043768166891218], [1983456265956794976, 4361195384500652719],
+$       [1315065538677459696, -2992076910560641550], [-7149730217729697266, 3439717222430487375],
+$       [2570659403464803771, 8631419022153023164], [5868423313020550867, 4146240584217391232],
+$       [-2735198894328925617, 5264060078739411290], [3542678912068023109, -5233890247650754801],
+$       [1069099336773081633, 6108638743991070182], [7328632885969547429, 4139146937596370621],
+$       [-680666606782208444, -6341969035278937456], [2090315968908273141, 2108245666568416319],
+$       [-7797806126303981233, 5543952075745306991], [7512738459362009897, -1081331959113522549],
+$       [5451000194024426505, -4930526268067668021], [7911451053137180573, 6547628299226151803],
+$       [361806948812415997, -6256353996019946887], [8944400338333791729, -1595709351669639765],
+$       [-5537718571470241891, -8489773664937361460], [-1604510772928451288, -1983898434193043730],
+$       [5965585827748815837, -8112191413110063813], [-6135890877322296878, 8221962045973762809],
+$       [-1278758043686558948, -5930469341167211560], [-4336686540692135404, -828617689254424782],
+$       [-820224846059451873, 2187124549949858355], [2279284160323894721, 8857305569737063260],
+$       [6821662565766546018, -1891690572216711073], [-3409701317737580308, -3432015301528450144],
+$       [-1669425339163789339, 1510528923465858174], [547223563252619198, 9188985523369347932],
+$       [1549672675595623354, 6623807131056930391], [-4650083605102547546, -3649012677183435366],
+$       [6797713567512303824, 6090290803198418679], [-6073739054277077134, -8112450597396923468],
+$       [6160359614871764154, 2435447582872536816], [1122278044999479096, -4532295128563555427],
+$       [300391321783027104, -7446184725806577025], [-3234859666060112421, -975880419889897269],
+$       [-121402567283764841, -8112450597396923468], [427680239190877869, -5129673613314694626],
+$       [-293058742287503649, 3272668496832980113], [-594298898004751365, -4554881244005925495],
+$       [-2857807878695789381, -4198820459033535605], [1621048156404143923, 899540534831060292],
+$       [2191339273690874361, 5465187829372007807], [2396175021961323571, -8112450597396923468],
+$       [-4312734444669042327, 4307058047753873964], [-7160020170169361537, 8480759463131083585],
+$       [-622600455392046895, 1948602233950651659], [-1701327656939817100, -9047916848477351771],
+$       [1342254947164009642, -1215993115947694143], [722363985497730682, -2725924693236706757],
+$       [7995148569807887748, -8112450597396923468], [1506537540715428398, 1666862205208192838],
+$       [-3296147252238980962, 2852741390133306693], [134304025336385596, -3650406519203850424],
+$       [1493133051257915699, -4920473205276345022], [-4205395968857804103, -81596516675180513],
+$       [-5767880520796944837, -8112450597396923468], [-3534100231040563299, -6169426466247705912],
+$       [8792158071768509489, -4171837807255015203], [-3416822665313822345, -7154294105179812744],
+$       [-5197731070627241587, -3535013224299925921], [-2206097047928475557, 2247505968398571635],
+$       [7857099530321738599, -6640109938271580853], [2383985821523833207, -8112450597396923468],
+$       [-8777336864633141605, -2974879588839749290], [4407421389082999569, 6202175053079601],
+$       [-5042559129304211449, 1588429971453676318], [4508799121234669646, -6909475619527983882],
+$       [-5864307731540795784, -5969162611787821241], [4009624399188808666, -8112450597396923468],
+$       [8304529575274840208, -8516602325775275396], [-217850636704975216, -6760691211292805175],
+$       [-9122293112959749168, 1112436480122916663], [7624770555418972085, 1542608085126448115],
+$       [2704860680894855052, 3212083365553457723], [8572908888879693032, -8112450597396923468],
+$       [6353657408119725167, -1958316801590216994], [-6117757351188455189, 7444071779808177805],
+$       [-2786326940648826143, -345152633557588502], [-7596287111950076897, 7305076795846591945],
+$       [-6853188031357640626, -709715881809639836], [8658514888856572919, -4548691390870721497],
+$       [-731394497324647483, 2663460245262507778], [9085076623407409687, 5443794884370338704],
+$       [-3379026649007734859, 5524066996984644099], [1858552988168889067, -4543991072447042662],
+$       [-6807635879077969808, 1743060039145446215], [-7267548611985487465, 886093143616209817],
+$       [1751800513704077699, -5418739146992312774], [6507257723102990346, -6481448684158413681],
+$       [944127077248482106, -8112450597396923468], [6074940495150990271, -672422226331365348],
+$       [4023818523360929777, -5327628259224086175], [447419021572386696, 7246031691902730647],
+$       [1374987143962605177, 3924143807666972500], [-2835140148936858804, 9056853043334211815],
+$       [7637905382122504639, 1447441571168140746], [-5221020541917689484, 6094886251274320005],
+$       [3863382572572773228, -8461798600837770806], [1631322196710433906, 2382265672947030522],
+$       [-4773160058692919490, 772849313076963065], [1811876287530049367, 412285912970356796],
+$       [8911397274479862748, 3658926824113302679], [-6715000814395927846, -6434635055716197830],
+$       [-1444245972106734923, 273514999919880834], [-4821195655106241672, -5841659168859837596],
+$       [2069628428140667107, -4420793501358939348], [3646331577585376509, 379841854986853958],
+$       [8607255176137946030, -5806265389695195738], [1088744109307547710, -5296734508237410931],
+$       [680793318541371999, -5936150374532133321], [2366928830034733866, -3042859968169415288],
+$       [3633704583025653131, 2118791339646145433], [7428648820407670105, 6783670075973717094],
+$       [6464788489863916431, -1599621059108851610], [-4784749966915867100, 6855259197118611367],
+$       [-4833384133271968767, 752146942029270392], [6138709171374333579, 6260434921107845637],
+$       [-8388631391943933161, 6785750916382734663], [7772773398845688186, 6785750916382734663],
+$       [6596301383605546931, -8993838081522650910], [168580189495224415, -125788334135721117],
+$       [1484517996253757720, 8393712810379004809], [-4895335821104809880, -6803684733122635510],
+$       [-1773235501219105797, 5711641823786076028], [2391095493647443652, -7256036119009309640],
+$       [6098197206627214099, 3090560677176919844], [-2780199318248835593, -2098212233121877797],
+$       [-4299460359267361353, -3807653388778570939], [6488347346593225819, 7310439631964926201],
+$       [8823508030608455913, -5351984693945052879], [-4178399148574637329, 6922708811542893],
+$       [8943425021729111573, 7110533098595793473], [-2564604992478668643, -8523705281513831735],
+$       [-160444085569533104, 8131631916206700488], [1523645122412633953, 6776706333057310355],
+$       [6595980412757981451, -5090546537956099294], [-4480037713479512967, 4760276456714825324],
+$       [-1435957384002213379, 6869091460070737617], [7404078055694637271, -4147026252543832727],
+$       [1793459246748858248, 3977157323879762335], [-9196917717387940278, 8265427975570869884],
+$       [-56393994406717881, -3166560534992249866], [3928817743031143688, -5290875246251972965],
+$       [8476578503868410709, 3974345197494073234], [-3791934328606690463, 4002751730569836693],
+$       [1708076218259375154, -6265862347918825051], [2240684503230572205, -7561668278047429422],
+$       [5840598767987719699, -7595330989322138437], [-516438343300256790, 710768518740331276],
+$       [-2995567487560879896, -3912594735262783520], [4241472074671704324, -6824830992893369796],
+$       [4319865066244595144, 5357396193455499059], [-3654113224593128136, 1510352928487344860],
+$       [3562416197787001582, -5812765275576839056], [3423273722753602825, -5902129502028153311],
+$       [-3667978345414944410, 5506459464907159014], [4245913084517678438, -6925615131832704744],
+$       [-1895156028239772365, -6144122734608668916], [-2060013143427718823, -2718161574617735679],
+$       [4691369266032188497, 8927597523344231057], [-3725998902427121938, -6616285469521003932],
+$       [4483844712434249170, -2815034767123312515], [7078720555757999411, -4641216890131253406],
+$       [-6480872807626192879, -6954929042789195419], [-183822711537979803, -396336466836936840],
+$       [-3758455760309455636, 1677681061610734076], [825806654318204636, -4279365353005913951],
+$       [316350999472807334, 4931345464285699390], [-756105276756811670, 5660758086490838602],
+$       [7615290594146038796, -7148151021174546195], [-3894335967395189438, 9215517885967118211],
+$       [-6785479684066820582, -3363804164465815679], [147005985114732363, -6567939790302429665],
+$       [-2583916285372156182, 6015752845394160512], [6977615868221005999, 5130159538363408842],
+$       [-8962378692701380971, -2290545992271153113], [-36312913505387440, -3700184427211778437],
+$       [-7513108054276879857, -267401824316209541], [-7054977139467973086, 7694520093783479643],
+$       [7958300694443399907, 3127776605758747919], [8993613185948270769, 6246029443405160411]]}

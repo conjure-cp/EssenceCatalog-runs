@@ -1,0 +1,447 @@
+language ESSENCE' 1.0
+
+given x_max: int(1..)
+given y_max: int(1..)
+given n_shapes: int(1..)
+given fin1: int
+given grid_Explicit_1: matrix indexed by [int(1..fin1)] of int(1..x_max)
+given grid_Explicit_2: matrix indexed by [int(1..fin1)] of int(1..y_max)
+given fin2: int
+given fin3: int
+given form_Function1DR5_ExplicitVarSizeWithMarker_Marker: matrix indexed by [int(1..n_shapes)] of int(0..fin3)
+given form_Function1DR5_ExplicitVarSizeWithMarker_Values_1:
+        matrix indexed by [int(1..n_shapes), int(1..fin3)] of int(1..x_max)
+given form_Function1DR5_ExplicitVarSizeWithMarker_Values_2:
+        matrix indexed by [int(1..n_shapes), int(1..fin3)] of int(1..y_max)
+find layout_FunctionNDPartial_Flags: matrix indexed by [int(1..x_max), int(1..y_max)] of bool
+find layout_FunctionNDPartial_Values: matrix indexed by [int(1..x_max), int(1..y_max)] of int(1..n_shapes)
+branching on [layout_FunctionNDPartial_Flags, layout_FunctionNDPartial_Values]
+such that
+    and([layout_FunctionNDPartial_Flags[q34_1, q34_2] ->
+         table([q34_1, q34_2; int(1..2)],
+               [[grid_Explicit_1[q35], grid_Explicit_2[q35]; int(1..2)] | q35 : int(1..fin1)])
+             | q34_1 : int(1..x_max), q34_2 : int(1..y_max)]),
+    and([or([or([and([or([sx_ExplicitVarSizeWithDummy[q23] = q29_1
+                              | q23 : int(1..x_max), sx_ExplicitVarSizeWithDummy[q23] != x_max + 1])
+                      /\
+                      or([sy_ExplicitVarSizeWithDummy[q25] = q29_2
+                              | q25 : int(1..y_max), sy_ExplicitVarSizeWithDummy[q25] != y_max + 1])
+                      <->
+                      or([layout_FunctionNDPartial_Flags[q28_1, q28_2] /\
+                          layout_FunctionNDPartial_Values[q28_1, q28_2] = s
+                          /\ (q28_1 = q29_1 /\ q28_2 = q29_2)
+                              | q28_1 : int(1..x_max), q28_2 : int(1..y_max)])
+                          | q29_1 : int(1..x_max), q29_2 : int(1..y_max)])
+                 /\
+                 and([layout_FunctionNDPartial_Values
+                          [min([sx_ExplicitVarSizeWithDummy[q13]
+                                    | q13 : int(1..x_max), sx_ExplicitVarSizeWithDummy[q13] != x_max + 1])
+                           + form_Function1DR5_ExplicitVarSizeWithMarker_Values_1[s, q21],
+                           min([sy_ExplicitVarSizeWithDummy[q15]
+                                    | q15 : int(1..y_max), sy_ExplicitVarSizeWithDummy[q15] != y_max + 1])
+                           + form_Function1DR5_ExplicitVarSizeWithMarker_Values_2[s, q21]]
+                      = s
+                      /\
+                      layout_FunctionNDPartial_Flags
+                          [min([sx_ExplicitVarSizeWithDummy[q17]
+                                    | q17 : int(1..x_max), sx_ExplicitVarSizeWithDummy[q17] != x_max + 1])
+                           + form_Function1DR5_ExplicitVarSizeWithMarker_Values_1[s, q21],
+                           min([sy_ExplicitVarSizeWithDummy[q19]
+                                    | q19 : int(1..y_max), sy_ExplicitVarSizeWithDummy[q19] != y_max + 1])
+                           + form_Function1DR5_ExplicitVarSizeWithMarker_Values_2[s, q21]]
+                          | q21 : int(1..fin3), q21 <= form_Function1DR5_ExplicitVarSizeWithMarker_Marker[s]])
+                     | sy_ExplicitVarSizeWithDummy : matrix indexed by [int(1..y_max)] of int(1..y_max + 1),
+                       and([sy_ExplicitVarSizeWithDummy[q8] < sy_ExplicitVarSizeWithDummy[q8 + 1] \/
+                            sy_ExplicitVarSizeWithDummy[q8] = y_max + 1
+                                | q8 : int(1..y_max - 1)]),
+                       and([sy_ExplicitVarSizeWithDummy[q9] = y_max + 1 ->
+                            sy_ExplicitVarSizeWithDummy[q9 + 1] = y_max + 1
+                                | q9 : int(1..y_max - 1)])])
+                 | sx_ExplicitVarSizeWithDummy : matrix indexed by [int(1..x_max)] of int(1..x_max + 1),
+                   and([sx_ExplicitVarSizeWithDummy[q4] < sx_ExplicitVarSizeWithDummy[q4 + 1] \/
+                        sx_ExplicitVarSizeWithDummy[q4] = x_max + 1
+                            | q4 : int(1..x_max - 1)]),
+                   and([sx_ExplicitVarSizeWithDummy[q5] = x_max + 1 -> sx_ExplicitVarSizeWithDummy[q5 + 1] = x_max + 1
+                            | q5 : int(1..x_max - 1)])])
+             | s : int(1..n_shapes)]),
+    and([form_Function1DR5_ExplicitVarSizeWithMarker_Marker[s] =
+         sum([toInt(layout_FunctionNDPartial_Flags[q32_1, q32_2] /\ layout_FunctionNDPartial_Values[q32_1, q32_2] = s)
+                  | q32_1 : int(1..x_max), q32_2 : int(1..y_max)])
+             | s : int(1..n_shapes)]),
+    and([layout_FunctionNDPartial_Flags[q1_1, q1_2] = false -> layout_FunctionNDPartial_Values[q1_1, q1_2] = 1
+             | q1_1 : int(1..x_max), q1_2 : int(1..y_max)])
+
+$ Conjure's
+$ {"finds": [{"Name": "layout"}],
+$  "givens": [{"Name": "x_max"}, {"Name": "y_max"}, {"Name": "n_shapes"}, {"Name": "grid"}, {"Name": "form"}],
+$  "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "Shape"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_shapes"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_shapes"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "X"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "x_max"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "x_max"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Y"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "y_max"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "y_max"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Cell"},
+$        {"Domain":
+$             {"DomainTuple":
+$                  [{"DomainInt":
+$                        [{"TagInt": []},
+$                         [{"RangeBounded":
+$                               [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                {"Reference":
+$                                     [{"Name": "x_max"},
+$                                      {"DeclNoRepr":
+$                                           ["Given", {"Name": "x_max"},
+$                                            {"DomainInt":
+$                                                 [{"TagInt": []},
+$                                                  [{"RangeLowerBounded":
+$                                                        {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                            {"NoRegion": []}]}]}]}]]},
+$                   {"DomainInt":
+$                        [{"TagInt": []},
+$                         [{"RangeBounded":
+$                               [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                {"Reference":
+$                                     [{"Name": "y_max"},
+$                                      {"DeclNoRepr":
+$                                           ["Given", {"Name": "y_max"},
+$                                            {"DomainInt":
+$                                                 [{"TagInt": []},
+$                                                  [{"RangeLowerBounded":
+$                                                        {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                            {"NoRegion": []}]}]}]}]]}]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 2], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "trailVerbose": [], "trailRewrites": [], "nameGenState": [["fin", 4], ["q", 36]], "nbExtraGivens": 3,
+$  "representations":
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "x_max"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "y_max"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_shapes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "grid"},
+$        {"DomainSet":
+$             [{"Set_Explicit": []},
+$              {"SizeAttr_Size":
+$                   {"Reference":
+$                        [{"MachineName": ["fin", 1, []]},
+$                         {"DeclHasRepr":
+$                              ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "x_max"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "x_max"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "y_max"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "y_max"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]}],
+$       [{"Name": "layout"},
+$        {"DomainFunction":
+$             [{"Function_NDPartial": []}, [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "x_max"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "x_max"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "y_max"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "y_max"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_shapes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_shapes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "form"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 2, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_shapes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_shapes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainSet":
+$                   [{"Set_ExplicitVarSizeWithMarker": []},
+$                    {"SizeAttr_MaxSize":
+$                         {"Reference":
+$                              [{"MachineName": ["fin", 3, []]},
+$                               {"DeclHasRepr":
+$                                    ["Given", {"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$                    {"DomainTuple":
+$                         [{"DomainInt":
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                       {"Reference":
+$                                            [{"Name": "x_max"},
+$                                             {"DeclHasRepr":
+$                                                  ["Given", {"Name": "x_max"},
+$                                                   {"DomainInt":
+$                                                        [{"TagInt": []},
+$                                                         [{"RangeLowerBounded":
+$                                                               {"Constant":
+$                                                                    {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                          {"DomainInt":
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                       {"Reference":
+$                                            [{"Name": "y_max"},
+$                                             {"DeclHasRepr":
+$                                                  ["Given", {"Name": "y_max"},
+$                                                   {"DomainInt":
+$                                                        [{"TagInt": []},
+$                                                         [{"RangeLowerBounded":
+$                                                               {"Constant":
+$                                                                    {"ConstantInt":
+$                                                                         [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]}]}]],
+$  "representationsTree":
+$      [[{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "form"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest":
+$              [{"rootLabel": null, "subForest": []},
+$               {"rootLabel": {"Set_ExplicitVarSizeWithMarker": []},
+$                "subForest":
+$                    [{"rootLabel": null,
+$                      "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]}]}]],
+$       [{"Name": "grid"},
+$        [{"rootLabel": {"Set_Explicit": []},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]}]],
+$       [{"Name": "layout"},
+$        [{"rootLabel": {"Function_NDPartial": []},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "n_shapes"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "x_max"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "y_max"}, [{"rootLabel": null, "subForest": []}]]],
+$  "originalDomains":
+$      [[{"Name": "x_max"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "y_max"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n_shapes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "grid"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_None": []},
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "x_max"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "y_max"}, null]}]}]]}]}]}],
+$       [{"Name": "form"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_shapes"}, null]}]}]]},
+$              {"DomainSet":
+$                   [[], {"SizeAttr_None": []},
+$                    {"DomainTuple":
+$                         [{"DomainInt":
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                       {"Reference": [{"Name": "x_max"}, null]}]}]]},
+$                          {"DomainInt":
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                       {"Reference": [{"Name": "y_max"}, null]}]}]]}]}]}]}],
+$       [{"Name": "layout"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "x_max"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "y_max"}, null]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_shapes"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[-6725379463127131296, -3073238729758121283], [311610107757233885, 1537303839984616165],
+$       [2653282928202403066, 4238616927025332339], [-3313554591175495383, -3158271957840971736],
+$       [2451120526035174176, 1324714660258808946], [2960746264365151016, -7595696410168618285],
+$       [-6629109450218233182, 4821890668972286885], [3531391572742149861, -2874563624558997830],
+$       [5768638209807663285, 5613261641437074047], [-3608832813084582897, -2213484850610437462],
+$       [6726786078948945496, -1797947999998839219], [-1283964223178339200, 5054538902719635351],
+$       [-8522657348380784310, -7302423869442785008], [-2849729114503028262, 5054538902719635351],
+$       [-1321288641940126749, -7302423869442785008], [927073539975032479, -5893006058005774822],
+$       [3370809396038763490, -4027098313804177621], [-6889601287573258026, -8112450597396923468],
+$       [3584165805011709658, 9074204386553457861], [3341996480636232286, -16461943275607709],
+$       [-2719451289055775086, -7813471604048508036], [1281279476407423764, -4566442402055633597],
+$       [-9097167727062695530, -16461943275607709], [-7088543679878912625, -7813471604048508036],
+$       [4933160823572290472, 7235013450349042766], [196586069436707596, -8144176186530267277],
+$       [-5191657900049686284, 323238546401470148], [9075847452113157890, -7795752600318810598],
+$       [-7900237812969550955, -3668112570085725562], [-50593878948535635, 7530536718186948580],
+$       [-6778297902535843099, 1078699941185720285], [8813508220907688622, 6880318117913373896],
+$       [1245248510862970659, 496729066863422903], [7273551948945474920, -9058428755684541870],
+$       [5458226027738542046, -1842147306151389657], [2843960660540801517, 5914103464146377295],
+$       [3711744309866546301, -2298815496260651080], [8864955872992116106, 5914103464146377295],
+$       [-1846633807137418118, -2298815496260651080], [8954574906196416059, 4706308871628903871],
+$       [823142017535758347, -8010114541353676307], [7988768281427010500, -8824951629860785259],
+$       [8247865035953785216, -5862744504302360749], [8810004507541795246, -859881358208999388],
+$       [-4036260351233792528, 4104168124764070275], [-4744108464878480244, -5862744504302360749],
+$       [-5513569668419123531, -859881358208999388], [6302974632753806490, -1136420047137526381],
+$       [1153786399343310209, -463440822104974619], [2797312906994668414, -5964542853585196611],
+$       [4765157680725376187, 3262634844947916754], [-8258886307247506251, -3845393096715143144],
+$       [-7364049337188275378, 9100473308948586979], [4920001862596527966, 856385703949259074],
+$       [-5147259909477535747, 1685118182560236658], [-3088618574437154200, -7531597400142981399],
+$       [-1332019377187859920, -437613485350709554], [-1899357983148421076, 6607187813586330510],
+$       [-561197364664100997, 8293749268707927508], [-5056023350124547802, -658857917950794015],
+$       [-7750940021049695289, -2670703703811662346], [5892998345638771330, -6932666264572550477],
+$       [6837551125400117818, 4766758675974129188], [-227207336480740988, -6932666264572550477],
+$       [8883030882740069089, 4766758675974129188], [-5255247907083163467, 1103433419517608141],
+$       [-4232093189077106381, 457275814029308475], [4604455409286911355, 4814258245597407570],
+$       [7298679573681310051, 7530536718186948580], [7470149676947382349, -530718690727628598],
+$       [-8404674597223641287, 1062011766562327196], [8648906978879044103, 856385703949259074],
+$       [-9156442250465644538, -7124319820370221454], [-3306676923906542523, -6542195526094890509],
+$       [2613916429715537355, -1330164870116264918], [6958952580169127427, 6607187813586330510],
+$       [-8494792749896110415, 5005664393579813062], [2704634116831848353, -474041585551352573],
+$       [2549431588138087330, 2064712867768238268], [-4022643826893123204, 856385703949259074],
+$       [-929556136877475205, -8333937426597319286], [6110948031335541868, 36895550080325579],
+$       [-3447463610110794542, -6942586708758117882], [5977202822717440593, 6607187813586330510],
+$       [4864185321172202839, -3814369619844869834], [-4680149882486655535, -6099115306262019181],
+$       [-6829319476483165240, 8954786524393625480], [-5612764874892941509, 3796488553444723316],
+$       [-9013768430167931787, 5601906999325401580], [-6451201234162209596, 811928285674303383],
+$       [-7215662161380912343, 1661815870368516298], [-316649620413814111, -7143646689556391021],
+$       [-6199028563801762754, 7615519183983041080], [-6419776979239010307, -6480487038247243279],
+$       [-4790464782149658152, 5918065593650219778], [-5345173644329348465, 6849458190497896131],
+$       [-7672907724211506132, 3502334750603999595], [2478764394883998457, 932162293838829445],
+$       [-7513108054276879857, -267401824316209541], [8124623866458060540, 2716862633979234705],
+$       [-7054977139467973086, 7694520093783479643], [-1616092883407576153, 9137547698298312381],
+$       [-8999433025933784134, -298737712448417187], [8993613185948270769, 6246029443405160411]]}
