@@ -1,3 +1,4 @@
+import sys
 
 modelName = {}
 modelName["csplib-prob001"] = "Car Sequencing"
@@ -142,7 +143,19 @@ for k in counts.keys():
     if not k[0] in models:
         models.append(k[0])
 
+for m in models:
+    for mo in modes:
+        if mo != "00_compact":
+            if not (m,mo) in counts.keys():
+                print("Not found", m, mo, file=sys.stderr)
+            else:
+                pass
+                # print(m, mo, counts.keys(), file=sys.stderr)
+
+# print(counts.keys(), file=sys.stderr)
 # print(models)
+
+
 
 print("Problem\t" + "\t".join([name for mode, name in modeName.items() if name != "SKIP"]))
 
@@ -152,4 +165,14 @@ for model in models:
                                              for mode in modes
                                              if modeName[mode] != "SKIP"
                                            ])))
+
+
+
+# print("%-60s & References \\\\ \\hline" % "Problem")
+#
+# for model in models:
+#     if model != "SKIP":
+#         print("%-60s & citations \\\\" % model)
+
+
 
