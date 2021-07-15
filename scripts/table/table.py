@@ -110,9 +110,9 @@ modelName["prob123-Milk"] = "SKIP"
 modeName = {}
 modeName['00_compact'] = "SKIP"
 modeName['01_noch_lvlPruned'] = "no-channelling, pruning"
-modeName['02_noch_lvlFlat'] = "no-channelling, no-pruning"
 modeName['03_full_lvlPruned_paramSparse'] = "channelling (except parameters), pruning"
 modeName['04_full_lvlPruned_paramAll'] = "channelling, pruning"
+modeName['02_noch_lvlFlat'] = "no-channelling, no-pruning"
 modeName['05_full_lvlFlat_paramSparse'] = "channelling (except parameters), no-pruning"
 modeName['06_full_lvlFlat_paramAll'] = "channelling, no-pruning"
 
