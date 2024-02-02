@@ -41,6 +41,10 @@ elif [ "${CONJURE_MODE}" == "06_full_lvlFlat_paramAll" ]; then
     FLAGS="-ax --smart-filenames --representation-levels=no --representations-givens=x"
     GENERATE_MODELS=false
     GENERATE_ESTIMATES=true
+elif [ "${CONJURE_MODE}" == "07_portfolio" ]; then
+    FLAGS="--portfolio=4 --smart-filenames"
+    GENERATE_MODELS=true
+    GENERATE_ESTIMATES=false
 else
     echo "CONJURE_MODE not recognised: ${CONJURE_MODE}"
     exit 1
