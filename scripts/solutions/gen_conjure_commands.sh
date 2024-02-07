@@ -16,7 +16,7 @@ for prob in *; do
     for essence in *.essence; do                        # go through all essence files for this problem
         essence_base="${essence%.*}"
         for param in params/*.param "${essence_base}-params"/*.param; do
-            for conjure_mode in compact noch; do
+            for conjure_mode in 07_portfolio; do
                 pushd "${ROOT_DIR}/problems/${prob}/${essence_base}-models/${conjure_mode}" > /dev/null
                 for eprime in *.eprime; do
                     for savilerow_mode in O0 O2; do
