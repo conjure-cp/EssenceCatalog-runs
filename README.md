@@ -1,8 +1,5 @@
 **THIS REPOSITORY IS A WORK IN PROGRESS AT THE MOMENT!**
 
-**THE PATHS AT THE END OF THIS README ARE OUTDATED/WRONG.**
-
-
 This repository is for running and recording data about running Conjure
 on the problem specifications written in Essence. The problem
 specifications themselves are kept in the
