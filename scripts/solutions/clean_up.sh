@@ -14,5 +14,4 @@ find problems -name '*.eprime-info'   -delete
 find problems -name '*.eprime-infor'  -delete
 
 # the eprimes are duplicated during solving. remove them here.
-# problems/${PROBLEM}/${ESSENCE_BASE}-models/${CONJURE_MODE}/${SAVILEROW_MODE}/${SOLVER}
-rm -f problems/*/*-models/*/*/*/*.eprime
+rm -f problems/*/conjure-mode/*/savilerow-mode/*/solver/*/*.eprime

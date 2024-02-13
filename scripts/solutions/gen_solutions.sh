@@ -9,6 +9,9 @@ export LIMIT_TIME=${LIMIT_TIME:-600}
 ROOT_DIR=$(pwd)
 CMD_FILE="${ROOT_DIR}/scripts/solutions/conjure_commands.txt"
 
+cat $CMD_FILE | head -n10 > 10.tmp
+mv 10.tmp $CMD_FILE
+
 nb_commands=$(cat ${CMD_FILE} | wc -l)
 nb_cores=$1
 
