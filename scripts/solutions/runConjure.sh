@@ -36,7 +36,7 @@ if [ "${SOLVER}" == "minion" ]; then
 elif [ "${SOLVER}" == "lingeling" ]; then
     SOLVER_OPTIONS="-t ${LIMIT_TIME} --seed=0"
 elif [ "${SOLVER}" == "chuffed" ]; then
-    SOLVER_OPTIONS="--t ${LIMIT_TIME}000 --rnd-seed 0"
+    SOLVER_OPTIONS="-t ${LIMIT_TIME}000 --rnd-seed 0"
 elif [ "${SOLVER}" == "kissat" ]; then
     SOLVER_OPTIONS="--time=${LIMIT_TIME} --seed=0"
 else
@@ -53,6 +53,7 @@ conjure solve --use-existing-models=${EPRIME} ${ESSENCE_FULL} ${PARAM_FULL} -o $
     --solver "${SOLVER}" \
     --solver-options "${SOLVER_OPTIONS}"
 
+echo ${TARGET_DIR}
 rm -f ${TARGET_DIR}/*.eprime-minion         # no need to keep: generated minion file
 rm -f ${TARGET_DIR}/*.eprime-dimacs         # no need to keep: generated sat file
 rm -f ${TARGET_DIR}/*.eprime-param          # no need to keep

@@ -12,27 +12,22 @@ rm -f ${INFOS_TSV_FILE}
 touch ${INFOS_TSV_FILE}
 
                                                         # go through all problems in EssenceCatalog
-pushd problems > /dev/null
+pushd EssenceCatalog/problems > /dev/null
 for prob in *; do
     pushd "${prob}" > /dev/null
     for essence in *.essence; do                        # go through all essence files for this problem
         essence_base="${essence%.*}"
-        if [ -d params ]; then
-            pushd params > /dev/null
-        elif [ -d "${essence_base}-params" ] ; then
-            pushd "${essence_base}-params" > /dev/null
-        else
-            continue                                    # skip this essence, it has no params
-        fi
-        for param in *.param; do
-            param_base="${param%.*}"
-            for conjure_mode in compact noch; do
-                pushd "${ROOT_DIR}/problems/${prob}/${essence_base}-models/${conjure_mode}" > /dev/null
+        for param in params/*.param params/*/*.param; do
+            param_base="${param##*/}"
+            param_base="${param_base%.*}"
+            for conjure_mode in portfolio4; do
+                pushd "${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}" > /dev/null
                 for eprime in *.eprime; do
                     eprime_base="${eprime%.*}"
-                    for savilerow_mode in O0 O2; do
-                        for solver in minion lingeling; do
-                            INFO_FILE="${ROOT_DIR}/problems/${prob}/${essence_base}-models/${conjure_mode}/${savilerow_mode}/${solver}/${eprime_base}-${param_base}.eprime-info"
+                    for savilerow_mode in O2; do
+                        for solver in kissat chuffed; do
+                            # echo $prob $param $param_base $eprime_base $solver
+                            INFO_FILE="${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}/savilerow-mode/${savilerow_mode}/solver/${solver}/${eprime_base}-${param_base}.eprime-info"
                             if [ -f "${INFO_FILE}" ]; then
                                 cat "${INFO_FILE}" | tr ':' '\t' | while read name value; do
                                     echo -e "${prob}\t${essence}\t${param}\t${conjure_mode}\t${savilerow_mode}\t${eprime}\t${solver}\t${name}\t${value}" >> ${INFOS_TSV_FILE}
@@ -44,7 +39,6 @@ for prob in *; do
                 popd > /dev/null
             done
         done
-        popd > /dev/null
     done
     popd > /dev/null
 done
