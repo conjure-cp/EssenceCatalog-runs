@@ -1,0 +1,505 @@
+language ESSENCE' 1.0
+
+given n_flights: int(1..)
+given n_planes: int(1..)
+given maint_freq: int(1..)
+given fin1: int
+given network_RelationAsMatrix: matrix indexed by [int(1..n_flights), int(1..n_flights)] of bool
+given fin2: int
+given can_fly_RelationAsMatrix: matrix indexed by [int(1..n_planes), int(1..n_flights)] of bool
+given fin3: int
+given carry_in_Function1D: matrix indexed by [int(1..n_planes)] of int(1..n_flights)
+given fin4: int
+given maint_Explicit: matrix indexed by [int(1..fin4)] of int(1..n_flights)
+find route_Function1DR11_Function1DPartial_Flags: matrix indexed by [int(1..n_planes), int(1..n_flights)] of bool
+find route_Function1DR11_Function1DPartial_Values:
+        matrix indexed by [int(1..n_planes), int(1..n_flights)] of int(1..n_flights)
+find conjure_aux1_Occurrence: matrix indexed by [int(1..n_planes), int(1..n_planes), int(1..n_flights)] of bool
+branching on [route_Function1DR11_Function1DPartial_Flags, route_Function1DR11_Function1DPartial_Values]
+such that
+    and([and([route_Function1DR11_Function1DPartial_Flags[q51, q53] ->
+              q53 = 1 \/ route_Function1DR11_Function1DPartial_Flags[q51, q53 - 1]
+                  | q53 : int(1..n_flights)])
+             | q51 : int(1..n_planes)]),
+    and([or([q44_1 = carry_in_Function1D[p] /\ q44_2 = route_Function1DR11_Function1DPartial_Values[p, 1]
+                 | q44_1 : int(1..n_flights), q44_2 : int(1..n_flights), network_RelationAsMatrix[q44_1, q44_2]])
+         /\ route_Function1DR11_Function1DPartial_Flags[p, 1]
+             | p : int(1..n_planes)]),
+    and([and([route_Function1DR11_Function1DPartial_Flags[p, q46] ->
+              or([q49_2 = route_Function1DR11_Function1DPartial_Values[p, q46]
+                      | q49_1 : int(1..n_planes), q49_2 : int(1..n_flights), can_fly_RelationAsMatrix[q49_1, q49_2],
+                        q49_1 = p])
+                  | q46 : int(1..n_flights)])
+             | p : int(1..n_planes)]),
+    and([and([i <= sum([toInt(route_Function1DR11_Function1DPartial_Flags[q15, q20]) | q20 : int(1..n_flights)]) - 1 ->
+              or([q6_1 =
+                  sum([toInt(route_Function1DR11_Function1DPartial_Flags[q15, q16]) *
+                       catchUndef(route_Function1DR11_Function1DPartial_Values[q15, q16], 0)
+                           | q16 : int(1..n_flights), q16 = i])
+                  /\ or([route_Function1DR11_Function1DPartial_Flags[q15, q17] /\ q17 = i | q17 : int(1..n_flights)])
+                  /\
+                  (q6_2 =
+                   sum([toInt(route_Function1DR11_Function1DPartial_Flags[q15, q18]) *
+                        catchUndef(route_Function1DR11_Function1DPartial_Values[q15, q18], 0)
+                            | q18 : int(1..n_flights), q18 = i + 1])
+                   /\
+                   or([route_Function1DR11_Function1DPartial_Flags[q15, q19] /\ q19 = i + 1 | q19 : int(1..n_flights)]))
+                      | q6_1 : int(1..n_flights), q6_2 : int(1..n_flights), network_RelationAsMatrix[q6_1, q6_2]])
+                  | i : int(1..n_flights)])
+             | q15 : int(1..n_planes)]),
+    and([or([or([route_Function1DR11_Function1DPartial_Flags[p, q23] /\
+                 route_Function1DR11_Function1DPartial_Values[p, q23] = f
+                     | q23 : int(1..n_flights)])
+                 | p : int(1..n_planes)])
+             | f : int(1..n_flights)]),
+    and([and([route_Function1DR11_Function1DPartial_Flags[p1, q29] ->
+              conjure_aux1_Occurrence[p1, p2, route_Function1DR11_Function1DPartial_Values[p1, q29]]
+                  | q29 : int(1..n_flights)])
+             | p1 : int(1..n_planes), p2 : int(1..n_planes)]),
+    and([and([conjure_aux1_Occurrence[p1, p2, q26] ->
+              or([route_Function1DR11_Function1DPartial_Flags[p1, q30] /\
+                  route_Function1DR11_Function1DPartial_Values[p1, q30] = q26
+                      | q30 : int(1..n_flights)])
+                  | q26 : int(1..n_flights)])
+             | p1 : int(1..n_planes), p2 : int(1..n_planes)]),
+    and([sum([toInt(conjure_aux1_Occurrence[p1, p2, q25] /\
+                    or([route_Function1DR11_Function1DPartial_Flags[p2, q33] /\
+                        route_Function1DR11_Function1DPartial_Values[p2, q33] = q25
+                            | q33 : int(1..n_flights)]))
+                  | q25 : int(1..n_flights)])
+         = 0 | p1 : int(1..n_planes), p2 : int(1..n_planes)]),
+    and([and([i <=
+              sum([toInt(route_Function1DR11_Function1DPartial_Flags[q38, q42]) | q42 : int(1..n_flights)]) - maint_freq
+              ->
+              or([or([maint_Explicit[q40] = route_Function1DR11_Function1DPartial_Values[q38, j] | q40 : int(1..fin4)])
+                  /\ route_Function1DR11_Function1DPartial_Flags[q38, j]
+                      | j : int(i..i + maint_freq)])
+                  | i : int(1..n_flights - maint_freq)])
+             | q38 : int(1..n_planes)]),
+    and([and([route_Function1DR11_Function1DPartial_Flags[q1, q2] = false ->
+              route_Function1DR11_Function1DPartial_Values[q1, q2] = 1
+                  | q2 : int(1..n_flights)])
+             | q1 : int(1..n_planes)])
+
+$ Conjure's
+$ {"finds": [{"Name": "route"}],
+$  "givens":
+$      [{"Name": "n_flights"}, {"Name": "n_planes"}, {"Name": "maint_freq"}, {"Name": "network"}, {"Name": "can_fly"},
+$       {"Name": "carry_in"}, {"Name": "maint"}],
+$  "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "Flight"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_flights"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_flights"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Plane"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_planes"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_planes"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Compact": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 2], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 4], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 2], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1]],
+$  "nameGenState": [["conjure_aux", 2], ["fin", 5], ["q", 54]], "nbExtraGivens": 4,
+$  "representations":
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_flights"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_planes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "route"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_planes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_planes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainFunction":
+$                   [{"Function_1DPartial": []}, [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "n_flights"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "n_flights"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "n_flights"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "n_flights"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]}],
+$       [{"Name": "carry_in"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 3, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_planes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_planes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_flights"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_flights"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "network"},
+$        {"DomainRelation":
+$             [{"Relation_AsMatrix": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 1, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               []],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n_flights"},
+$                                  {"DeclHasRepr":
+$                                       ["Given", {"Name": "n_flights"},
+$                                        {"DomainInt":
+$                                             [{"TagInt": []},
+$                                              [{"RangeLowerBounded":
+$                                                    {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n_flights"},
+$                                  {"DeclHasRepr":
+$                                       ["Given", {"Name": "n_flights"},
+$                                        {"DomainInt":
+$                                             [{"TagInt": []},
+$                                              [{"RangeLowerBounded":
+$                                                    {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]]}],
+$       [{"Name": "can_fly"},
+$        {"DomainRelation":
+$             [{"Relation_AsMatrix": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 2, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               []],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n_planes"},
+$                                  {"DeclHasRepr":
+$                                       ["Given", {"Name": "n_planes"},
+$                                        {"DomainInt":
+$                                             [{"TagInt": []},
+$                                              [{"RangeLowerBounded":
+$                                                    {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n_flights"},
+$                                  {"DeclHasRepr":
+$                                       ["Given", {"Name": "n_flights"},
+$                                        {"DomainInt":
+$                                             [{"TagInt": []},
+$                                              [{"RangeLowerBounded":
+$                                                    {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]]}],
+$       [{"Name": "maint"},
+$        {"DomainSet":
+$             [{"Set_Explicit": []},
+$              {"SizeAttr_Size":
+$                   {"Reference":
+$                        [{"MachineName": ["fin", 4, []]},
+$                         {"DeclHasRepr":
+$                              ["Given", {"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_flights"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_flights"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "maint_freq"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]],
+$  "representationsTree":
+$      [[{"Name": "can_fly"},
+$        [{"rootLabel": {"Relation_AsMatrix": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "carry_in"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 4, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "maint"}, [{"rootLabel": {"Set_Explicit": []}, "subForest": [{"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "maint_freq"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "n_flights"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "n_planes"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "network"},
+$        [{"rootLabel": {"Relation_AsMatrix": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "route"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest":
+$              [{"rootLabel": null, "subForest": []},
+$               {"rootLabel": {"Function_1DPartial": []},
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]}]]],
+$  "originalDomains":
+$      [[{"Name": "n_flights"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n_planes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "maint_freq"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "network"},
+$        {"DomainRelation":
+$             [[], [{"SizeAttr_None": []}, []],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n_flights"}, null]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n_flights"}, null]}]}]]}]]}],
+$       [{"Name": "can_fly"},
+$        {"DomainRelation":
+$             [[], [{"SizeAttr_None": []}, []],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n_planes"}, null]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n_flights"}, null]}]}]]}]]}],
+$       [{"Name": "carry_in"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_planes"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_flights"}, null]}]}]]}]}],
+$       [{"Name": "maint"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_None": []},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_flights"}, null]}]}]]}]}],
+$       [{"Name": "route"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_planes"}, null]}]}]]},
+$              {"DomainFunction":
+$                   [[], [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "n_flights"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "n_flights"}, null]}]}]]}]}]}]],
+$  "trailGeneralised":
+$      [[3048340975531194336, -2332108615156231456], [-3519404895461285347, 5281802696893243003],
+$       [7841101158010956128, 5281802696893243003], [-7489664484728274438, -487485001489940726],
+$       [-836803239410649998, -9158966025511521658], [1797786619985064228, -5092023593691171766],
+$       [3609509319108652750, -8260012497708283382], [1314443943240400992, -6186052816533520005],
+$       [5579516608877331689, -8260012497708283382], [733530268002687112, 4108269501120141667],
+$       [6006263062881270490, -7420013454795957424], [-8106180614190463934, -3340861283812572562],
+$       [-2281510248546460530, -3938834299923047610], [-546401631285731636, -1554585239861975696],
+$       [-5420694684748027365, 4354285328715169502], [2976975564844715867, 3657531444767924719],
+$       [4425963032049063604, -5818469926372010263], [6169213622432180689, 4354285328715169502],
+$       [-1878915903265862045, -5818469926372010263], [-4291650102042462501, 3491794642996419791],
+$       [-1868602935003096307, -3915946068810600855], [6438400819338342243, -5029971741192290352],
+$       [-2875293001835267687, 805304872345796809], [-7978992701816865299, 6293055255782513019],
+$       [2319066709321437151, -1157549208852486459], [6715763736702967476, -6797199967494437930],
+$       [2425723704737789672, -7648231351886073280], [5781059174302684192, 6065767754397525088],
+$       [3121303550359227228, 2596021323747026347], [-8409576105716828152, -6184016537745563353],
+$       [-418728965556636182, -7155235844026340897], [-1312040883211803303, 7057913374756612062],
+$       [-8041730682831517388, -7155235844026340897], [-2633547558223570181, 7057913374756612062],
+$       [-2382089609628346591, -3726859289703513736], [-5142037945173336637, 4340965518220009337],
+$       [9002624416978037229, -8220718182343978231], [567763393485431262, -6617704464739885315],
+$       [-497789343425821676, -8626935557197411557], [-3152934872573405760, -7028876214351377631],
+$       [7489684293786948785, -872597494795650827], [-8211448576122911381, 5245730454832569555],
+$       [-1751552711027306265, -6184016537745563353], [3693489413013692031, -3493203780928951252],
+$       [-3260704069449142705, 8076331277252598202], [109828967217400860, -3170894643674484076],
+$       [-8607999151102094557, 4062879352226063368], [-383214692653562774, -8438055240862190397],
+$       [-979514093504116246, 6446600531433125595], [5928653804633937764, -1755582176464963894],
+$       [316235061797556972, 6477209309720559200], [3437393764279151237, 5664287393247857687],
+$       [9109203379959980119, 9064543578986341090], [-478517020643126509, 7784286207844336240],
+$       [-2823856410257987614, -2706535523397163062], [-3921578894272417462, 6936077735233138084],
+$       [-3193117993673864909, -2954223272025507909], [6792422779841950616, 206348705281626823],
+$       [2529060605242216748, -2210021933680879931], [5726229633276920237, 5778052528419831132],
+$       [-8589930737496895216, 7784286207844336240], [8581843767025332148, -9146297341836572211],
+$       [2124352027748658248, 7402849895003494596], [-7783338880955763196, -8316387021816657239],
+$       [-1916842863905348437, -5760188219373703475], [-6431934094502966390, 5512940075179839518],
+$       [-4437925943058245492, 2242960774844368391], [-2578402294494732700, 6893193534221980519],
+$       [169908566209779585, 6853894924297077826], [418033493918792255, 5258730483277493210],
+$       [-3587610362915398423, -4639362511512333928], [118484346123135436, -6715606020635232000],
+$       [5359960831374430861, -894427647025981064], [-1487818080875407962, 5717722412335454112],
+$       [3840973726053218909, -1354357128873320893], [4537513113588544954, -925306380875502910],
+$       [2854948999968413237, -8438055240862190397], [-1580215641714227285, -1617377946794676964],
+$       [6452800616274714906, -7004765039479967795], [-1228549947925042438, 3217034961273477681],
+$       [-3917235183715639490, 2668851185520728000], [4109833136609116438, 4451118674573613748],
+$       [6643197423746124934, 8959090777215514242], [1858227345384463294, -1087003274262656337],
+$       [-6976284593534794401, -6370329481073425743], [2372675486567412969, 8284548543850612000],
+$       [7622020786150383119, 5522875629227505555], [7842474752446770910, -52101660400824570],
+$       [-1177972791361666984, 1258094868930443870], [-785947176900704501, 6440330766372579168],
+$       [9141675204670669029, 2385488144494108939], [7317960472144059979, 1014742601914510200],
+$       [3436720775698008663, -4982648357294336570], [-4170429108373802455, -2205569110741135968],
+$       [4550509138225217308, -6042741558541317210], [990585616629215788, 2976144842776067098],
+$       [3976910610409648907, 1041392665290190574], [-6955809803686428163, -641157041422997899],
+$       [3144667474353714631, 710271603599825350], [-3779409461558230523, 2829248341757992689],
+$       [-7531321275543689422, 2004661947231969193], [5406172424254230061, -4847353085421175665],
+$       [-7749521256536624924, -6744393285039030754], [5869190901515073991, 1962512605414539031],
+$       [6672654460340651838, 5387797035680880119], [-3874693000714648444, -7686223390906627590],
+$       [3873681863536991904, 3799709966538298566], [1160701423894965892, -5331054832846928051],
+$       [-1772030755902567124, -8203013224771023452], [8522385203455921658, -22363764669220308],
+$       [746522715260988776, 2715056186380307382], [-8287755471247550880, -2081550668962485417],
+$       [-6071981841060491543, -253611931742024849], [3770090339417322536, -6184016537745563353],
+$       [4249668491591595771, -3371658156267901710], [-3438131295010463556, 5294834082446844504],
+$       [-5901121807804651988, -5207599426694297830], [2952152699212873314, 7422102552144072512],
+$       [-5191050333557911755, -8438055240862190397], [-5910599788360860635, 5550390568096743431],
+$       [5930832381704845491, -2151434354101450022], [-9184690159327608617, 5349753988251887010],
+$       [8604518611967319773, 2593084508157450242], [-3841249862153466570, 4232595827966057941],
+$       [2192644011436040598, 3795120218491459659], [3706320591507399628, 7930629854217027494],
+$       [1529504878062881118, -5122527566742563399], [7614343175899422111, 2593084508157450242],
+$       [4794218686406549070, 8875752890405251757], [3136465146707227010, 1426997598557951721],
+$       [-4390115732191874462, 7285988967005420558], [-1819781084988673331, -185209346602909076],
+$       [3045541658808955619, 5745864227485308081], [-4599229424072785125, 2593084508157450242],
+$       [4128433432343724844, -5491971277331010963], [-403939860651422098, 2931141675981112947],
+$       [7388444890495939546, 2342520664034260294], [5056086139158808300, 3711390298431581550],
+$       [-6924317111592140231, 2593084508157450242], [-8763341155537852776, -782062939468756647],
+$       [-4238729734040606286, -5159448655251929547], [8483428429902105016, 7801437633635701854],
+$       [-324895387272499829, -3822049673033051360], [7914094170490034530, 2478268509730415000],
+$       [-5173908784397385366, 2593084508157450242], [7282692552143469892, 507322375392983197],
+$       [-4686936104041984096, 1026171857608469748], [-6961858223295729244, -2931445239159498587],
+$       [3472702137975501974, -2535807929429006061], [-6273471165322480524, -6943829221115342170],
+$       [-3336895640903406930, -6209769860846698705], [-8317579694932258463, -4119705736852831458],
+$       [-9050849221515255182, 259517280919639013], [4059922110657921570, -1025684642446063555],
+$       [-2249038384912559384, 766301817715753566], [-665462697430394125, 2516516134785855041],
+$       [9050498895455039683, -6384524558092715492], [-3781548166299505206, -6209769860846698705],
+$       [-5367376226200424426, -2286821955383541607], [4819077248911515686, 5833831964093603977],
+$       [1273209318215859726, 7875889400610328682], [-4213619927887088047, 690697447920077944],
+$       [-2679442863014738969, 6037291111417981243], [-1112843181647716468, -4119705736852831458],
+$       [-7549692577811892478, 4462785719359593096], [-3840739757932075039, -9033069025240743555],
+$       [6449361216350331643, 534630107561612491], [-4264320617065794615, -3197535813748588153],
+$       [-1086069437649760700, 3061762215180925332], [-5064002245768035080, -6013496423667529612],
+$       [2575590364150794972, -4996037400884838346], [-6260192649391252246, 2893666523281442064],
+$       [4609254890335915390, 4109177687294418275], [252477958997901348, 403892748741216763],
+$       [-964358655570030329, -5498111343692607753], [-3254467883099200877, -5420071290108198448],
+$       [-8940990002979762542, 4110457826774952372], [-3025478824715934241, -7704601640058298586],
+$       [-3722262881154758639, 6794018145404485952], [-962573661727957184, 6936523427162444796],
+$       [1391725996931715816, -2717752761680935708]],
+$  "trailVerbose": [], "trailRewrites": []}

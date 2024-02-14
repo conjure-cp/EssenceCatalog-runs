@@ -1,0 +1,150 @@
+language ESSENCE' 1.0
+
+given n: int(1..)
+given k: int(1..)
+find boxes_PartitionAsSet_ExplicitR2_Occurrence: matrix indexed by [int(1..k), int(1..n)] of bool
+branching on [boxes_PartitionAsSet_ExplicitR2_Occurrence]
+such that
+    and([or([nums_Explicit[q15] != nums_Explicit[q16] /\ nums_Explicit[q15] + nums_Explicit[q16] = nums_Explicit[q17]
+                 | q15 : int(1..3), q16 : int(1..3), q17 : int(1..3)])
+         ->
+         and([!and([boxes_PartitionAsSet_ExplicitR2_Occurrence[q23, nums_Explicit[q25]] | q25 : int(1..3)])
+                  | q23 : int(1..k)])
+         /\ and([or([nums_Explicit[q21] = q20 | q20 : int(1..n)]) | q21 : int(1..3)])
+             | nums_Explicit : matrix indexed by [int(1..3)] of int(1..n),
+               and([nums_Explicit[q1] < nums_Explicit[q1 + 1] | q1 : int(1..2)])]),
+    and([1 = sum([toInt(boxes_PartitionAsSet_ExplicitR2_Occurrence[q10, q3]) | q10 : int(1..k)]) | q3 : int(1..n)]),
+    and([sum([toInt(boxes_PartitionAsSet_ExplicitR2_Occurrence[q26, q27]) | q27 : int(1..n)]) >= 1 | q26 : int(1..k)]),
+    and([[-toInt(boxes_PartitionAsSet_ExplicitR2_Occurrence[q6, q11]) | q11 : int(1..n)] <lex
+         [-toInt(boxes_PartitionAsSet_ExplicitR2_Occurrence[q6 + 1, q12]) | q12 : int(1..n)]
+             | q6 : int(1..k - 1)]),
+    and([sum([toInt(boxes_PartitionAsSet_ExplicitR2_Occurrence[q7, q8]) | q8 : int(1..n)]) <= n | q7 : int(1..k)]),
+    n = sum([sum([toInt(boxes_PartitionAsSet_ExplicitR2_Occurrence[q13, q14]) | q14 : int(1..n)]) | q13 : int(1..k)])
+
+$ Conjure's
+$ {"finds": [{"Name": "boxes"}], "givens": [{"Name": "n"}, {"Name": "k"}], "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "ball"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Compact": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 4], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["q", 28]], "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "boxes"},
+$        {"DomainPartition":
+$             [{"Partition_AsSet": [{"Set_Explicit": []}, {"Set_Occurrence": []}]},
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_Size":
+$                        {"Reference":
+$                             [{"Name": "k"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "k"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "n"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]],
+$  "representationsTree":
+$      [[{"Name": "boxes"},
+$        [{"rootLabel": {"Partition_AsSet": [{"Set_Explicit": []}, {"Set_Occurrence": []}]},
+$          "subForest": [{"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "k"}, [{"rootLabel": null, "subForest": []}]], [{"Name": "n"}, [{"rootLabel": null, "subForest": []}]]],
+$  "originalDomains":
+$      [[{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "boxes"},
+$        {"DomainPartition":
+$             [[],
+$              {"isRegular": false, "partsNum": {"SizeAttr_Size": {"Reference": [{"Name": "k"}, null]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n"},
+$                              {"DeclNoRepr":
+$                                   ["Given", {"Name": "n"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                    {"NoRegion": []}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[-2012133051429812299, 4848493497644890160], [-3347673438995220972, 7211221216840904420],
+$       [-3270133149540651713, -8438055240862190397], [-8387819539917128378, 4739146601937988317],
+$       [-7953920702479218552, -4284373778627360628], [2043381873010913300, -8042057417743046426],
+$       [5898744648156466244, -6308571854371264235], [-7761744451816110360, -6089765212029035448],
+$       [-9158457762462387826, 5404222015929315615], [110137744117617079, -1928787629867556438],
+$       [-5624266881591297980, -7479012396684172350], [-6533887056097352698, -5818863309787272703],
+$       [6026993791796582492, -5893075857036368536], [-6161599641448283980, -6810136709397995602],
+$       [-457386864327739236, 7571317583683032095], [-237074599312930852, 6106629721462048345],
+$       [2712000134436565084, -3427494419523851816], [3389004389215555423, -133743958807413540],
+$       [5758085915350030996, -9021542799729580618], [876237533835097288, 8914605556780536091],
+$       [-910373472003466850, 1582407483166769514], [-1307714401027384960, -7634082958074580579],
+$       [8909732489980389331, 1446684102367625239], [7679541074371827374, -9168169012458308414],
+$       [248645008568155687, 202748559995960889], [3922074739615836854, -4897601634708388090],
+$       [-3719721945603395231, 491101741216174336], [-7722669920793586300, -8438055240862190397],
+$       [1817898777939991889, 8120982384875029879], [5207831812643584623, 223088013549915694],
+$       [-5825883996400950807, 3631030611325339962], [-1956347045300011850, 3399385829446123916],
+$       [6751004781619979710, 7356226936744057330], [7553635991922774995, 5340392270095146598],
+$       [4744393957754324962, 5646462732738597130], [-1050460716604160040, 8825118342727340316],
+$       [-4882824797382602697, -8243926699850563690], [6058738845692231726, 5633277128993212164],
+$       [-6198849163810607381, 4808009395189118798], [-5726842849584294352, 1921916229596024321],
+$       [-1944751232029888822, -8112526527086014300], [1511742417818899737, -8438055240862190397],
+$       [-1959907809160957084, 5876567673992922379], [9156887210635132892, 8137254045245778422],
+$       [-1439527885590402418, -3325355279583538482], [101614034032923209, 4792003833805483686],
+$       [-3192460514954697220, 6411240657713441738], [-6679187430591998797, 7956083634954781601],
+$       [4474344699861003426, 1346122520927484338], [-2231218435572358417, -4508704242766253589],
+$       [8919326959335125314, 7987098270094823851], [910798633472513731, -5744079945931825650],
+$       [-3322679144306960068, 4086418035086208976], [1266500862258960272, 1068700198003755196],
+$       [-8978873102988052529, 4333340139893289032]],
+$  "trailVerbose": [], "trailRewrites": []}

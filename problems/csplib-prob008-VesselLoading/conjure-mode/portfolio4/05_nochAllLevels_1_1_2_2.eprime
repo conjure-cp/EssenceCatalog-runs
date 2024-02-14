@@ -1,0 +1,1203 @@
+language ESSENCE' 1.0
+
+given deck_width: int(1..)
+given deck_length: int(1..)
+given n_containers: int(1..)
+given n_classes: int(1..)
+given fin1: int
+given width_Function1D: matrix indexed by [int(1..n_containers)] of int(1..deck_width)
+given fin2: int
+given length_Function1D: matrix indexed by [int(1..n_containers)] of int(1..deck_length)
+given fin3: int
+given class_Function1D: matrix indexed by [int(1..n_containers)] of int(1..n_classes)
+given fin4: int
+given fin5: int
+given separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit:
+        matrix indexed by [int(1..fin4), int(1..2)] of int(1..n_classes)
+given separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_2: matrix indexed by [int(1..fin4)] of int(0..fin5)
+find west_Function1D: matrix indexed by [int(1..n_containers)] of int(0..deck_width)
+find east_Function1D: matrix indexed by [int(1..n_containers)] of int(0..deck_width)
+find north_FunctionAsRelation_RelationAsMatrix: matrix indexed by [int(1..n_containers), int(0..deck_length)] of bool
+find south_FunctionAsRelation_RelationAsMatrix: matrix indexed by [int(1..n_containers), int(0..deck_length)] of bool
+branching on
+    [west_Function1D, east_Function1D, north_FunctionAsRelation_RelationAsMatrix,
+     south_FunctionAsRelation_RelationAsMatrix]
+such that
+    and([east_Function1D[c] - west_Function1D[c] = width_Function1D[c] /\
+         and([sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q146_1, q146_2]) * catchUndef(q146_2, 0)
+                       | q146_1 : int(1..n_containers), q146_2 : int(0..deck_length), q146_1 = c])
+              -
+              sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q151_1, q151_2]) * catchUndef(q151_2, 0)
+                       | q151_1 : int(1..n_containers), q151_2 : int(0..deck_length), q151_1 = c])
+              = length_Function1D[c],
+              or([south_FunctionAsRelation_RelationAsMatrix[q149_1, q149_2] /\ q149_1 = c
+                      | q149_1 : int(1..n_containers), q149_2 : int(0..deck_length)]),
+              or([north_FunctionAsRelation_RelationAsMatrix[q154_1, q154_2] /\ q154_1 = c
+                      | q154_1 : int(1..n_containers), q154_2 : int(0..deck_length)]);
+                  int(1..3)])
+         \/
+         east_Function1D[c] - west_Function1D[c] = length_Function1D[c] /\
+         and([sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q156_1, q156_2]) * catchUndef(q156_2, 0)
+                       | q156_1 : int(1..n_containers), q156_2 : int(0..deck_length), q156_1 = c])
+              -
+              sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q161_1, q161_2]) * catchUndef(q161_2, 0)
+                       | q161_1 : int(1..n_containers), q161_2 : int(0..deck_length), q161_1 = c])
+              = width_Function1D[c],
+              or([south_FunctionAsRelation_RelationAsMatrix[q159_1, q159_2] /\ q159_1 = c
+                      | q159_1 : int(1..n_containers), q159_2 : int(0..deck_length)]),
+              or([north_FunctionAsRelation_RelationAsMatrix[q164_1, q164_2] /\ q164_1 = c
+                      | q164_1 : int(1..n_containers), q164_2 : int(0..deck_length)]);
+                  int(1..3)])
+             | c : int(1..n_containers)]),
+    and([c1 != c2 ->
+         west_Function1D[c1] != west_Function1D[c2] \/
+         and([sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q12_1, q12_2]) * catchUndef(q12_2, 0)
+                       | q12_1 : int(1..n_containers), q12_2 : int(0..deck_length), q12_1 = c1])
+              !=
+              sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q17_1, q17_2]) * catchUndef(q17_2, 0)
+                       | q17_1 : int(1..n_containers), q17_2 : int(0..deck_length), q17_1 = c2]),
+              or([north_FunctionAsRelation_RelationAsMatrix[q15_1, q15_2] /\ q15_1 = c1
+                      | q15_1 : int(1..n_containers), q15_2 : int(0..deck_length)]),
+              or([north_FunctionAsRelation_RelationAsMatrix[q20_1, q20_2] /\ q20_1 = c2
+                      | q20_1 : int(1..n_containers), q20_2 : int(0..deck_length)]);
+                  int(1..3)])
+             | c1 : int(1..n_containers), c2 : int(1..n_containers)]),
+    and([c1 != c2 ->
+         and([max([west_Function1D[c1], west_Function1D[c2]; int(1..2)]) -
+              min([east_Function1D[c1], east_Function1D[c2]; int(1..2)])
+              >= 0,
+              allDiff([west_Function1D[c1], west_Function1D[c2]; int(1..2)]),
+              allDiff([east_Function1D[c1], east_Function1D[c2]; int(1..2)]);
+                  int(1..3)])
+         \/
+         and([max([sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q42_1, q42_2]) * catchUndef(q42_2, 0)
+                            | q42_1 : int(1..n_containers), q42_2 : int(0..deck_length), q42_1 = c1]),
+                   sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q47_1, q47_2]) * catchUndef(q47_2, 0)
+                            | q47_1 : int(1..n_containers), q47_2 : int(0..deck_length), q47_1 = c2]);
+                       int(1..2)])
+              -
+              min([sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q22_1, q22_2]) * catchUndef(q22_2, 0)
+                            | q22_1 : int(1..n_containers), q22_2 : int(0..deck_length), q22_1 = c1]),
+                   sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q27_1, q27_2]) * catchUndef(q27_2, 0)
+                            | q27_1 : int(1..n_containers), q27_2 : int(0..deck_length), q27_1 = c2]);
+                       int(1..2)])
+              >= 0,
+              or([north_FunctionAsRelation_RelationAsMatrix[q45_1, q45_2] /\ q45_1 = c1
+                      | q45_1 : int(1..n_containers), q45_2 : int(0..deck_length)]),
+              or([north_FunctionAsRelation_RelationAsMatrix[q50_1, q50_2] /\ q50_1 = c2
+                      | q50_1 : int(1..n_containers), q50_2 : int(0..deck_length)]),
+              and([allDiff([sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q52_1, q52_2]) * catchUndef(q52_2, 0)
+                                     | q52_1 : int(1..n_containers), q52_2 : int(0..deck_length), q52_1 = c1]),
+                            sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q57_1, q57_2]) * catchUndef(q57_2, 0)
+                                     | q57_1 : int(1..n_containers), q57_2 : int(0..deck_length), q57_1 = c2]);
+                                int(1..2)]),
+                   or([north_FunctionAsRelation_RelationAsMatrix[q55_1, q55_2] /\ q55_1 = c1
+                           | q55_1 : int(1..n_containers), q55_2 : int(0..deck_length)]),
+                   or([north_FunctionAsRelation_RelationAsMatrix[q60_1, q60_2] /\ q60_1 = c2
+                           | q60_1 : int(1..n_containers), q60_2 : int(0..deck_length)]);
+                       int(1..3)]),
+              or([south_FunctionAsRelation_RelationAsMatrix[q25_1, q25_2] /\ q25_1 = c1
+                      | q25_1 : int(1..n_containers), q25_2 : int(0..deck_length)]),
+              or([south_FunctionAsRelation_RelationAsMatrix[q30_1, q30_2] /\ q30_1 = c2
+                      | q30_1 : int(1..n_containers), q30_2 : int(0..deck_length)]),
+              and([allDiff([sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q32_1, q32_2]) * catchUndef(q32_2, 0)
+                                     | q32_1 : int(1..n_containers), q32_2 : int(0..deck_length), q32_1 = c1]),
+                            sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q37_1, q37_2]) * catchUndef(q37_2, 0)
+                                     | q37_1 : int(1..n_containers), q37_2 : int(0..deck_length), q37_1 = c2]);
+                                int(1..2)]),
+                   or([south_FunctionAsRelation_RelationAsMatrix[q35_1, q35_2] /\ q35_1 = c1
+                           | q35_1 : int(1..n_containers), q35_2 : int(0..deck_length)]),
+                   or([south_FunctionAsRelation_RelationAsMatrix[q40_1, q40_2] /\ q40_1 = c2
+                           | q40_1 : int(1..n_containers), q40_2 : int(0..deck_length)]);
+                       int(1..3)]);
+                  int(1..7)])
+             | c1 : int(1..n_containers), c2 : int(1..n_containers)]),
+    and([c1 != c2 ->
+         and([max([west_Function1D[c1], west_Function1D[c2]; int(1..2)]) -
+              min([east_Function1D[c1], east_Function1D[c2]; int(1..2)])
+              >=
+              sum([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_2[q64]
+                       | q64 : int(1..fin4),
+                         and([class_Function1D[c1] =
+                              separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q64, q66]
+                              \/
+                              class_Function1D[c2] =
+                              separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q64, q66]
+                                  | q66 : int(1..2)])
+                         /\
+                         (or([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q64, q70] =
+                              class_Function1D[c1]
+                                  | q70 : int(1..2)])
+                          /\
+                          or([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q64, q72] =
+                              class_Function1D[c2]
+                                  | q72 : int(1..2)]))]),
+              allDiff([west_Function1D[c1], west_Function1D[c2]; int(1..2)]),
+              allDiff([east_Function1D[c1], east_Function1D[c2]; int(1..2)]),
+              or([and([class_Function1D[c1] =
+                       separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q75, q77]
+                       \/
+                       class_Function1D[c2] =
+                       separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q75, q77]
+                           | q77 : int(1..2)])
+                  /\
+                  (or([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q75, q81] =
+                       class_Function1D[c1]
+                           | q81 : int(1..2)])
+                   /\
+                   or([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q75, q83] =
+                       class_Function1D[c2]
+                           | q83 : int(1..2)]))
+                      | q75 : int(1..fin4)]),
+              allDiff([class_Function1D[c1], class_Function1D[c2]; int(1..2)]);
+                  int(1..5)])
+         \/
+         and([and([max([sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q126_1, q126_2]) * catchUndef(q126_2, 0)
+                                 | q126_1 : int(1..n_containers), q126_2 : int(0..deck_length), q126_1 = c1]),
+                        sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q131_1, q131_2]) * catchUndef(q131_2, 0)
+                                 | q131_1 : int(1..n_containers), q131_2 : int(0..deck_length), q131_1 = c2]);
+                            int(1..2)])
+                   -
+                   min([sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q85_1, q85_2]) * catchUndef(q85_2, 0)
+                                 | q85_1 : int(1..n_containers), q85_2 : int(0..deck_length), q85_1 = c1]),
+                        sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q90_1, q90_2]) * catchUndef(q90_2, 0)
+                                 | q90_1 : int(1..n_containers), q90_2 : int(0..deck_length), q90_1 = c2]);
+                            int(1..2)])
+                   >=
+                   sum([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_2[q105]
+                            | q105 : int(1..fin4),
+                              and([class_Function1D[c1] =
+                                   separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q105, q107]
+                                   \/
+                                   class_Function1D[c2] =
+                                   separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q105, q107]
+                                       | q107 : int(1..2)])
+                              /\
+                              (or([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q105, q111] =
+                                   class_Function1D[c1]
+                                       | q111 : int(1..2)])
+                               /\
+                               or([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q105, q113] =
+                                   class_Function1D[c2]
+                                       | q113 : int(1..2)]))]),
+                   or([north_FunctionAsRelation_RelationAsMatrix[q129_1, q129_2] /\ q129_1 = c1
+                           | q129_1 : int(1..n_containers), q129_2 : int(0..deck_length)]),
+                   or([north_FunctionAsRelation_RelationAsMatrix[q134_1, q134_2] /\ q134_1 = c2
+                           | q134_1 : int(1..n_containers), q134_2 : int(0..deck_length)]);
+                       int(1..3)]),
+              and([allDiff([sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q136_1, q136_2]) *
+                                 catchUndef(q136_2, 0)
+                                     | q136_1 : int(1..n_containers), q136_2 : int(0..deck_length), q136_1 = c1]),
+                            sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q141_1, q141_2]) *
+                                 catchUndef(q141_2, 0)
+                                     | q141_1 : int(1..n_containers), q141_2 : int(0..deck_length), q141_1 = c2]);
+                                int(1..2)]),
+                   or([north_FunctionAsRelation_RelationAsMatrix[q139_1, q139_2] /\ q139_1 = c1
+                           | q139_1 : int(1..n_containers), q139_2 : int(0..deck_length)]),
+                   or([north_FunctionAsRelation_RelationAsMatrix[q144_1, q144_2] /\ q144_1 = c2
+                           | q144_1 : int(1..n_containers), q144_2 : int(0..deck_length)]);
+                       int(1..3)]),
+              or([south_FunctionAsRelation_RelationAsMatrix[q88_1, q88_2] /\ q88_1 = c1
+                      | q88_1 : int(1..n_containers), q88_2 : int(0..deck_length)]),
+              or([south_FunctionAsRelation_RelationAsMatrix[q93_1, q93_2] /\ q93_1 = c2
+                      | q93_1 : int(1..n_containers), q93_2 : int(0..deck_length)]),
+              and([allDiff([sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q95_1, q95_2]) * catchUndef(q95_2, 0)
+                                     | q95_1 : int(1..n_containers), q95_2 : int(0..deck_length), q95_1 = c1]),
+                            sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q100_1, q100_2]) *
+                                 catchUndef(q100_2, 0)
+                                     | q100_1 : int(1..n_containers), q100_2 : int(0..deck_length), q100_1 = c2]);
+                                int(1..2)]),
+                   or([south_FunctionAsRelation_RelationAsMatrix[q98_1, q98_2] /\ q98_1 = c1
+                           | q98_1 : int(1..n_containers), q98_2 : int(0..deck_length)]),
+                   or([south_FunctionAsRelation_RelationAsMatrix[q103_1, q103_2] /\ q103_1 = c2
+                           | q103_1 : int(1..n_containers), q103_2 : int(0..deck_length)]);
+                       int(1..3)]),
+              or([and([class_Function1D[c1] =
+                       separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q116, q118]
+                       \/
+                       class_Function1D[c2] =
+                       separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q116, q118]
+                           | q118 : int(1..2)])
+                  /\
+                  (or([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q116, q122] =
+                       class_Function1D[c1]
+                           | q122 : int(1..2)])
+                   /\
+                   or([separation_FunctionAsRelationR3_RelationAsSetR3_ExplicitR3_1_Explicit[q116, q124] =
+                       class_Function1D[c2]
+                           | q124 : int(1..2)]))
+                      | q116 : int(1..fin4)]),
+              allDiff([class_Function1D[c1], class_Function1D[c2]; int(1..2)]);
+                  int(1..7)])
+             | c1 : int(1..n_containers), c2 : int(1..n_containers)]),
+    and([1 =
+         sum([toInt(south_FunctionAsRelation_RelationAsMatrix[q61_1, q61_2])
+                  | q61_1 : int(1..n_containers), q61_2 : int(0..deck_length), q61_1 = q5])
+             | q5 : int(1..n_containers)]),
+    and([1 =
+         sum([toInt(north_FunctionAsRelation_RelationAsMatrix[q62_1, q62_2])
+                  | q62_1 : int(1..n_containers), q62_2 : int(0..deck_length), q62_1 = q9])
+             | q9 : int(1..n_containers)])
+
+$ Conjure's
+$ {"finds": [{"Name": "west"}, {"Name": "east"}, {"Name": "north"}, {"Name": "south"}],
+$  "givens":
+$      [{"Name": "deck_width"}, {"Name": "deck_length"}, {"Name": "n_containers"}, {"Name": "n_classes"},
+$       {"Name": "width"}, {"Name": "length"}, {"Name": "class"}, {"Name": "separation"}],
+$  "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "Container"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_containers"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_containers"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Class"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_classes"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_classes"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Width"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "deck_width"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "deck_width"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Length"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "deck_length"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "deck_length"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "X"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                          {"Reference":
+$                               [{"Name": "deck_width"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "deck_width"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Y"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                          {"Reference":
+$                               [{"Name": "deck_length"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "deck_length"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 2], [1, 1, 2], [1, 1, 1], [1, 2, 2], [1, 2, 2], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["fin", 6], ["q", 165]], "nbExtraGivens": 5,
+$  "representations":
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_containers"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "deck_width"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "deck_length"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_classes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 5, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "east"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_containers"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_containers"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"Name": "deck_width"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "deck_width"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "west"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_containers"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_containers"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"Name": "deck_width"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "deck_width"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "width"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 1, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_containers"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_containers"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "deck_width"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "deck_width"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "south"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsMatrix": []}},
+$              [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_containers"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_containers"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"Name": "deck_length"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "deck_length"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "north"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsMatrix": []}},
+$              [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_containers"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_containers"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"Name": "deck_length"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "deck_length"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "length"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 2, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_containers"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_containers"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "deck_length"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "deck_length"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "separation"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsSet": {"Set_Explicit": []}}},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 4, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainSet":
+$                   [{"Set_Explicit": []}, {"SizeAttr_Size": {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "n_classes"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "n_classes"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 5, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 5, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "class"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 3, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_containers"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_containers"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_classes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_classes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]],
+$  "representationsTree":
+$      [[{"Name": "class"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "deck_length"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "deck_width"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "east"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 4, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 5, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "length"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "n_classes"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "n_containers"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "north"},
+$        [{"rootLabel": {"Function_AsRelation": {"Relation_AsMatrix": []}},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "separation"},
+$        [{"rootLabel": {"Function_AsRelation": {"Relation_AsSet": {"Set_Explicit": []}}},
+$          "subForest":
+$              [{"rootLabel": {"Set_Explicit": []}, "subForest": [{"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "south"},
+$        [{"rootLabel": {"Function_AsRelation": {"Relation_AsMatrix": []}},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "west"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "width"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "deck_width"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "deck_length"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n_containers"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n_classes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "width"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_containers"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "deck_width"}, null]}]}]]}]}],
+$       [{"Name": "length"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_containers"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "deck_length"}, null]}]}]]}]}],
+$       [{"Name": "class"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_containers"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_classes"}, null]}]}]]}]}],
+$       [{"Name": "separation"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainSet":
+$                   [[], {"SizeAttr_Size": {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "n_classes"}, null]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 0]}}}]]}]}],
+$       [{"Name": "west"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_containers"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference": [{"Name": "deck_width"}, null]}]}]]}]}],
+$       [{"Name": "east"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_containers"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference": [{"Name": "deck_width"}, null]}]}]]}]}],
+$       [{"Name": "north"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_containers"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference": [{"Name": "deck_length"}, null]}]}]]}]}],
+$       [{"Name": "south"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_containers"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference": [{"Name": "deck_length"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[-8346743354768559631, 856649581105626212], [5719664178273277593, 7993648347309041173],
+$       [-6128280484859114555, 1385629104213072362], [-5127968037029287430, 7580991777700473353],
+$       [-1652851918888323943, -5297160377708239435], [-877359368536920444, -7259298297381865849],
+$       [3463336145783578538, -7259298297381865849], [6688601011555519145, -3561447471892417640],
+$       [-2268397350798409858, -4408994173939484989], [-4106224995728656907, 2961609353816650932],
+$       [2077472643366726135, -3009971216001341054], [1806396540099934840, 7981785226352092418],
+$       [-398185790334609020, -5591769156447153587], [-816976286634754043, -2477713455667127199],
+$       [8881958787621669875, -1724923254129913161], [4796299611902888222, -989606269478036202],
+$       [-8654808980830507513, 8689346089542176517], [-7625121999491739072, -1724923254129913161],
+$       [-2168886940369513271, 8689346089542176517], [5688220168987864027, -927645123102353222],
+$       [7999652083000847675, -7384074434870732812], [-8581908033841710563, 4106809146509433887],
+$       [-2884770766131993942, -6392257020837618349], [-6928035318879315523, 2684768711616569713],
+$       [-5875621062675236974, -2331330771630558583], [-4292970901397124105, -1695359168884905199],
+$       [-7408033180530640900, 7698997282705324979], [-2060801142664624038, 7698997282705324979],
+$       [-3270084762489609589, 7349025664218177194], [-5523512963781234351, -3899320454824154330],
+$       [-5101675749143187570, 8730787130292426522], [-7964796085567264852, 5037233368187877180],
+$       [-5670031465339882095, -621109093555014126], [-801231332565551184, -4046972772194913688],
+$       [98167080722576657, 9048832482995580437], [-5208269529663855153, -5147555528578120313],
+$       [588093933789281056, -2194640427415013832], [6974909759032772955, -5599314139894866123],
+$       [1719066634108565022, -5147555528578120313], [-5951197625305987591, -5599314139894866123],
+$       [-8240580525115420001, 1390928880725724012], [-4366884668227911800, -8930983100155566353],
+$       [9029629476160897624, 3998826281022871567], [-5908541448353489293, 7308970184277118165],
+$       [-6338497593207992501, -4480384477075902358], [8330093244136681540, 8477046554476251778],
+$       [-265209380638949164, 5728174482992570712], [-1306944379551387104, -6867367118944267055],
+$       [4138209923922855914, 7242303864730800901], [-5983960951141604521, 1917138315817075100],
+$       [2834353257807474479, -21115371012254683], [486735153451484455, 1044195116484858158],
+$       [8244881444004095900, 8093534121209722033], [-4687795534355364197, -6430478340340109055],
+$       [505163832148168810, 6958536242660392755], [-6627523865659219132, 6958536242660392755],
+$       [7580137509035990839, -7866837638080762616], [5918808065962153810, 1708726351630268629],
+$       [6023575622993468145, 7274017618119701380], [-6409405498127974241, -158157042855811210],
+$       [-5064147392324206120, -2054284655226383574], [-101363995113345090, 3745389712158772751],
+$       [-4828340702131383873, -9028293133856645291], [-4842631172014200835, -1160937678367423949],
+$       [-7487184669799718116, -1489971301445033686], [8407227843137790209, -7845395781214473791],
+$       [7230770438299555130, -1160937678367423949], [-8280651552923441505, -7845395781214473791],
+$       [7204547604494833597, -1042519381603881958], [-5427861338397124577, 5476804928589864870],
+$       [2012294153592666325, 8258267114844446455], [-8260041576633695902, 965930135323098571],
+$       [-9158967342319604073, 4250232181939711015], [6608539284015167736, 3197533902330029433],
+$       [-7025957267088750711, -680194358820754299], [1697932001618614438, 5117686698510108663],
+$       [-2370200119660862416, 5117686698510108663], [-8017829229221760495, -5923647961577892842],
+$       [2197681331380177629, 3372554456384247936], [8350225183910935550, -1154918102136951490],
+$       [1961049081168617672, 2658837097908065900], [-4184272553980512655, 2699192776033070450],
+$       [-9094921125561754114, -2781452785759872766], [-8959365144496472873, 347776544521489249],
+$       [-3862363726670491987, 5882986462724737651], [8941115394517780038, -8253038200918177416],
+$       [-7654488876244942391, 150711593058997009], [-2639574442527819096, 5882986462724737651],
+$       [2380828863889107283, 150711593058997009], [5320194551138691365, -2793314142572992344],
+$       [534549877600723112, 5206590714141828593], [3245558729169816304, -2309777114774790425],
+$       [8784246113605692867, 3376501679034856369], [1059011169954614013, 2213657659419059176],
+$       [-4495538937710859334, 5728174482992570712], [-3687052886539950106, 8477046554476251778],
+$       [774891771358556420, -6867367118944267055], [7564002255475656698, 7242303864730800901],
+$       [-3083083880832140818, -2648654944195547713], [-6968502814679043174, 3822640623018125947],
+$       [5112638821966475325, 5623505471248868844], [4278805100742182261, -3930947385781722252],
+$       [-7497038758391133644, 4631636452246559329], [7143617817122666191, 7325289715580535353],
+$       [-4413843153402270669, 276299481097914464], [5842355867659477853, 4631636452246559329],
+$       [-6840355428538992530, 7325289715580535353], [-4158677316868013703, -1159046297759939088],
+$       [8520282842245270201, -2403559378962444379], [5443331577287539593, 1988867369232199390],
+$       [1319555780791725375, -2064957316777566847], [5764307517468997660, 1229985211873094629],
+$       [-9081848534747338351, 3821268366158362943], [-5555942665350905051, 3821268366158362943],
+$       [5719821241733254477, 6161511237397814472], [848013929980673755, -6345161939541388273],
+$       [-6599343738252607839, -9193164708856178692], [-7661949184148422519, -4083612170024592646],
+$       [-6512912650396432499, 9114661634252428146], [7415327546734621267, 8987545981657576273],
+$       [-5845603835538555435, -720621385698602259], [-4510895501690188741, 4507992524729957879],
+$       [1272912604363435315, 6215441812413467046], [8335779495578378952, -8208971954528621211],
+$       [-2101963657135969057, 4507992524729957879], [-3008576825048381822, -8208971954528621211],
+$       [-7681550839608280055, 1150804717910684994], [7692823296244557355, -8326837638818856636],
+$       [9135191067238291261, -8169000052479567813], [103703134413482853, -6742273686604173309],
+$       [-2580847693588687852, 4329145491289519239], [3399231449853504374, -681253660037620867],
+$       [1407472359081607719, -7430088004350142967], [3361733302342161284, 5527121875364415995],
+$       [-292877517113970808, 5527121875364415995], [8175413749437546592, -6012229543831755438],
+$       [-3241020862801797394, -2902311707378159626], [4002632449398917784, -481899530141826866],
+$       [-6933031373366107512, -5294329046182749980], [1260438963535577580, -2057531570961084174],
+$       [5811761699168839550, 5687980065644181424], [-7232682014595793164, 3349012711550854841],
+$       [-8433421817499549646, 8256861301183037167], [5116424411401734786, 2603398850088801736],
+$       [2410299783380723791, -3772107367188672635], [-3525932259282332766, 8256861301183037167],
+$       [2548793126640009997, -3772107367188672635], [-7623460437673234112, -2452698971837111020],
+$       [-3218529161663771778, -6083090100962706197], [-6459802876739405868, -7694224240160437413],
+$       [-2421519531141900756, 7489495483939974885], [6390092278823212545, -8889980562852780060],
+$       [-64633308872157957, 4990364747295473380], [-5983069303340580933, -8240517831346342459],
+$       [8358017879669795382, -1556528543411575835], [-8645500676720883969, 850520644151207801],
+$       [8916454074271293519, 7703176932194024130], [-1657398873547101691, -7106652394309036007],
+$       [-4777630457493251454, -6624561565708313943], [5772268143142588395, 7887342510091544851],
+$       [3055492612726893799, 7887342510091544851], [-2842272156466617017, -724298665926103768],
+$       [1665157007607630111, 5080111167229819765], [-3989168927569278825, 2325707172365915296],
+$       [-6114548553160148869, 8054755448085693530], [2848042053660867953, -189869901414400978],
+$       [-415191761918076891, -6891984762936074157], [2766683570085479127, -8327263226379403783],
+$       [7241607464960555725, -7230410883824819989], [-4849940087707337331, 5132574954179925410],
+$       [-977142617612613014, 5522092677332588425], [6382929787906155801, -7230410883824819989],
+$       [8449742107369906664, 5522092677332588425], [-7973270458965744217, -6665861600192023038],
+$       [615534632942007537, -3790695820563780378], [5790592090341366703, 4913155143558315839],
+$       [-768728679128533747, 3746915348871020887], [-2175634268990583834, -1074456504602902263],
+$       [-4896711433267131696, 2557342854179978917], [1644297147455460577, -6170245795072742715],
+$       [8436123361326420206, -4876940831940466057], [7548854986561088434, -4876940831940466057],
+$       [7802731731088486394, -865812667027013930], [3970575009803601178, 4755140014316740956],
+$       [1941296375769000522, -5930264111825924634], [-7058990419675341118, 2113461961408381488],
+$       [-1016173129461956204, 6240417464386163966], [-3684315816854341808, 4567665873478830850],
+$       [-352748168247309778, 3680412198761561613], [4537644789870244240, 726536081432020627],
+$       [5592965070788003196, -2797937660784976072], [487537719201672585, -6062031745807183799],
+$       [8456694107577813668, 726536081432020627], [1057025236639985211, -6062031745807183799],
+$       [8717945023957741874, -5996291259714716456], [9204230068588663128, -4672201963837916923],
+$       [-1099850268082570382, -8866767709522803561], [-3507730585762598396, 6688337663259444453],
+$       [7553513578991048159, 2439535611610139414], [1219612578881041899, 85013740113481928],
+$       [3876496115399090588, -5253501835180102472], [-7641693199684653840, 6601298650837317916],
+$       [-3791089192174290487, 3824361765207673783], [4707094392628330770, 2418004979431229974],
+$       [-2038639294005761482, -339250622937292262], [-5244196279268213314, -6712187695283883658],
+$       [-3142665431403833014, 8107207643646102144], [-5075762540535037514, 7442411998920922929],
+$       [4817612728760344615, 2759562984736947136], [-3303263852373225471, -1509975880225623247],
+$       [5107220700673359006, -4467211787005246768], [325494556324321486, 7663498481329264124],
+$       [539444854599395053, 782907753443818553], [-2239347342493952749, -3446303021588486048],
+$       [9049829375506939543, -4770554346698026760], [-893898108341614594, -5361494622044645589],
+$       [-4377078777459603070, -6510938932862398829], [474902604866547038, -8589617059652367135],
+$       [-1461585306610313867, -7683482975684211477], [-8952497832737882334, 3813927578299565365],
+$       [-8938289032625784186, -6808865192233642427], [-1838541544972828911, -271002156566999614],
+$       [-6355026706496405385, -4397156518328303674], [8677843080654100035, 8608817205017205741],
+$       [-7653650404373815512, 8346794465196188750], [-2297146165033121560, -1115621641645825007],
+$       [-4321790892246258691, 347782090573592609], [2901181951092857857, -5836363041045099943],
+$       [7392328793393978651, -1046596589074648283], [3456790508484384742, -3535066243206023786],
+$       [-211739637240029504, -4998680960279758660], [5369357956210452931, 5691717945120683052],
+$       [5207512621327028678, -5858280090980229344], [8771119292576597654, -1960665846661010492],
+$       [501938693039916460, -7926353679462074560], [-9160653821347018502, -6716175710825380787],
+$       [8402913548468453614, -8158145176842688621], [7278883628221208218, -18292362257390266],
+$       [3868665279387167784, -6957677363781190222], [-1763787670533064146, -6773044174583905517],
+$       [2334514686537490747, -2575596411831440956], [-452484994460275985, -5400091041846818032],
+$       [3170829077333963604, -7937081625112489778], [-628269118023581703, 8649931911675003922],
+$       [-778746129963412099, -3259335484365434851], [-5863043658804817582, 3115243432452178354],
+$       [-1353625788718007140, 3672883286526822541], [4632031679777977043, -2685545488485755480],
+$       [5839883657611005207, 6668447321011619392], [-4223492744041419677, -679935105460154900],
+$       [-5808383605948675363, 6948889683393995676], [7752515158722340189, -2272141601502125456],
+$       [7509294833776361077, 8824705747995328214], [5475210282880729354, 8561305228752076966],
+$       [-6138316819010972782, -6043254433909837137], [7872181825712344863, 5996469138007134480],
+$       [-3109495075827144344, -8048078038091818595], [5044516383373602668, -5061165476025765715],
+$       [-2734061479693731081, -7189942353306902414], [218901442408771221, 4427475905073170158],
+$       [3660077414279045517, -6552120891729489289], [5585410849776791888, -5775361147058950778],
+$       [2234194316617049272, 1427300520265774691], [-5728606432977120319, 2549443864625015664],
+$       [-5637713531390455575, 7653393636402381875], [4636927161876124857, 2067925296706955072],
+$       [-8472515131518679672, 3969335665837594452], [8904340255302503046, 1040971540135539558],
+$       [-8771141500997802433, 2790131231173840871], [8875073553774625470, -8001592450945486842],
+$       [3164158979982216456, -3026005430406850408], [1550829684626017628, -25295069576105265],
+$       [-1711099356566526424, 5352733313972665481], [2525043992935328800, -9176219947208672710],
+$       [-7382898370781036198, -3106375018996006974], [-5859360108522958816, -3263961946064137805],
+$       [-3752867029131854811, -1565580998679154709], [-4957214543179175957, 4103627037776489114],
+$       [4386633834314180527, -8974987662688258606], [-3294157495244987039, 4103627037776489114],
+$       [-3057980522656152379, -8974987662688258606], [-2030868956122168093, 1728648238080892601],
+$       [-4694236175371321277, 3394336436813417190], [-7825015045048610884, 7141717233289942225],
+$       [-6195585442379463239, -6271646068340899276], [9032084599951106329, -4474162787733536467],
+$       [3723253213984520468, 1592101384864796830], [-193921836221404157, 1404908416784375657],
+$       [-7413039644699956362, -1263765719035426719], [3398795210170894621, -2220090686639670093],
+$       [4269715717283671777, -2220090686639670093], [3203256632573940442, 8877949306304638154],
+$       [2655882956372598542, 8549933109805619802], [4111105963019681453, -842000615247883158],
+$       [8689736948775736775, -3402624631918302780], [9093159399125423490, 2513648674005770606],
+$       [6083298981693136843, -5350635999178809888], [-9099837226876535286, 3819740413967150857],
+$       [8694505876221697470, -3510280863358983417], [-1377184385850641193, 4412127962511684376],
+$       [-5011903473659776250, 6335009854947114421], [1372097523695786451, -3510280863358983417],
+$       [-302623096976129360, 6335009854947114421], [-598410989465543524, 280302631045346108],
+$       [-691890051342147753, -2226742414945759485], [4653406378736657147, -4026021450030142613],
+$       [-4381293677775894228, 8023719616838935281], [8026186382822546936, -4441667375881628152],
+$       [-82205428658573727, 5913877340446500469], [-3604397846129675622, 2046545512167395057],
+$       [-2387511220761057189, -8228995717429568653], [-8523065749479879881, -8228995717429568653],
+$       [4310485774239590026, 7372988660719770200], [-3590862060233485313, -3620455087823894111],
+$       [5187425839936940544, -5665337552052845756], [1591066812765149190, 8351535181520819110],
+$       [-8315293272424419263, 2774163685626688106], [8335473914829483473, 4520983316000044071],
+$       [-5724553604493609552, -703539272205488439], [-7297187762384561320, -315948415945249485],
+$       [-3577974938882513437, -8848962619550250326], [-7248405132834209732, 8760740207589586705],
+$       [-5579936079338844165, -315948415945249485], [3766854850240865310, 8760740207589586705],
+$       [6500668172117704554, 6082909447865008602], [442049636848711694, 4022465911709173846],
+$       [-8063444375291581164, 4008200789023054519], [6853780205305704407, 250139782823727211],
+$       [8216360337859546436, -3465851817574257271], [2699431690737635812, 7653447494972936517],
+$       [6698640340431218737, 1755275474152945354], [4174507797254304062, 8613334618904450289],
+$       [8484773965249268043, -9126501026312309467], [-2208926813908625960, 4166933875244451703],
+$       [4173084626622729252, 4166933875244451703], [5883491939177824215, -7779591331557922330],
+$       [1684403498465079783, 3673658079105539264], [-5327177375336535224, 665948774842782882],
+$       [-5303493546100435150, -5561137086229483400], [7057521869033510231, 3180239652482866674],
+$       [8219078785441884946, 1809205371304817226], [5729349304771710675, 2094234472883859173],
+$       [2271631220278945267, 5526509246075561395], [6538274339815641358, -7233961261899833336],
+$       [-1071535157311981961, -7607596577578813183], [4498398720716883054, 5526509246075561395],
+$       [2587230744109434689, -7607596577578813183], [-6465623628496729855, -6257414769951981352],
+$       [-6602142863338996134, 354006577354270757], [6725926808029054498, -214008796223196825],
+$       [3070508706867614721, -7865373351921446511], [-4506244095699105039, 2509776736045977530],
+$       [4407565974171089568, -8601529537576336275], [7371617111419550511, 4800635398532402245],
+$       [-282215623116886974, 1768513165429994159], [-757407684257023642, 1768513165429994159],
+$       [-6315238619016655573, 3138995899611499112], [4895914050840351358, 5864064437519760687],
+$       [1846519332238541033, 3255621428898882104], [-3034952646867176225, 5026856399645281726],
+$       [-715655768109166412, 4515130067809266838], [2785709895213014628, -3835257193377439967],
+$       [522029058134035401, -6040717351325463123], [-1720326422960233371, 6961826686892950775],
+$       [-7696068108117778994, -3548511151463887210], [2593154519875103757, -2065467986510593147],
+$       [1904995005478791562, 6961826686892950775], [-6001311226415313185, -2065467986510593147],
+$       [6303373955296707599, -8439565184209509406], [673375866174408311, -3569946437774574992],
+$       [-8483789201634030851, 4458446867289841491], [5098911092803874350, 2402765739385323295],
+$       [2494170425994056177, 1490005339911597227], [-4444471403687375845, -7161494323508838304],
+$       [-5954140002192777436, 4229337619577311337], [-8581923726808770061, -2592512471080154855],
+$       [-168731476741640085, -3586045569421814834], [8371239511117659843, -5537648202548166824],
+$       [656345684263883768, -8645046430982599249], [-582271421103210276, -3171558675382858200],
+$       [1561798548425985672, -4523932699187779476], [-8434150186296358039, -1990581216388363130],
+$       [-2815705866432471478, 1373520921483733626], [-3710304385169669702, -2041054057731176575],
+$       [-2673773869299348171, 4785074149802965938], [7246549222111797519, 8196736480268465377],
+$       [-950307713722394884, -7152683741991291908], [2106528200599460496, 5266934528610207208],
+$       [391251869123294842, 5349804681514314030], [6134838815333394108, 656700227489462144],
+$       [4691397414073449812, -4161176592224530712], [2890215439465366606, -2621070257014396832],
+$       [3772616558621636319, 1570721064297888324], [6232581263868352239, -1181606047239963153],
+$       [5029794909582027630, -3136996187212185550], [480101152722482333, -898635078133313667],
+$       [6380439491433526049, 4240322195760728973], [6016467151006899398, 6195931089388006546],
+$       [-485133752329429660, -4840118161923415690], [-6970295170257011336, -4107702801867973989],
+$       [-4839173373670638403, -7304935230108584882], [-7345388032456356075, 7290816422707201639],
+$       [7490712836081346320, 86459082050739030], [1479433322212217760, -8494458740708516905],
+$       [2750790588027208880, -1303518841995772694], [-5146939253137316047, 6185782341331322148],
+$       [-1366807971135147157, -8860505111838756098], [2528603590246144082, 7388958644880817285],
+$       [-6453417326814618825, 5010295825341841130], [-1568134860958349855, -2709424269323296028],
+$       [-2030197946977866353, 2655699783919270322], [5058697486043146281, -7968215539175323839],
+$       [5839325106545834469, 1339567424519668081], [4759235197054051385, -7089463850377503644],
+$       [-4354597112035521901, -4350712925653123726], [-7217815320825482483, 1758943375063013550],
+$       [-7338520250883427561, -1784863377285379210], [-2882520760219878637, -3642573624484585238],
+$       [8753784399347645671, -5135210520615102474], [7220400157592458391, 1065187455110178688],
+$       [1120301308189606891, -5175123929528003023], [-4016429156898335586, 4554184731987313520],
+$       [-4265535152952096088, 6198616924419409169], [4769040623939137087, -8137058599914873688],
+$       [-7201526065668179965, -1890344112582959076], [3810806680606095840, -6302190303010423267],
+$       [-1125918620859611386, 4720946742410756480], [-2238671230052601634, 9187301640202263776],
+$       [-6000270407586162701, -4447022555520926313], [6004590253386485963, -7993697890115752857],
+$       [387905320074644623, 5994626618495062593], [-8446761603661617364, -5072565058975405497],
+$       [-6212895349873418169, 7645031573224479597], [8857583933029098243, 7283434563660466253],
+$       [-5898425772716500536, -8308484365005993190], [4461685741341215286, -5540208990610456338],
+$       [8872919241844360054, 1532825704038980109], [54261316794160793, -7435677656378339482],
+$       [724576185954734965, -7864924653744987815], [2311928545443497980, 1404655926429935437],
+$       [-726434348966584728, -3012734503473882015], [-1597146733652401534, -2547036122791073647],
+$       [6787324357800906463, 3703748152632411334], [4623628651159493405, 5245229423510701036],
+$       [-7578274304326547666, 1894907165404166912], [2864609069593707603, -5013441440669954768],
+$       [-7597440928969811697, 1497640586999133364], [-5692679033288697451, 4619210216426572675],
+$       [-8473731429249290197, -5511326520328470649], [796998941347311043, -1629428972384390],
+$       [-1459263248558365999, -2261044007329165216], [-2317600872614080329, -570230415175445455],
+$       [-4680393706457439006, -547019148888210928], [5126732495220367220, 4103627037776489114],
+$       [727066518287133832, -8974987662688258606], [7757264217735874, 4103627037776489114],
+$       [8033131074641242550, -8974987662688258606], [-4731383862200185368, 1728648238080892601],
+$       [9085869098458508635, 4426756404093478686], [-784662589641206052, -360616123059916664],
+$       [5212296072076815448, 6629656557808146653], [1845904241261059180, 4266565300042550485],
+$       [-6397074612740146519, 6629656557808146653], [-8985970971781889839, 4266565300042550485],
+$       [-3193221002253924521, 853911920731622825], [5914401786541005916, 777682659559712857],
+$       [7518939054990919045, -2126702503249664624], [-4448913131497849380, -8438055240862190397],
+$       [4910996299657430187, -8841230943993865055], [-2437056572357821459, -8483184454935723373],
+$       [1312850085349882902, 1434504626165670072], [-8118442627454292871, -201160657623269431],
+$       [-4071822154615353092, -8483184454935723373], [-5586772310052716557, -3848439288269585693],
+$       [-7680700322764754919, 1672663422412330855], [1296434911277643496, 245970754869939006],
+$       [1188789512410689777, -2070999126698756932], [-4231724973743236388, -8438055240862190397],
+$       [8581335169932072935, -4537016246412364119], [3461139050385293933, 462320816131678263],
+$       [2644218756264557920, 7437596115049603174], [-1639480615765839467, -7610870316737606747],
+$       [1646129677595976794, 462320816131678263], [-480530888659433018, 661362284721273526],
+$       [832562176790521117, 3924833651812970372], [-966208909541813824, 4468140917386333782],
+$       [7967388026958125155, 4981487020320828185], [-3886675800383988315, 6190535892033654969],
+$       [-7844774885119136444, -5495863804329856870], [495827432642359268, -6998925362728769534],
+$       [-8558834686810938813, -4257206130684424548], [5288771119632233347, 5514811915975425001],
+$       [-5516681463246811373, 7474400563959809981], [7808974927982497922, 5690343107266187288],
+$       [1594916446201706114, -7759137101734510011], [1875318782487026862, -912505819092032802],
+$       [-4177673887072368544, 7359512237037979937], [-3862378918852886713, 2669907305973880629],
+$       [-735750573217880954, -8532489098534368057], [4409904963178172026, -8532489098534368057],
+$       [7802301601920906586, 3684271035915239416], [4805817316862367008, 4255798970957882963],
+$       [-4317797878310307362, 8880103167535762708], [6794183032587410978, -8979183343121944502],
+$       [665990353208039642, 2494611136860807610], [2794427224450672820, -2912375931218690067],
+$       [5219332709499054278, 694946111447062837], [828462955772103880, -8421580832360036489],
+$       [-1613993844001443284, 3666077453969542246], [7045336863413359807, -5667223392648688347],
+$       [7664114634891455504, -8421580832360036489], [-5229961442132557915, -5667223392648688347],
+$       [-7316774184170483590, -2370213743132396662], [-6483859714290726088, 2080274455258547816],
+$       [7737806732512023330, -5585048499023935261], [-4219986829081211726, 2153129736109004355],
+$       [-1075239060319566857, 7320923383782907011], [3153740071138222513, 3109736642225972189],
+$       [-234967674019524992, -4359064058233014527], [-1225859789370271557, -8087632143883154445],
+$       [-5507029445018715369, -8087632143883154445], [801989921311461755, 4751927605100388650],
+$       [340157305695283741, -6822579468693904014], [7782902457235494339, 5890533672916868990],
+$       [519538849619561447, 5288196627199817732], [8690427737068602359, -5667154039817566558],
+$       [7422258480145750713, -4142311149726473924], [-4093001811334966529, 7991693590563238785],
+$       [2309909452734337225, -4379708365114067769], [8579976906851503209, 3495660323166573912],
+$       [-3615807401111707632, 6928433594187823317], [6499431855050502553, -4379708365114067769],
+$       [5780201392857269098, 6928433594187823317], [-1973836605724452077, -4048368028959285444],
+$       [-7155997745309520887, -9034873446989072057], [3550892861495088495, -7925505849908977685],
+$       [-6112676129257707657, 9125217070047325989], [7830010059912301814, -3256959373637577688],
+$       [-4763531394202330593, 2798271942809635257], [-114520827059047440, -1800976005821453607],
+$       [7746309208784976309, -1310199794394843590], [-1866986438678741604, 2101808672934837689],
+$       [-7144102265212607421, 3667798267244719889], [2644975247931142442, -1514352817895645005],
+$       [-2665856778828798702, -1514352817895645005], [1048425220756233111, 3791148442222883960],
+$       [-8888448083550570964, 864761628710194969], [5572868925171561139, 94800274055535392],
+$       [4209590912066737049, -9134720646130606934], [7767257599005461574, 9046816193345097646],
+$       [-4036324097449891256, 4242456394077551615], [8858309849213586145, 8626447335133395193],
+$       [-8766469321074478103, 4449646274983838707], [-7234427010771573350, 4837876114026539018],
+$       [8695943055174234001, 6865797878025310289], [8267837568618292034, 4449646274983838707],
+$       [2280793487373336703, 6865797878025310289], [-9209269605409356737, -4961313796138876614],
+$       [4038969359164667717, 5981180323383787610], [4462062748260857455, 5685370053452441231],
+$       [2914660828647511792, -3395089397802564753], [2714822214931014309, 907963406200879653],
+$       [5378848516242340610, -633520097282950731], [1429971895698215755, 9042244141080962405],
+$       [2234069857509773724, 6850999551807654583], [-2186012867520013580, 6850999551807654583],
+$       [5194225056268155919, -3761153058237670874], [-1976637163569612309, 8520746908215492920],
+$       [4845165625862142360, -6376575744982716378], [1282603882715099430, 5758502413118831176],
+$       [1944405850709264751, 8152445564164996390], [-7934059055729325082, -676771473126495410],
+$       [-1320370009470713205, -8785465219302644291], [5090886733435244795, 7629216198055583859],
+$       [7612429377918816490, -4101753026457427768], [-6464188201613971065, -332711269905924863],
+$       [5788460798426861334, 7629216198055583859], [-7050966340496955895, -332711269905924863],
+$       [8540041340672757317, 8856733980729638008], [-5068017676563450750, -6040073657520689871],
+$       [3846539423381069286, 8857816952973334207], [-867926609716823379, -8859754476511293899],
+$       [319732840472051353, -2552989007853260886], [2921284512285853303, 85013740113481928],
+$       [4065826667429125232, 2899364913441119242], [2376896845633653175, -1951787586193130955],
+$       [-6203206001966250322, 4312041459224152640], [410559962607143886, 7085047377969590773],
+$       [7875965888222317371, -5914275972273629578], [-4682759130625350162, -2845622290807820891],
+$       [3523827193991115433, -898453898012029691], [6871711186116901388, 5690884293836631535],
+$       [-7345312849430731524, 5690884293836631535], [55156670956066953, 729876910666810376],
+$       [9143112169543563448, 3548239179870748471], [-1495131404693790869, 6975584811492693456],
+$       [-6568870496150773719, 8170509339182029382], [-1950982816674394334, 6366027226574640542],
+$       [-3007929938199768038, 3843001571470822041], [-5635010983549469585, -482360413200922587],
+$       [-4644536826141124537, 2990015958553201463], [-7983724698225939496, -4635178797566104202],
+$       [-898574328749747697, -8703336777394665339], [-6387153830836015040, 2990015958553201463],
+$       [-7347152134764691371, -8703336777394665339], [-8779560372028180607, -2625057306980134558],
+$       [-133079132219559235, 5453284729837997624], [-7905418764625984353, 4165380715020006987],
+$       [3720070220991634080, -4495036338390665345], [-8642104831904255837, -1487672599270362681],
+$       [-132775788206777264, -6822103201241413375], [52527705487575625, 8768047490759338185],
+$       [9188267380094434962, -6263490525577226325], [6536106356249101570, -6263490525577226325],
+$       [-2922107156851179511, 2169507321881924194], [-6960174583636958253, -607807099530071474],
+$       [-6389998095662571760, 8052961907820863082], [-449832952265090878, -1236098822029854908],
+$       [-3167165100050186261, -7506352171681182138], [-1123105735348807116, -903901353760032212],
+$       [-5616886372242733227, -5048891912257883943], [-645388502712397427, 2183261450932652703],
+$       [9180016556009953096, 8008797320524442664], [-4484756649240375423, 1887668280549117541],
+$       [-6298513607665975028, 2183261450932652703], [-5588502999005159085, 1887668280549117541],
+$       [151386223640556555, 833976085755473812], [3908188476551874798, 5433093645573542071],
+$       [-2821230448807831106, -25025244209210197], [-1340968339066392839, -8694237723907739903],
+$       [595065240808547963, -4733371254856749600], [-2973997071076195657, 3670046684304203097],
+$       [-148642208572851094, 5551229434939084986], [4691637469131422611, -7341574372426150323],
+$       [-7014687598500603160, -2613759004901164471], [-6504591506169589247, -4495741252798482413],
+$       [9043481891744724473, -4495741252798482413], [8907810732999081376, 2802352114704966968],
+$       [-7349004407731108915, 4783463584714037853], [-7508272298292159246, 8192995050892938740],
+$       [3749908297910150096, -5595356803179044450], [-8475352480478674701, -1235608439204422750],
+$       [3812871127648850011, -2351783040888306173], [2189127859264382278, -8624535262848741951],
+$       [-4681628994972511534, -668626963653327781], [-2749389630473929823, 135165655978273874],
+$       [-5648688919757025518, 3973799755754933961], [-4138123433822444163, -668626963653327781],
+$       [-7187309805375387560, 3973799755754933961], [5420762879528488140, 8595343761035209778],
+$       [3611977679947485076, 4393511203592196978], [3098820863915129814, 8947305456944913567],
+$       [-627495585370165467, -3879302554854309533], [5890384119325719386, 1981918635512627001],
+$       [1539274655687789173, -3227284985138727207], [-3949328437529344452, -7666953108548403867],
+$       [1103546144160622343, 3560106094014375287], [-3145337662947580585, 3560106094014375287],
+$       [-8638018159638977484, -8723111342792710298], [-9217310780881228898, -7179150908874943244],
+$       [3150345355759913633, -6901813984937803342], [-8375553534660059949, 845244458016146704],
+$       [964607681539716590, -6652812220783044726], [-8555669342113172195, -8246949364896891498],
+$       [-3538840727240356344, -8900960020170677715], [-8282156943934337244, -1712021732865615021],
+$       [-3326507338700769715, 2941762994694217256], [-7067207709282928844, 95228178540338505],
+$       [-445070331196024755, -1712021732865615021], [4134113945527076110, 95228178540338505],
+$       [-3370755742664167854, -1888625990027187256], [-6172171356810282009, -1293043388189205655],
+$       [-3020226792001979701, 618103888023890039], [1669615186865765364, 1275921763650032961],
+$       [-7952802697646124058, -8626611027268580974], [-5056413705931663168, -7161494323508838304],
+$       [-4326481658396778465, 4229337619577311337], [3852551246803240312, -2592512471080154855],
+$       [-6388455942903121622, 2147317732061234032], [-8239707036343686518, -252979712131731463],
+$       [-2484382923834468639, 4631636452246559329], [-1303397038269395322, 7325289715580535353],
+$       [197722173077262499, 276299481097914464], [-7438780269597287986, 4631636452246559329],
+$       [7542606327142352318, 7325289715580535353], [228057676551671606, 4426756404093478686],
+$       [4682830573209603093, -360616123059916664], [6768060587799483249, 6629656557808146653],
+$       [1232509508496274529, 4266565300042550485], [-1091678252339325064, 6629656557808146653],
+$       [6380368234171396996, 4266565300042550485], [-3065192886849319170, 853911920731622825],
+$       [-6519305561429377239, 777682659559712857], [-887640309399049316, -173071163706801614],
+$       [1400542224462247236, -1800795126528300982], [2042207810478327613, 8989450887858501216],
+$       [-2174187133268915899, -4803001399794267638], [6406977542925804108, -3755014560446646383],
+$       [2095208377740593659, -2637174405487218219], [-4276602590570594006, 3560974621233799687],
+$       [8974078583650920218, 3560974621233799687], [-210754430266752357, 3977583499822923736],
+$       [4003072032573866632, -4294547075699756005], [-4553226572229574973, 268140042039600692],
+$       [-1788228997008277403, 3664323270124554890], [1379302099137824610, 4227211462285955322],
+$       [-4705317573889998276, 4277594386187455205], [775636017719497557, 2888895060921191973],
+$       [3620743077166736217, -6201018185583692745], [8701025924691470826, 8456040261685955446],
+$       [4498953536110834853, -6303782554196137211], [-4343002503040547978, -6201018185583692745],
+$       [-4866923934081019453, -6303782554196137211], [-9081621070643507641, 855138956130125018],
+$       [9004099154246035069, 1888705678181467984], [3807967583787221359, 5768776687012649443],
+$       [5331637373449947964, 1313569548347476499], [-3957928427499854571, -4107925501846967637],
+$       [2005810943776793422, -7791972859201824931], [-5149687179946828417, -6782607006974793391],
+$       [3263491056216508008, -8728146882744816333], [-1887719122273956904, -8728146882744816333],
+$       [-1297156748362506177, -6515288958380456566], [101598282475659111, 7384059295637155978],
+$       [-1164453465525866636, -2544288095371137986], [1464353925011794854, -7004917976240835324],
+$       [7464659709274034643, 8421184568497234882], [9150188296608160382, 1526815109722836644],
+$       [-8623154264549631561, -4934294083210852095], [-5689123114313380205, 8473619080863094663],
+$       [6508975089305607654, 3938127682272352120], [5042387836813159271, 5484441680418945749],
+$       [-4658068997203785986, 8473619080863094663], [-6019618184605523287, 5484441680418945749],
+$       [-5273297291870862851, 4978954642288252236], [561913080041677294, -3221265323924880081],
+$       [7383252999775072470, 5541565178697707755], [4655448825066525589, 534341145818968261],
+$       [-4470009916623720019, -250146222197434064], [-1792872816103664514, 4631636452246559329],
+$       [7101877124944867426, 7325289715580535353], [-8074382756197866436, 2592960820887159536],
+$       [297500393375354848, 6034042949214056558], [-1500671344551367171, 5581974605377276711],
+$       [-8901244305664649419, -7813340062234205174], [7640741268738891287, -8967567900992491006],
+$       [2801955806798298674, -5955954750231139747], [4253887155832539698, 5265554585998680259],
+$       [2236145971109171128, 2075939495711926703], [-3392157077187570220, 4775994078087030820],
+$       [-4894401536737872996, 5668485079573765364], [-3254467883099200877, -5420071290108198448],
+$       [6163815859799041067, -6006601982709390936], [-8940990002979762542, 4110457826774952372],
+$       [5382311162302377934, 8201483118811985108], [-3722262881154758639, 6794018145404485952],
+$       [-1411605651813959569, -6009192800884738818], [-7326834647621169430, -7199960134786767938],
+$       [1391725996931715816, -2717752761680935708]],
+$  "trailVerbose": [], "trailRewrites": []}

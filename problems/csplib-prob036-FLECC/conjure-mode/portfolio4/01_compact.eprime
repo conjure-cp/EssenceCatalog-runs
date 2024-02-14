@@ -1,0 +1,393 @@
+language ESSENCE' 1.0
+
+given nbCharacter: int(1..)
+given maxDist: int(1..)
+given codeWordLength: int(1..)
+given numOfCodeWords: int(1..)
+given fin1: int
+given dist_FunctionND: matrix indexed by [int(1..nbCharacter), int(1..nbCharacter)] of int(0..maxDist)
+letting let1 be maxDist * codeWordLength
+given minDist: int(0..let1)
+where and([dist_FunctionND[shadow1, shadow1] = 0 | shadow1 : int(1..nbCharacter)])
+where and([dist_FunctionND[c1, c2] = dist_FunctionND[c2, c1] | c1 : int(1..nbCharacter), c2 : int(1..nbCharacter)])
+find c_ExplicitR10_Function1D: matrix indexed by [int(1..numOfCodeWords), int(1..codeWordLength)] of int(1..nbCharacter)
+branching on [c_ExplicitR10_Function1D]
+such that
+    and([or([!(sum([c_ExplicitR10_Function1D[q20, q26] | q26 : int(1..codeWordLength), q26 = q25]) =
+               c_ExplicitR10_Function1D[q19, q25]
+               /\ or([q27 = q25 | q27 : int(1..codeWordLength)]))
+                 | q25 : int(1..codeWordLength)])
+         \/
+         or([!(sum([c_ExplicitR10_Function1D[q19, q29] | q29 : int(1..codeWordLength), q29 = q28]) =
+               c_ExplicitR10_Function1D[q20, q28]
+               /\ or([q30 = q28 | q30 : int(1..codeWordLength)]))
+                 | q28 : int(1..codeWordLength)])
+         ->
+         and([sum([dist_FunctionND
+                       [sum([c_ExplicitR10_Function1D[q19, q21] | q21 : int(1..codeWordLength), q21 = i]),
+                        sum([c_ExplicitR10_Function1D[q20, q22] | q22 : int(1..codeWordLength), q22 = i])]
+                       | i : int(1..codeWordLength)])
+              >= minDist,
+              and([or([q23 = i | q23 : int(1..codeWordLength)]) | i : int(1..codeWordLength)]),
+              and([or([q24 = i | q24 : int(1..codeWordLength)]) | i : int(1..codeWordLength)]);
+                  int(1..3)])
+             | q19 : int(1..numOfCodeWords), q20 : int(1..numOfCodeWords)]),
+    and([[c_ExplicitR10_Function1D[q7, q10] | q10 : int(1..codeWordLength)] <lex
+         [c_ExplicitR10_Function1D[q7 + 1, q11] | q11 : int(1..codeWordLength)]
+             | q7 : int(1..numOfCodeWords - 1)])
+
+$ Conjure's
+$ {"finds": [{"Name": "c"}],
+$  "givens":
+$      [{"Name": "nbCharacter"}, {"Name": "maxDist"}, {"Name": "codeWordLength"}, {"Name": "numOfCodeWords"},
+$       {"Name": "dist"}, {"Name": "minDist"}],
+$  "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "Character"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "nbCharacter"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "nbCharacter"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Index"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "codeWordLength"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "codeWordLength"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "String"},
+$        {"Domain":
+$             {"DomainFunction":
+$                  [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$                   {"DomainInt":
+$                        [{"TagInt": []},
+$                         [{"RangeBounded":
+$                               [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                {"Reference":
+$                                     [{"Name": "codeWordLength"},
+$                                      {"DeclNoRepr":
+$                                           ["Given", {"Name": "codeWordLength"},
+$                                            {"DomainInt":
+$                                                 [{"TagInt": []},
+$                                                  [{"RangeLowerBounded":
+$                                                        {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                            {"NoRegion": []}]}]}]}]]},
+$                   {"DomainInt":
+$                        [{"TagInt": []},
+$                         [{"RangeBounded":
+$                               [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                {"Reference":
+$                                     [{"Name": "nbCharacter"},
+$                                      {"DeclNoRepr":
+$                                           ["Given", {"Name": "nbCharacter"},
+$                                            {"DomainInt":
+$                                                 [{"TagInt": []},
+$                                                  [{"RangeLowerBounded":
+$                                                        {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                            {"NoRegion": []}]}]}]}]]}]}}],
+$       [{"MachineName": ["let", 1, []]},
+$        {"Op":
+$             {"MkOpProduct":
+$                  {"AbstractLiteral":
+$                       {"AbsLitMatrix":
+$                            [{"DomainInt":
+$                                  [{"TagInt": []},
+$                                   [{"RangeBounded":
+$                                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                          {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                             [{"Reference":
+$                                   [{"Name": "maxDist"},
+$                                    {"DeclNoRepr":
+$                                         ["Given", {"Name": "maxDist"},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                          {"NoRegion": []}]}]},
+$                              {"Reference":
+$                                   [{"Name": "codeWordLength"},
+$                                    {"DeclNoRepr":
+$                                         ["Given", {"Name": "codeWordLength"},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                          {"NoRegion": []}]}]}]]}}}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Compact": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["fin", 2], ["let", 2], ["q", 31], ["shadow", 2]], "nbExtraGivens": 1,
+$  "representations":
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "nbCharacter"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "maxDist"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "codeWordLength"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "dist"},
+$        {"DomainFunction":
+$             [{"Function_ND": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 1, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "nbCharacter"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "nbCharacter"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "nbCharacter"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "nbCharacter"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"Name": "maxDist"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "maxDist"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "numOfCodeWords"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "minDist"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference":
+$                          [{"MachineName": ["let", 1, []]},
+$                           {"Alias":
+$                                {"Op":
+$                                     {"MkOpProduct":
+$                                          {"AbstractLiteral":
+$                                               {"AbsLitMatrix":
+$                                                    [{"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                     [{"Reference":
+$                                                           [{"Name": "maxDist"},
+$                                                            {"DeclHasRepr":
+$                                                                 ["Given", {"Name": "maxDist"},
+$                                                                  {"DomainInt":
+$                                                                       [{"TagInt": []},
+$                                                                        [{"RangeLowerBounded":
+$                                                                              {"Constant":
+$                                                                                   {"ConstantInt":
+$                                                                                        [{"TagInt": []}, 1]}}}]]}]}]},
+$                                                      {"Reference":
+$                                                           [{"Name": "codeWordLength"},
+$                                                            {"DeclHasRepr":
+$                                                                 ["Given", {"Name": "codeWordLength"},
+$                                                                  {"DomainInt":
+$                                                                       [{"TagInt": []},
+$                                                                        [{"RangeLowerBounded":
+$                                                                              {"Constant":
+$                                                                                   {"ConstantInt":
+$                                                                                        [{"TagInt": []},
+$                                                                                         1]}}}]]}]}]}]]}}}}}]}]}]]}],
+$       [{"Name": "c"},
+$        {"DomainSet":
+$             [{"Set_Explicit": []},
+$              {"SizeAttr_Size":
+$                   {"Reference":
+$                        [{"Name": "numOfCodeWords"},
+$                         {"DeclHasRepr":
+$                              ["Given", {"Name": "numOfCodeWords"},
+$                               {"DomainInt":
+$                                    [{"TagInt": []},
+$                                     [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}},
+$              {"DomainFunction":
+$                   [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "codeWordLength"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "codeWordLength"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "nbCharacter"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "nbCharacter"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]}]],
+$  "representationsTree":
+$      [[{"Name": "c"},
+$        [{"rootLabel": {"Set_Explicit": []},
+$          "subForest":
+$              [{"rootLabel": {"Function_1D": []},
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]}]],
+$       [{"Name": "codeWordLength"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "dist"},
+$        [{"rootLabel": {"Function_ND": []},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "maxDist"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "minDist"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "nbCharacter"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "numOfCodeWords"}, [{"rootLabel": null, "subForest": []}]]],
+$  "originalDomains":
+$      [[{"Name": "nbCharacter"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "maxDist"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "codeWordLength"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "numOfCodeWords"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "dist"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "nbCharacter"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "nbCharacter"}, null]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference": [{"Name": "maxDist"}, null]}]}]]}]}],
+$       [{"Name": "minDist"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference": [{"MachineName": ["let", 1, []]}, null]}]}]]}],
+$       [{"Name": "c"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_Size": {"Reference": [{"Name": "numOfCodeWords"}, null]}},
+$              {"DomainFunction":
+$                   [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "codeWordLength"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "nbCharacter"}, null]}]}]]}]}]}]],
+$  "trailGeneralised":
+$      [[-1596146360511686556, -154255295892493697], [-2506225163045120890, -9115604658306078037],
+$       [-2834732105909340446, -5448077855517075322], [-2218039515157627203, 7398039817149882757],
+$       [4799188257116424295, 8866324820333108003], [8008355656190739460, 6261155402285188931],
+$       [-4651869713862576736, 2356811014230798611], [-6356763279452908798, -1522830820186013964],
+$       [-1791337983907153070, 7398039817149882757], [-1515699574061723908, 8432264127805369797],
+$       [2652011172575790327, 2107955460837954854], [-6705649727922458168, 6966890029818602013],
+$       [-9106105014341442524, 7285334961850599598], [-317174500686911490, 2389325389357597301],
+$       [7106785823586261520, -6195190412226733497], [-6960010216762664909, -5889656244190607683],
+$       [-6769041930822778195, 3047466179948978315], [1542062196364414116, -8021597439167678431],
+$       [-301320443788632176, 6336804441124434901], [412422334259081057, -7163722828814727322],
+$       [6025568354244939519, -5889656244190607683], [6073029832230730933, -4946542790736184615],
+$       [-34394762959700142, -7003751042450464740], [1499371432725488235, -4643862428260378913],
+$       [-3591421985600342869, -1742524451633677820], [-208647795976954172, 4287236633044366931],
+$       [-5349284279837706472, 3133187481071749560], [-1311818711777229277, 4557087727056313061],
+$       [1579315998686553575, -3680955432679138545], [1741533283414801017, -6735535553468717641],
+$       [5705856880428043229, 2976224082402237885], [648736342647107161, 1671464897071167877],
+$       [-1500589259031958417, -6458625960371109881], [-8882143015177640798, -1926688796119814015],
+$       [6717378971813378995, -7603897542828517692], [4441564425536906428, -307421753749777309],
+$       [7713058033774517282, 5285516147455964907], [-191612077732848703, -539416152437606635],
+$       [1331549377120753021, 732526493247370614], [-6442754373789190531, -3552781484616656303],
+$       [-3906322199372129631, -4976448982281459195], [1647892785864031440, 6430402367931760989],
+$       [4521120319506612202, -4313514844486192426], [-2005437053672609786, 423526884533438195],
+$       [5566606535454180642, 6707915535467805068], [-1260573162578205776, 5556279181838445333],
+$       [-2735344801952046848, 4663290489939154299], [6279090788528710246, 6112619199791943620],
+$       [318841651882585284, -8411434551393748340], [-1846287754261205431, 2169870894092533582],
+$       [-8699516461168616304, -2936541475005996493], [3649351731547645616, 7648603429757298645],
+$       [1715932704128483416, -1564227497224157829], [-182875258931572202, -7751528843904930664],
+$       [-8032105215857144253, -8106030904840530851], [-510682259293767, -6056239589000183561],
+$       [7663549010941708944, -6660281721490446401], [7163507627032505598, 7185963327061979541],
+$       [-5547626735701017359, 886123984765556228], [-6340824016629342539, -60527101369443895],
+$       [1487713043578914989, 1747760748334122575], [-5574707511034410973, 3834632829510146050],
+$       [6895718469780078052, 1257811157140082436], [6670721799022673665, 6518661516493519552],
+$       [-2957581085089544538, 275491847510114471], [6482919248584904468, 9140722754563845371],
+$       [1249839099721056174, -1005458523235680446], [141554434654875647, 7582854741989640573],
+$       [3107774673628641250, -4933127553327423034], [2874275968533965938, -6060556457963845126],
+$       [-6063105048297762809, -8258032474184925620], [5825651728782662964, -8513243486952339347],
+$       [4549131686219134165, 2981279222413772137], [-996254799848503440, -8824930715924512038],
+$       [-7596493023115089780, 5982711337053607965], [-1358986622184392627, 4840896652882207988],
+$       [2540400093303827290, -5278869321433827649], [-2161896606227329751, -4612141920428540917],
+$       [-3540402456787283058, -107222692202157390], [953863684423847608, 6244672636666346431],
+$       [3484452616618994694, 3421002338791127327], [-6007382973008290778, 8993469015230131884],
+$       [-9162906953132680460, 882110989966058706], [-1484551606651425179, 9033731668306679317],
+$       [-9024100035709136674, 3967498861041682916], [-7262449237077373111, -152324218142930294],
+$       [-3981254775909516034, -3325373752121161320], [-6559707898087392609, -1457204451009419720],
+$       [1391725996931715816, -2717752761680935708]],
+$  "trailVerbose": [], "trailRewrites": []}

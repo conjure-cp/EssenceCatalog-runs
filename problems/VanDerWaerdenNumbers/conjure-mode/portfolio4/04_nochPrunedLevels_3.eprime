@@ -1,0 +1,151 @@
+language ESSENCE' 1.0
+
+given k: int(1..)
+given l: int(1..)
+given n: int(1..)
+find p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker: matrix indexed by [int(1..k)] of int(0..n)
+find p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Values: matrix indexed by [int(1..k), int(1..n)] of int(1..n)
+branching on
+    [p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker,
+     p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Values]
+such that
+    and([and([and([!and([or([q17 <= p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker[q14] /\
+                             p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Values[q14, q17] = start + i * width
+                                 | q17 : int(1..n)])
+                             | i : int(0..l - 1)])
+                       | width : int(1..(n - start + 1) / (l - 1))])
+                  | start : int(1..n - l + 1)])
+             | q14 : int(1..k)]),
+    alldifferent_except([toInt(q21 <= p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker[q20]) *
+                         catchUndef(p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Values[q20, q21], 0)
+                             | q20 : int(1..k), q21 : int(1..n)],
+                        0),
+    and([p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker[q22] >= 1 | q22 : int(1..k)]),
+    and([flatten([[p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker[q4]; int(1)],
+                  [p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Values[q4, q10] | q10 : int(1..n)];
+                      int(1..2)])
+         <lex
+         flatten([[p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker[q4 + 1]; int(1)],
+                  [p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Values[q4 + 1, q11] | q11 : int(1..n)];
+                      int(1..2)])
+             | q4 : int(1..k - 1)]),
+    and([and([q6 + 1 <= p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker[q5] ->
+              p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Values[q5, q6] <
+              p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Values[q5, q6 + 1]
+                  | q6 : int(1..n - 1)])
+             | q5 : int(1..k)]),
+    and([and([q7 > p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker[q5] ->
+              p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Values[q5, q7] = 1
+                  | q7 : int(1..n)])
+             | q5 : int(1..k)]),
+    and([p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker[q5] <= n | q5 : int(1..k)]),
+    n = sum([p_PartitionAsSet_ExplicitR5_ExplicitVarSizeWithMarker_Marker[q12] | q12 : int(1..k)])
+
+$ Conjure's
+$ {"finds": [{"Name": "p"}], "givens": [{"Name": "k"}, {"Name": "l"}, {"Name": "n"}], "enumGivens": [],
+$  "enumLettings": [], "lettings": [], "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 3, 4], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1]],
+$  "nameGenState": [["q", 24]], "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "l"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "p"},
+$        {"DomainPartition":
+$             [{"Partition_AsSet": [{"Set_Explicit": []}, {"Set_ExplicitVarSizeWithMarker": []}]},
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_Size":
+$                        {"Reference":
+$                             [{"Name": "k"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "k"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "n"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]],
+$  "representationsTree":
+$      [[{"Name": "k"}, [{"rootLabel": null, "subForest": []}]], [{"Name": "l"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "n"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "p"},
+$        [{"rootLabel": {"Partition_AsSet": [{"Set_Explicit": []}, {"Set_ExplicitVarSizeWithMarker": []}]},
+$          "subForest": [{"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "l"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "p"},
+$        {"DomainPartition":
+$             [[],
+$              {"isRegular": false, "partsNum": {"SizeAttr_Size": {"Reference": [{"Name": "k"}, null]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n"},
+$                              {"DeclNoRepr":
+$                                   ["Given", {"Name": "n"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                    {"NoRegion": []}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[-1619756256488273747, -2924438530124482889], [-1289629344960182503, 6771164867874054424],
+$       [-8894373338360627709, 4765448912711860966], [-4341733137532101138, 8833576242079462375],
+$       [5900386646657861026, -2342577944280301098], [2456303631093990282, -4026247634427676038],
+$       [-1627928630346256462, 1331998745323973004], [-3649436247209788334, 3906697481461517159],
+$       [-9157059743567100868, 8395926680064030756], [8410411385298927878, 6713252425645573825],
+$       [8527203191881098420, -8582331117944334250], [-1184646944589810118, -2400473809049651311],
+$       [-4251528973733078123, -8902924569171089403], [8933671380460192874, -820970764123985533],
+$       [6890690378202485053, 5111498551816330176], [7027401776894312056, 4462900516818915820],
+$       [9114450149201331086, 7016583088752450778], [8015722412881750210, -8834425544272216901],
+$       [2359282078297261455, 1940538737127238218], [-2916162895961696254, -1034456990577333374],
+$       [5353961117861941621, -1644272002261964392], [-992328036437110354, -7114586685192706522],
+$       [247277693577360787, -623145828423234518], [6791477248868820676, 1409111936664472735],
+$       [709302812022249956, 631921924970820999], [-2334101612043524231, -3271087510228661754],
+$       [-6270998210851380081, 519337948367697243], [4617504384821713634, -5460426986742898524],
+$       [-7017378835442361188, -2196369054802740624], [1817573262994077679, -1472588135403537654],
+$       [1121325134442228179, 7753091305953275186], [-2366993159918460323, 6609360030036458000],
+$       [-2425981691308582285, -5603728113047506590], [-8764747819237648756, 4175656609833207221],
+$       [-1864946426893325845, -924753839561955764], [1153870288622334508, 5334644301898664040],
+$       [4444113489788309271, -5137364396459196068], [5584748791779627536, 2300985640473920688],
+$       [-8885217818970742234, 4954208069202000752], [1266500862258960272, 1068700198003755196],
+$       [-8978873102988052529, 4333340139893289032]],
+$  "trailVerbose": [], "trailRewrites": []}

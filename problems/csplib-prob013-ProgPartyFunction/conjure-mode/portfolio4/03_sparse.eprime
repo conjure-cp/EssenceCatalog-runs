@@ -1,0 +1,314 @@
+language ESSENCE' 1.0
+
+given n_boats: int(1..)
+given n_periods: int(1..)
+given fin1: int
+given fin2: int
+given capacity_Function1D: matrix indexed by [int(1..n_boats)] of int(1..fin2)
+given fin3: int
+given fin4: int
+given crew_Function1D: matrix indexed by [int(1..n_boats)] of int(1..fin4)
+find hosts_ExplicitVarSizeWithDummy: matrix indexed by [int(1..n_boats)] of int(1..n_boats + 1)
+find sched_ExplicitR10_Function1D: matrix indexed by [int(1..n_periods), int(1..n_boats)] of int(1..n_boats)
+branching on [hosts_ExplicitVarSizeWithDummy, sched_ExplicitR10_Function1D]
+minimising sum([toInt(hosts_ExplicitVarSizeWithDummy[q29] != n_boats + 1) | q29 : int(1..n_boats)])
+such that
+    and([and([or([hosts_ExplicitVarSizeWithDummy[q16] != n_boats + 1 /\
+                  hosts_ExplicitVarSizeWithDummy[q16] = sched_ExplicitR10_Function1D[q11, q14]
+                      | q16 : int(1..n_boats)])
+                  | q14 : int(1..n_boats)])
+         /\
+         and([hosts_ExplicitVarSizeWithDummy[q18] != n_boats + 1 ->
+              or([sched_ExplicitR10_Function1D[q11, q21] = hosts_ExplicitVarSizeWithDummy[q18] | q21 : int(1..n_boats)])
+                  | q18 : int(1..n_boats)])
+             | q11 : int(1..n_periods)]),
+    and([and([hosts_ExplicitVarSizeWithDummy[q23] != n_boats + 1 ->
+              sched_ExplicitR10_Function1D[q22, hosts_ExplicitVarSizeWithDummy[q23]] =
+              hosts_ExplicitVarSizeWithDummy[q23]
+                  | q23 : int(1..n_boats)])
+             | q22 : int(1..n_periods)]),
+    and([and([hosts_ExplicitVarSizeWithDummy[q25] != n_boats + 1 ->
+              sum([toInt(sched_ExplicitR10_Function1D[q24, q27] = hosts_ExplicitVarSizeWithDummy[q25]) *
+                   catchUndef(crew_Function1D[q27], 0)
+                       | q27 : int(1..n_boats)])
+              <= capacity_Function1D[hosts_ExplicitVarSizeWithDummy[q25]]
+                  | q25 : int(1..n_boats)])
+             | q24 : int(1..n_periods)]),
+    and([b1 < b2 ->
+         sum([toInt(sched_ExplicitR10_Function1D[q8, b1] = sched_ExplicitR10_Function1D[q8, b2])
+                  | q8 : int(1..n_periods)])
+         <= 1
+             | b1 : int(1..n_boats), b2 : int(1..n_boats)]),
+    and([hosts_ExplicitVarSizeWithDummy[q1] < hosts_ExplicitVarSizeWithDummy[q1 + 1] \/
+         hosts_ExplicitVarSizeWithDummy[q1] = n_boats + 1
+             | q1 : int(1..n_boats - 1)]),
+    and([hosts_ExplicitVarSizeWithDummy[q2] = n_boats + 1 -> hosts_ExplicitVarSizeWithDummy[q2 + 1] = n_boats + 1
+             | q2 : int(1..n_boats - 1)]),
+    1 <= sum([toInt(hosts_ExplicitVarSizeWithDummy[q3] != n_boats + 1) | q3 : int(1..n_boats)]),
+    and([[sched_ExplicitR10_Function1D[q5, q9] | q9 : int(1..n_boats)] <lex
+         [sched_ExplicitR10_Function1D[q5 + 1, q10] | q10 : int(1..n_boats)]
+             | q5 : int(1..n_periods - 1)])
+
+$ Conjure's
+$ {"finds": [{"Name": "hosts"}, {"Name": "sched"}],
+$  "givens": [{"Name": "n_boats"}, {"Name": "n_periods"}, {"Name": "capacity"}, {"Name": "crew"}], "enumGivens": [],
+$  "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "Boat"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_boats"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_boats"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Sparse": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["fin", 5], ["q", 30]], "nbExtraGivens": 4,
+$  "representations":
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_boats"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_periods"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "hosts"},
+$        {"DomainSet":
+$             [{"Set_ExplicitVarSizeWithDummy": []},
+$              {"SizeAttr_MinSize": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_boats"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_boats"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "sched"},
+$        {"DomainSet":
+$             [{"Set_Explicit": []},
+$              {"SizeAttr_Size":
+$                   {"Reference":
+$                        [{"Name": "n_periods"},
+$                         {"DeclHasRepr":
+$                              ["Given", {"Name": "n_periods"},
+$                               {"DomainInt":
+$                                    [{"TagInt": []},
+$                                     [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}},
+$              {"DomainFunction":
+$                   [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "n_boats"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "n_boats"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "n_boats"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "n_boats"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]}],
+$       [{"Name": "crew"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 3, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_boats"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_boats"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 4, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 4, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "capacity"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 1, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_boats"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_boats"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 2, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 2, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}]],
+$  "representationsTree":
+$      [[{"Name": "capacity"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "crew"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 4, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "hosts"},
+$        [{"rootLabel": {"Set_ExplicitVarSizeWithDummy": []}, "subForest": [{"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "n_boats"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "n_periods"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "sched"},
+$        [{"rootLabel": {"Set_Explicit": []},
+$          "subForest":
+$              [{"rootLabel": {"Function_1D": []},
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]}]]],
+$  "originalDomains":
+$      [[{"Name": "n_boats"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n_periods"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "capacity"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_boats"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}],
+$       [{"Name": "crew"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_boats"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}],
+$       [{"Name": "hosts"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_MinSize": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_boats"}, null]}]}]]}]}],
+$       [{"Name": "sched"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_Size": {"Reference": [{"Name": "n_periods"}, null]}},
+$              {"DomainFunction":
+$                   [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "n_boats"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "n_boats"}, null]}]}]]}]}]}]],
+$  "trailGeneralised":
+$      [[4300083167970527999, 453217273062001508], [1449505861874775983, -8438055240862190397],
+$       [5281229010440947887, -6834016800860201655], [5284458256570761216, -8877882384365629833],
+$       [2467157580446590489, -3360482540744205998], [-1445387012973284299, 5049992031507933962],
+$       [7186258950130395039, 2261027729252848972], [-2021431384738727758, 3893756346428182775],
+$       [-5076137249400197422, 8124266857970509595], [-2560564079310002058, 5931820551385749140],
+$       [-989030611832777799, -8877882384365629833], [-6297531176823702465, 6111178224520665898],
+$       [8683242440120698687, -1078607993318440871], [8156093469151770753, 3912864911089736740],
+$       [-7460590795030175335, -5836339538921084899], [2290044853725032571, 368645404334682841],
+$       [-3992390214359908014, 1696483882009973362], [-3127726311464729867, -5267826980904617772],
+$       [2725997346657715129, 4100798038242063180], [-6434140592937085892, 371440649411780287],
+$       [622717354883500262, -95883294128706971], [-7573046773037794344, -4447028161558549229],
+$       [-6239084410934046056, -8798115842706389380], [-6579924520540139090, -7385942281365461700],
+$       [3511089918921359085, -8877882384365629833], [-3401042874568441859, -1875555538868317039],
+$       [-2063232083815142470, 7658287057041319702], [-456225061265464282, -1878593814805245274],
+$       [-7107214281707968884, -3650102039830868052], [2545233505171972742, 4438433528228510328],
+$       [2434588917292986128, 8512166712520509028], [4470139776301533457, -8877882384365629833],
+$       [-4271015801394719478, 6582234095303033464], [3044450173502248631, -203210169352075243],
+$       [8401656775386692633, 1942143237869766792], [-8689174171789079631, -7817622290637578835],
+$       [1370123627850365841, -9040579371224693739], [-2604440398648822106, 1989160563043695811],
+$       [6078026359296851360, 8610086795516121813], [3665480419006720704, -3529339099768787967],
+$       [3254629096259338947, 298016837636340693], [4059541269799484862, -8877882384365629833],
+$       [-3183741252580052807, -5953771268563728709], [-4166420299809197, -6547473931595124063],
+$       [-326972953405106795, -4811653898217618796], [-6908134602334797457, -515013536789014770],
+$       [4852381641628449972, -8971282615168979901], [4024205644662197170, -5215754549081975050],
+$       [-7889780042756147486, -8863683701959546463], [4828958189374023258, -5992401112773233965],
+$       [-1604931327787605063, -5740580508113449127], [-7663442690131012780, 3130513796866614708],
+$       [-5401469481040420898, 5314901710186168859], [3190313566257464092, -118149321053165420],
+$       [750767871976634553, 2756874910040892458], [-2484536538658220679, 7119210078414907256],
+$       [-2664193164591235802, 4083067338604708191], [-6842523063905432303, -170036995191711214],
+$       [3874199125492985988, 6257420110468837929], [8174856338662242229, -5992426578147687130],
+$       [-9151265327045562274, 9152668105341751339], [-8384964017853564568, -1929823667988058628],
+$       [8994835264334410545, -5833990685967313687], [-8810624722692480753, -4048997266254063519],
+$       [2998779603044926737, 5846560344256726413], [-4278709012018441631, 8252767103825110428],
+$       [5432121855555602310, 3392027975815444690], [8057231166355924454, 4353694488787500674],
+$       [7539453479768627126, -493819863362020445], [-7003934784454543239, 5053558252591583007],
+$       [2773243624869292266, -9147032158611632357], [4409826499002174389, 2015386020952110977],
+$       [-4095212037219919751, -8976955720644885992], [-3254467883099200877, -5420071290108198448],
+$       [-8940990002979762542, 4110457826774952372], [-3722262881154758639, 6794018145404485952],
+$       [4090692559559280110, 8020438179731538196], [1391725996931715816, -2717752761680935708]],
+$  "trailVerbose": [], "trailRewrites": []}

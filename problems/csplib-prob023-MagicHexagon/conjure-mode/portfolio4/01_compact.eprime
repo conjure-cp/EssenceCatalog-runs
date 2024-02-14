@@ -1,0 +1,1497 @@
+language ESSENCE' 1.0
+
+given order: int
+letting ix be order - 1
+letting diameter be order * 2 - 1
+letting max_val be 3 * order ** 2 - 3 * order + 1
+letting total_sum be max_val * (max_val + 1) / 2
+letting let1 be -ix
+letting let2 be -ix
+letting let3 be -ix
+find hexagon: matrix indexed by [int(let1..ix), int(let2..ix), int(let3..ix)] of int(0..max_val)
+find sumsto: int(0..total_sum)
+find A: int(0..max_val)
+find B: int(0..max_val)
+find C: int(0..max_val)
+find D: int(0..max_val)
+find E: int(0..max_val)
+find F: int(0..max_val)
+branching on [hexagon, sumsto, A, B, C, D, E, F]
+such that
+    and([hexagon[i, j, k] != 0 | i : int(-ix..ix), j : int(-ix..ix), k : int(-ix..ix), i + j + k = 0]),
+    and([hexagon[i, j, k] = 0 | i : int(-ix..ix), j : int(-ix..ix), k : int(-ix..ix), i + j + k != 0]),
+    allDiff([hexagon[i, j, k] | i : int(-ix..ix), j : int(-ix..ix), k : int(-ix..ix), i + j + k = 0]),
+    and([sumsto = sum([hexagon[i, j, k] | j : int(-ix..ix), k : int(-ix..ix)]) | i : int(-ix..ix)]),
+    and([sumsto = sum([hexagon[i, j, k] | i : int(-ix..ix), k : int(-ix..ix)]) | j : int(-ix..ix)]),
+    and([sumsto = sum([hexagon[i, j, k] | i : int(-ix..ix), j : int(-ix..ix)]) | k : int(-ix..ix)]),
+    A = hexagon[0, ix, -ix],
+    B = hexagon[ix, 0, -ix],
+    C = hexagon[ix, -ix, 0],
+    D = hexagon[-ix, 0, ix],
+    E = hexagon[0, -ix, ix],
+    F = hexagon[-ix, ix, 0],
+    [A, B, C, D, E, F; int(1..6)] <=lex [B, C, D, E, F, A; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [C, D, E, F, A, B; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [D, E, F, A, B, C; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [E, F, A, B, C, D; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [F, A, B, C, D, E; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [A, F, E, D, C, B; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [B, A, F, E, D, C; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [C, B, A, F, E, D; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [D, C, B, A, F, E; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [E, D, C, B, A, F; int(1..6)],
+    [A, B, C, D, E, F; int(1..6)] <=lex [F, E, D, C, B, A; int(1..6)],
+    diameter * sumsto = total_sum
+
+$ Conjure's
+$ {"finds":
+$      [{"Name": "hexagon"}, {"Name": "sumsto"}, {"Name": "A"}, {"Name": "B"}, {"Name": "C"}, {"Name": "D"},
+$       {"Name": "E"}, {"Name": "F"}],
+$  "givens": [{"Name": "order"}], "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "ix"},
+$        {"Op":
+$             {"MkOpMinus":
+$                  [{"Reference":
+$                        [{"Name": "order"},
+$                         {"DeclNoRepr":
+$                              ["Given", {"Name": "order"}, {"DomainInt": [{"TagInt": []}, []]}, {"NoRegion": []}]}]},
+$                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]}}],
+$       [{"Name": "diameter"},
+$        {"Op":
+$             {"MkOpMinus":
+$                  [{"Op":
+$                        {"MkOpProduct":
+$                             {"AbstractLiteral":
+$                                  {"AbsLitMatrix":
+$                                       [{"DomainInt":
+$                                             [{"TagInt": []},
+$                                              [{"RangeBounded":
+$                                                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                     {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                        [{"Reference":
+$                                              [{"Name": "order"},
+$                                               {"DeclNoRepr":
+$                                                    ["Given", {"Name": "order"}, {"DomainInt": [{"TagInt": []}, []]},
+$                                                     {"NoRegion": []}]}]},
+$                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]]}}}},
+$                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]}}],
+$       [{"Name": "max_val"},
+$        {"Op":
+$             {"MkOpSum":
+$                  {"AbstractLiteral":
+$                       {"AbsLitMatrix":
+$                            [{"DomainInt":
+$                                  [{"TagInt": []},
+$                                   [{"RangeBounded":
+$                                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                          {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                             [{"Op":
+$                                   {"MkOpMinus":
+$                                        [{"Op":
+$                                              {"MkOpProduct":
+$                                                   {"AbstractLiteral":
+$                                                        {"AbsLitMatrix":
+$                                                             [{"DomainInt":
+$                                                                   [{"TagInt": []},
+$                                                                    [{"RangeBounded":
+$                                                                          [{"Constant":
+$                                                                                {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                           {"Constant":
+$                                                                                {"ConstantInt":
+$                                                                                     [{"TagInt": []}, 2]}}]}]]},
+$                                                              [{"Constant": {"ConstantInt": [{"TagInt": []}, 3]}},
+$                                                               {"Op":
+$                                                                    {"MkOpPow":
+$                                                                         [{"Reference":
+$                                                                               [{"Name": "order"},
+$                                                                                {"DeclNoRepr":
+$                                                                                     ["Given", {"Name": "order"},
+$                                                                                      {"DomainInt":
+$                                                                                           [{"TagInt": []}, []]},
+$                                                                                      {"NoRegion": []}]}]},
+$                                                                          {"Constant":
+$                                                                               {"ConstantInt":
+$                                                                                    [{"TagInt": []}, 2]}}]}}]]}}}},
+$                                         {"Op":
+$                                              {"MkOpProduct":
+$                                                   {"AbstractLiteral":
+$                                                        {"AbsLitMatrix":
+$                                                             [{"DomainInt":
+$                                                                   [{"TagInt": []},
+$                                                                    [{"RangeBounded":
+$                                                                          [{"Constant":
+$                                                                                {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                           {"Constant":
+$                                                                                {"ConstantInt":
+$                                                                                     [{"TagInt": []}, 2]}}]}]]},
+$                                                              [{"Constant": {"ConstantInt": [{"TagInt": []}, 3]}},
+$                                                               {"Reference":
+$                                                                    [{"Name": "order"},
+$                                                                     {"DeclNoRepr":
+$                                                                          ["Given", {"Name": "order"},
+$                                                                           {"DomainInt": [{"TagInt": []}, []]},
+$                                                                           {"NoRegion": []}]}]}]]}}}}]}},
+$                              {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]]}}}}],
+$       [{"Name": "total_sum"},
+$        {"Op":
+$             {"MkOpDiv":
+$                  [{"Op":
+$                        {"MkOpProduct":
+$                             {"AbstractLiteral":
+$                                  {"AbsLitMatrix":
+$                                       [{"DomainInt":
+$                                             [{"TagInt": []},
+$                                              [{"RangeBounded":
+$                                                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                     {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                        [{"Reference":
+$                                              [{"Name": "max_val"},
+$                                               {"Alias":
+$                                                    {"Op":
+$                                                         {"MkOpSum":
+$                                                              {"AbstractLiteral":
+$                                                                   {"AbsLitMatrix":
+$                                                                        [{"DomainInt":
+$                                                                              [{"TagInt": []},
+$                                                                               [{"RangeBounded":
+$                                                                                     [{"Constant":
+$                                                                                           {"ConstantInt":
+$                                                                                                [{"TagInt": []}, 1]}},
+$                                                                                      {"Constant":
+$                                                                                           {"ConstantInt":
+$                                                                                                [{"TagInt": []},
+$                                                                                                 2]}}]}]]},
+$                                                                         [{"Op":
+$                                                                               {"MkOpMinus":
+$                                                                                    [{"Op":
+$                                                                                          {"MkOpProduct":
+$                                                                                               {"AbstractLiteral":
+$                                                                                                    {"AbsLitMatrix":
+$                                                                                                         [{"DomainInt":
+$                                                                                                               [{"TagInt":
+$                                                                                                                     []},
+$                                                                                                                [{"RangeBounded":
+$                                                                                                                      [{"Constant":
+$                                                                                                                            {"ConstantInt":
+$                                                                                                                                 [{"TagInt":
+$                                                                                                                                       []},
+$                                                                                                                                  1]}},
+$                                                                                                                       {"Constant":
+$                                                                                                                            {"ConstantInt":
+$                                                                                                                                 [{"TagInt":
+$                                                                                                                                       []},
+$                                                                                                                                  2]}}]}]]},
+$                                                                                                          [{"Constant":
+$                                                                                                                {"ConstantInt":
+$                                                                                                                     [{"TagInt":
+$                                                                                                                           []},
+$                                                                                                                      3]}},
+$                                                                                                           {"Op":
+$                                                                                                                {"MkOpPow":
+$                                                                                                                     [{"Reference":
+$                                                                                                                           [{"Name":
+$                                                                                                                                 "order"},
+$                                                                                                                            {"DeclNoRepr":
+$                                                                                                                                 ["Given",
+$                                                                                                                                  {"Name":
+$                                                                                                                                       "order"},
+$                                                                                                                                  {"DomainInt":
+$                                                                                                                                       [{"TagInt":
+$                                                                                                                                             []},
+$                                                                                                                                        []]},
+$                                                                                                                                  {"NoRegion":
+$                                                                                                                                       []}]}]},
+$                                                                                                                      {"Constant":
+$                                                                                                                           {"ConstantInt":
+$                                                                                                                                [{"TagInt":
+$                                                                                                                                      []},
+$                                                                                                                                 2]}}]}}]]}}}},
+$                                                                                     {"Op":
+$                                                                                          {"MkOpProduct":
+$                                                                                               {"AbstractLiteral":
+$                                                                                                    {"AbsLitMatrix":
+$                                                                                                         [{"DomainInt":
+$                                                                                                               [{"TagInt":
+$                                                                                                                     []},
+$                                                                                                                [{"RangeBounded":
+$                                                                                                                      [{"Constant":
+$                                                                                                                            {"ConstantInt":
+$                                                                                                                                 [{"TagInt":
+$                                                                                                                                       []},
+$                                                                                                                                  1]}},
+$                                                                                                                       {"Constant":
+$                                                                                                                            {"ConstantInt":
+$                                                                                                                                 [{"TagInt":
+$                                                                                                                                       []},
+$                                                                                                                                  2]}}]}]]},
+$                                                                                                          [{"Constant":
+$                                                                                                                {"ConstantInt":
+$                                                                                                                     [{"TagInt":
+$                                                                                                                           []},
+$                                                                                                                      3]}},
+$                                                                                                           {"Reference":
+$                                                                                                                [{"Name":
+$                                                                                                                      "order"},
+$                                                                                                                 {"DeclNoRepr":
+$                                                                                                                      ["Given",
+$                                                                                                                       {"Name":
+$                                                                                                                            "order"},
+$                                                                                                                       {"DomainInt":
+$                                                                                                                            [{"TagInt":
+$                                                                                                                                  []},
+$                                                                                                                             []]},
+$                                                                                                                       {"NoRegion":
+$                                                                                                                            []}]}]}]]}}}}]}},
+$                                                                          {"Constant":
+$                                                                               {"ConstantInt":
+$                                                                                    [{"TagInt": []}, 1]}}]]}}}}}]},
+$                                         {"Op":
+$                                              {"MkOpSum":
+$                                                   {"AbstractLiteral":
+$                                                        {"AbsLitMatrix":
+$                                                             [{"DomainInt":
+$                                                                   [{"TagInt": []},
+$                                                                    [{"RangeBounded":
+$                                                                          [{"Constant":
+$                                                                                {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                           {"Constant":
+$                                                                                {"ConstantInt":
+$                                                                                     [{"TagInt": []}, 2]}}]}]]},
+$                                                              [{"Reference":
+$                                                                    [{"Name": "max_val"},
+$                                                                     {"Alias":
+$                                                                          {"Op":
+$                                                                               {"MkOpSum":
+$                                                                                    {"AbstractLiteral":
+$                                                                                         {"AbsLitMatrix":
+$                                                                                              [{"DomainInt":
+$                                                                                                    [{"TagInt": []},
+$                                                                                                     [{"RangeBounded":
+$                                                                                                           [{"Constant":
+$                                                                                                                 {"ConstantInt":
+$                                                                                                                      [{"TagInt":
+$                                                                                                                            []},
+$                                                                                                                       1]}},
+$                                                                                                            {"Constant":
+$                                                                                                                 {"ConstantInt":
+$                                                                                                                      [{"TagInt":
+$                                                                                                                            []},
+$                                                                                                                       2]}}]}]]},
+$                                                                                               [{"Op":
+$                                                                                                     {"MkOpMinus":
+$                                                                                                          [{"Op":
+$                                                                                                                {"MkOpProduct":
+$                                                                                                                     {"AbstractLiteral":
+$                                                                                                                          {"AbsLitMatrix":
+$                                                                                                                               [{"DomainInt":
+$                                                                                                                                     [{"TagInt":
+$                                                                                                                                           []},
+$                                                                                                                                      [{"RangeBounded":
+$                                                                                                                                            [{"Constant":
+$                                                                                                                                                  {"ConstantInt":
+$                                                                                                                                                       [{"TagInt":
+$                                                                                                                                                             []},
+$                                                                                                                                                        1]}},
+$                                                                                                                                             {"Constant":
+$                                                                                                                                                  {"ConstantInt":
+$                                                                                                                                                       [{"TagInt":
+$                                                                                                                                                             []},
+$                                                                                                                                                        2]}}]}]]},
+$                                                                                                                                [{"Constant":
+$                                                                                                                                      {"ConstantInt":
+$                                                                                                                                           [{"TagInt":
+$                                                                                                                                                 []},
+$                                                                                                                                            3]}},
+$                                                                                                                                 {"Op":
+$                                                                                                                                      {"MkOpPow":
+$                                                                                                                                           [{"Reference":
+$                                                                                                                                                 [{"Name":
+$                                                                                                                                                       "order"},
+$                                                                                                                                                  {"DeclNoRepr":
+$                                                                                                                                                       ["Given",
+$                                                                                                                                                        {"Name":
+$                                                                                                                                                             "order"},
+$                                                                                                                                                        {"DomainInt":
+$                                                                                                                                                             [{"TagInt":
+$                                                                                                                                                                   []},
+$                                                                                                                                                              []]},
+$                                                                                                                                                        {"NoRegion":
+$                                                                                                                                                             []}]}]},
+$                                                                                                                                            {"Constant":
+$                                                                                                                                                 {"ConstantInt":
+$                                                                                                                                                      [{"TagInt":
+$                                                                                                                                                            []},
+$                                                                                                                                                       2]}}]}}]]}}}},
+$                                                                                                           {"Op":
+$                                                                                                                {"MkOpProduct":
+$                                                                                                                     {"AbstractLiteral":
+$                                                                                                                          {"AbsLitMatrix":
+$                                                                                                                               [{"DomainInt":
+$                                                                                                                                     [{"TagInt":
+$                                                                                                                                           []},
+$                                                                                                                                      [{"RangeBounded":
+$                                                                                                                                            [{"Constant":
+$                                                                                                                                                  {"ConstantInt":
+$                                                                                                                                                       [{"TagInt":
+$                                                                                                                                                             []},
+$                                                                                                                                                        1]}},
+$                                                                                                                                             {"Constant":
+$                                                                                                                                                  {"ConstantInt":
+$                                                                                                                                                       [{"TagInt":
+$                                                                                                                                                             []},
+$                                                                                                                                                        2]}}]}]]},
+$                                                                                                                                [{"Constant":
+$                                                                                                                                      {"ConstantInt":
+$                                                                                                                                           [{"TagInt":
+$                                                                                                                                                 []},
+$                                                                                                                                            3]}},
+$                                                                                                                                 {"Reference":
+$                                                                                                                                      [{"Name":
+$                                                                                                                                            "order"},
+$                                                                                                                                       {"DeclNoRepr":
+$                                                                                                                                            ["Given",
+$                                                                                                                                             {"Name":
+$                                                                                                                                                  "order"},
+$                                                                                                                                             {"DomainInt":
+$                                                                                                                                                  [{"TagInt":
+$                                                                                                                                                        []},
+$                                                                                                                                                   []]},
+$                                                                                                                                             {"NoRegion":
+$                                                                                                                                                  []}]}]}]]}}}}]}},
+$                                                                                                {"Constant":
+$                                                                                                     {"ConstantInt":
+$                                                                                                          [{"TagInt":
+$                                                                                                                []},
+$                                                                                                           1]}}]]}}}}}]},
+$                                                               {"Constant":
+$                                                                    {"ConstantInt": [{"TagInt": []}, 1]}}]]}}}}]]}}}},
+$                   {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}}],
+$       [{"MachineName": ["let", 1, []]},
+$        {"Op":
+$             {"MkOpNegate":
+$                  {"Reference":
+$                       [{"Name": "ix"},
+$                        {"Alias":
+$                             {"Op":
+$                                  {"MkOpMinus":
+$                                       [{"Reference":
+$                                             [{"Name": "order"},
+$                                              {"DeclNoRepr":
+$                                                   ["Given", {"Name": "order"}, {"DomainInt": [{"TagInt": []}, []]},
+$                                                    {"NoRegion": []}]}]},
+$                                        {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]}}}]}}}],
+$       [{"MachineName": ["let", 2, []]},
+$        {"Op":
+$             {"MkOpNegate":
+$                  {"Reference":
+$                       [{"Name": "ix"},
+$                        {"Alias":
+$                             {"Op":
+$                                  {"MkOpMinus":
+$                                       [{"Reference":
+$                                             [{"Name": "order"},
+$                                              {"DeclNoRepr":
+$                                                   ["Given", {"Name": "order"}, {"DomainInt": [{"TagInt": []}, []]},
+$                                                    {"NoRegion": []}]}]},
+$                                        {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]}}}]}}}],
+$       [{"MachineName": ["let", 3, []]},
+$        {"Op":
+$             {"MkOpNegate":
+$                  {"Reference":
+$                       [{"Name": "ix"},
+$                        {"Alias":
+$                             {"Op":
+$                                  {"MkOpMinus":
+$                                       [{"Reference":
+$                                             [{"Name": "order"},
+$                                              {"DeclNoRepr":
+$                                                   ["Given", {"Name": "order"}, {"DomainInt": [{"TagInt": []}, []]},
+$                                                    {"NoRegion": []}]}]},
+$                                        {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]}}}]}}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Compact": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["let", 4], ["q", 13]], "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "order"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "hexagon"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Reference":
+$                                [{"MachineName": ["let", 1, []]},
+$                                 {"Alias":
+$                                      {"Op":
+$                                           {"MkOpNegate":
+$                                                {"Reference":
+$                                                     [{"Name": "ix"},
+$                                                      {"Alias":
+$                                                           {"Op":
+$                                                                {"MkOpMinus":
+$                                                                     [{"Reference":
+$                                                                           [{"Name": "order"},
+$                                                                            {"DeclHasRepr":
+$                                                                                 ["Given", {"Name": "order"},
+$                                                                                  {"DomainInt":
+$                                                                                       [{"TagInt": []}, []]}]}]},
+$                                                                      {"Constant":
+$                                                                           {"ConstantInt":
+$                                                                                [{"TagInt": []}, 1]}}]}}}]}}}}]},
+$                           {"Reference":
+$                                [{"Name": "ix"},
+$                                 {"Alias":
+$                                      {"Op":
+$                                           {"MkOpMinus":
+$                                                [{"Reference":
+$                                                      [{"Name": "order"},
+$                                                       {"DeclHasRepr":
+$                                                            ["Given", {"Name": "order"},
+$                                                             {"DomainInt": [{"TagInt": []}, []]}]}]},
+$                                                 {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]}}}]}]}]]},
+$              {"DomainMatrix":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Reference":
+$                                      [{"MachineName": ["let", 2, []]},
+$                                       {"Alias":
+$                                            {"Op":
+$                                                 {"MkOpNegate":
+$                                                      {"Reference":
+$                                                           [{"Name": "ix"},
+$                                                            {"Alias":
+$                                                                 {"Op":
+$                                                                      {"MkOpMinus":
+$                                                                           [{"Reference":
+$                                                                                 [{"Name": "order"},
+$                                                                                  {"DeclHasRepr":
+$                                                                                       ["Given", {"Name": "order"},
+$                                                                                        {"DomainInt":
+$                                                                                             [{"TagInt": []}, []]}]}]},
+$                                                                            {"Constant":
+$                                                                                 {"ConstantInt":
+$                                                                                      [{"TagInt": []}, 1]}}]}}}]}}}}]},
+$                                 {"Reference":
+$                                      [{"Name": "ix"},
+$                                       {"Alias":
+$                                            {"Op":
+$                                                 {"MkOpMinus":
+$                                                      [{"Reference":
+$                                                            [{"Name": "order"},
+$                                                             {"DeclHasRepr":
+$                                                                  ["Given", {"Name": "order"},
+$                                                                   {"DomainInt": [{"TagInt": []}, []]}]}]},
+$                                                       {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]}}}]}]}]]},
+$                    {"DomainMatrix":
+$                         [{"DomainInt":
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Reference":
+$                                            [{"MachineName": ["let", 3, []]},
+$                                             {"Alias":
+$                                                  {"Op":
+$                                                       {"MkOpNegate":
+$                                                            {"Reference":
+$                                                                 [{"Name": "ix"},
+$                                                                  {"Alias":
+$                                                                       {"Op":
+$                                                                            {"MkOpMinus":
+$                                                                                 [{"Reference":
+$                                                                                       [{"Name": "order"},
+$                                                                                        {"DeclHasRepr":
+$                                                                                             ["Given", {"Name": "order"},
+$                                                                                              {"DomainInt":
+$                                                                                                   [{"TagInt": []},
+$                                                                                                    []]}]}]},
+$                                                                                  {"Constant":
+$                                                                                       {"ConstantInt":
+$                                                                                            [{"TagInt": []},
+$                                                                                             1]}}]}}}]}}}}]},
+$                                       {"Reference":
+$                                            [{"Name": "ix"},
+$                                             {"Alias":
+$                                                  {"Op":
+$                                                       {"MkOpMinus":
+$                                                            [{"Reference":
+$                                                                  [{"Name": "order"},
+$                                                                   {"DeclHasRepr":
+$                                                                        ["Given", {"Name": "order"},
+$                                                                         {"DomainInt": [{"TagInt": []}, []]}]}]},
+$                                                             {"Constant":
+$                                                                  {"ConstantInt": [{"TagInt": []}, 1]}}]}}}]}]}]]},
+$                          {"DomainInt":
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                                       {"Reference":
+$                                            [{"Name": "max_val"},
+$                                             {"Alias":
+$                                                  {"Op":
+$                                                       {"MkOpSum":
+$                                                            {"AbstractLiteral":
+$                                                                 {"AbsLitMatrix":
+$                                                                      [{"DomainInt":
+$                                                                            [{"TagInt": []},
+$                                                                             [{"RangeBounded":
+$                                                                                   [{"Constant":
+$                                                                                         {"ConstantInt":
+$                                                                                              [{"TagInt": []}, 1]}},
+$                                                                                    {"Constant":
+$                                                                                         {"ConstantInt":
+$                                                                                              [{"TagInt": []}, 2]}}]}]]},
+$                                                                       [{"Op":
+$                                                                             {"MkOpMinus":
+$                                                                                  [{"Op":
+$                                                                                        {"MkOpProduct":
+$                                                                                             {"AbstractLiteral":
+$                                                                                                  {"AbsLitMatrix":
+$                                                                                                       [{"DomainInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              [{"RangeBounded":
+$                                                                                                                    [{"Constant":
+$                                                                                                                          {"ConstantInt":
+$                                                                                                                               [{"TagInt":
+$                                                                                                                                     []},
+$                                                                                                                                1]}},
+$                                                                                                                     {"Constant":
+$                                                                                                                          {"ConstantInt":
+$                                                                                                                               [{"TagInt":
+$                                                                                                                                     []},
+$                                                                                                                                2]}}]}]]},
+$                                                                                                        [{"Constant":
+$                                                                                                              {"ConstantInt":
+$                                                                                                                   [{"TagInt":
+$                                                                                                                         []},
+$                                                                                                                    3]}},
+$                                                                                                         {"Op":
+$                                                                                                              {"MkOpPow":
+$                                                                                                                   [{"Reference":
+$                                                                                                                         [{"Name":
+$                                                                                                                               "order"},
+$                                                                                                                          {"DeclHasRepr":
+$                                                                                                                               ["Given",
+$                                                                                                                                {"Name":
+$                                                                                                                                     "order"},
+$                                                                                                                                {"DomainInt":
+$                                                                                                                                     [{"TagInt":
+$                                                                                                                                           []},
+$                                                                                                                                      []]}]}]},
+$                                                                                                                    {"Constant":
+$                                                                                                                         {"ConstantInt":
+$                                                                                                                              [{"TagInt":
+$                                                                                                                                    []},
+$                                                                                                                               2]}}]}}]]}}}},
+$                                                                                   {"Op":
+$                                                                                        {"MkOpProduct":
+$                                                                                             {"AbstractLiteral":
+$                                                                                                  {"AbsLitMatrix":
+$                                                                                                       [{"DomainInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              [{"RangeBounded":
+$                                                                                                                    [{"Constant":
+$                                                                                                                          {"ConstantInt":
+$                                                                                                                               [{"TagInt":
+$                                                                                                                                     []},
+$                                                                                                                                1]}},
+$                                                                                                                     {"Constant":
+$                                                                                                                          {"ConstantInt":
+$                                                                                                                               [{"TagInt":
+$                                                                                                                                     []},
+$                                                                                                                                2]}}]}]]},
+$                                                                                                        [{"Constant":
+$                                                                                                              {"ConstantInt":
+$                                                                                                                   [{"TagInt":
+$                                                                                                                         []},
+$                                                                                                                    3]}},
+$                                                                                                         {"Reference":
+$                                                                                                              [{"Name":
+$                                                                                                                    "order"},
+$                                                                                                               {"DeclHasRepr":
+$                                                                                                                    ["Given",
+$                                                                                                                     {"Name":
+$                                                                                                                          "order"},
+$                                                                                                                     {"DomainInt":
+$                                                                                                                          [{"TagInt":
+$                                                                                                                                []},
+$                                                                                                                           []]}]}]}]]}}}}]}},
+$                                                                        {"Constant":
+$                                                                             {"ConstantInt":
+$                                                                                  [{"TagInt": []},
+$                                                                                   1]}}]]}}}}}]}]}]]}]}]}]}],
+$       [{"Name": "sumsto"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference":
+$                          [{"Name": "total_sum"},
+$                           {"Alias":
+$                                {"Op":
+$                                     {"MkOpDiv":
+$                                          [{"Op":
+$                                                {"MkOpProduct":
+$                                                     {"AbstractLiteral":
+$                                                          {"AbsLitMatrix":
+$                                                               [{"DomainInt":
+$                                                                     [{"TagInt": []},
+$                                                                      [{"RangeBounded":
+$                                                                            [{"Constant":
+$                                                                                  {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                             {"Constant":
+$                                                                                  {"ConstantInt":
+$                                                                                       [{"TagInt": []}, 2]}}]}]]},
+$                                                                [{"Reference":
+$                                                                      [{"Name": "max_val"},
+$                                                                       {"Alias":
+$                                                                            {"Op":
+$                                                                                 {"MkOpSum":
+$                                                                                      {"AbstractLiteral":
+$                                                                                           {"AbsLitMatrix":
+$                                                                                                [{"DomainInt":
+$                                                                                                      [{"TagInt": []},
+$                                                                                                       [{"RangeBounded":
+$                                                                                                             [{"Constant":
+$                                                                                                                   {"ConstantInt":
+$                                                                                                                        [{"TagInt":
+$                                                                                                                              []},
+$                                                                                                                         1]}},
+$                                                                                                              {"Constant":
+$                                                                                                                   {"ConstantInt":
+$                                                                                                                        [{"TagInt":
+$                                                                                                                              []},
+$                                                                                                                         2]}}]}]]},
+$                                                                                                 [{"Op":
+$                                                                                                       {"MkOpMinus":
+$                                                                                                            [{"Op":
+$                                                                                                                  {"MkOpProduct":
+$                                                                                                                       {"AbstractLiteral":
+$                                                                                                                            {"AbsLitMatrix":
+$                                                                                                                                 [{"DomainInt":
+$                                                                                                                                       [{"TagInt":
+$                                                                                                                                             []},
+$                                                                                                                                        [{"RangeBounded":
+$                                                                                                                                              [{"Constant":
+$                                                                                                                                                    {"ConstantInt":
+$                                                                                                                                                         [{"TagInt":
+$                                                                                                                                                               []},
+$                                                                                                                                                          1]}},
+$                                                                                                                                               {"Constant":
+$                                                                                                                                                    {"ConstantInt":
+$                                                                                                                                                         [{"TagInt":
+$                                                                                                                                                               []},
+$                                                                                                                                                          2]}}]}]]},
+$                                                                                                                                  [{"Constant":
+$                                                                                                                                        {"ConstantInt":
+$                                                                                                                                             [{"TagInt":
+$                                                                                                                                                   []},
+$                                                                                                                                              3]}},
+$                                                                                                                                   {"Op":
+$                                                                                                                                        {"MkOpPow":
+$                                                                                                                                             [{"Reference":
+$                                                                                                                                                   [{"Name":
+$                                                                                                                                                         "order"},
+$                                                                                                                                                    {"DeclHasRepr":
+$                                                                                                                                                         ["Given",
+$                                                                                                                                                          {"Name":
+$                                                                                                                                                               "order"},
+$                                                                                                                                                          {"DomainInt":
+$                                                                                                                                                               [{"TagInt":
+$                                                                                                                                                                     []},
+$                                                                                                                                                                []]}]}]},
+$                                                                                                                                              {"Constant":
+$                                                                                                                                                   {"ConstantInt":
+$                                                                                                                                                        [{"TagInt":
+$                                                                                                                                                              []},
+$                                                                                                                                                         2]}}]}}]]}}}},
+$                                                                                                             {"Op":
+$                                                                                                                  {"MkOpProduct":
+$                                                                                                                       {"AbstractLiteral":
+$                                                                                                                            {"AbsLitMatrix":
+$                                                                                                                                 [{"DomainInt":
+$                                                                                                                                       [{"TagInt":
+$                                                                                                                                             []},
+$                                                                                                                                        [{"RangeBounded":
+$                                                                                                                                              [{"Constant":
+$                                                                                                                                                    {"ConstantInt":
+$                                                                                                                                                         [{"TagInt":
+$                                                                                                                                                               []},
+$                                                                                                                                                          1]}},
+$                                                                                                                                               {"Constant":
+$                                                                                                                                                    {"ConstantInt":
+$                                                                                                                                                         [{"TagInt":
+$                                                                                                                                                               []},
+$                                                                                                                                                          2]}}]}]]},
+$                                                                                                                                  [{"Constant":
+$                                                                                                                                        {"ConstantInt":
+$                                                                                                                                             [{"TagInt":
+$                                                                                                                                                   []},
+$                                                                                                                                              3]}},
+$                                                                                                                                   {"Reference":
+$                                                                                                                                        [{"Name":
+$                                                                                                                                              "order"},
+$                                                                                                                                         {"DeclHasRepr":
+$                                                                                                                                              ["Given",
+$                                                                                                                                               {"Name":
+$                                                                                                                                                    "order"},
+$                                                                                                                                               {"DomainInt":
+$                                                                                                                                                    [{"TagInt":
+$                                                                                                                                                          []},
+$                                                                                                                                                     []]}]}]}]]}}}}]}},
+$                                                                                                  {"Constant":
+$                                                                                                       {"ConstantInt":
+$                                                                                                            [{"TagInt":
+$                                                                                                                  []},
+$                                                                                                             1]}}]]}}}}}]},
+$                                                                 {"Op":
+$                                                                      {"MkOpSum":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Reference":
+$                                                                                            [{"Name": "max_val"},
+$                                                                                             {"Alias":
+$                                                                                                  {"Op":
+$                                                                                                       {"MkOpSum":
+$                                                                                                            {"AbstractLiteral":
+$                                                                                                                 {"AbsLitMatrix":
+$                                                                                                                      [{"DomainInt":
+$                                                                                                                            [{"TagInt":
+$                                                                                                                                  []},
+$                                                                                                                             [{"RangeBounded":
+$                                                                                                                                   [{"Constant":
+$                                                                                                                                         {"ConstantInt":
+$                                                                                                                                              [{"TagInt":
+$                                                                                                                                                    []},
+$                                                                                                                                               1]}},
+$                                                                                                                                    {"Constant":
+$                                                                                                                                         {"ConstantInt":
+$                                                                                                                                              [{"TagInt":
+$                                                                                                                                                    []},
+$                                                                                                                                               2]}}]}]]},
+$                                                                                                                       [{"Op":
+$                                                                                                                             {"MkOpMinus":
+$                                                                                                                                  [{"Op":
+$                                                                                                                                        {"MkOpProduct":
+$                                                                                                                                             {"AbstractLiteral":
+$                                                                                                                                                  {"AbsLitMatrix":
+$                                                                                                                                                       [{"DomainInt":
+$                                                                                                                                                             [{"TagInt":
+$                                                                                                                                                                   []},
+$                                                                                                                                                              [{"RangeBounded":
+$                                                                                                                                                                    [{"Constant":
+$                                                                                                                                                                          {"ConstantInt":
+$                                                                                                                                                                               [{"TagInt":
+$                                                                                                                                                                                     []},
+$                                                                                                                                                                                1]}},
+$                                                                                                                                                                     {"Constant":
+$                                                                                                                                                                          {"ConstantInt":
+$                                                                                                                                                                               [{"TagInt":
+$                                                                                                                                                                                     []},
+$                                                                                                                                                                                2]}}]}]]},
+$                                                                                                                                                        [{"Constant":
+$                                                                                                                                                              {"ConstantInt":
+$                                                                                                                                                                   [{"TagInt":
+$                                                                                                                                                                         []},
+$                                                                                                                                                                    3]}},
+$                                                                                                                                                         {"Op":
+$                                                                                                                                                              {"MkOpPow":
+$                                                                                                                                                                   [{"Reference":
+$                                                                                                                                                                         [{"Name":
+$                                                                                                                                                                               "order"},
+$                                                                                                                                                                          {"DeclHasRepr":
+$                                                                                                                                                                               ["Given",
+$                                                                                                                                                                                {"Name":
+$                                                                                                                                                                                     "order"},
+$                                                                                                                                                                                {"DomainInt":
+$                                                                                                                                                                                     [{"TagInt":
+$                                                                                                                                                                                           []},
+$                                                                                                                                                                                      []]}]}]},
+$                                                                                                                                                                    {"Constant":
+$                                                                                                                                                                         {"ConstantInt":
+$                                                                                                                                                                              [{"TagInt":
+$                                                                                                                                                                                    []},
+$                                                                                                                                                                               2]}}]}}]]}}}},
+$                                                                                                                                   {"Op":
+$                                                                                                                                        {"MkOpProduct":
+$                                                                                                                                             {"AbstractLiteral":
+$                                                                                                                                                  {"AbsLitMatrix":
+$                                                                                                                                                       [{"DomainInt":
+$                                                                                                                                                             [{"TagInt":
+$                                                                                                                                                                   []},
+$                                                                                                                                                              [{"RangeBounded":
+$                                                                                                                                                                    [{"Constant":
+$                                                                                                                                                                          {"ConstantInt":
+$                                                                                                                                                                               [{"TagInt":
+$                                                                                                                                                                                     []},
+$                                                                                                                                                                                1]}},
+$                                                                                                                                                                     {"Constant":
+$                                                                                                                                                                          {"ConstantInt":
+$                                                                                                                                                                               [{"TagInt":
+$                                                                                                                                                                                     []},
+$                                                                                                                                                                                2]}}]}]]},
+$                                                                                                                                                        [{"Constant":
+$                                                                                                                                                              {"ConstantInt":
+$                                                                                                                                                                   [{"TagInt":
+$                                                                                                                                                                         []},
+$                                                                                                                                                                    3]}},
+$                                                                                                                                                         {"Reference":
+$                                                                                                                                                              [{"Name":
+$                                                                                                                                                                    "order"},
+$                                                                                                                                                               {"DeclHasRepr":
+$                                                                                                                                                                    ["Given",
+$                                                                                                                                                                     {"Name":
+$                                                                                                                                                                          "order"},
+$                                                                                                                                                                     {"DomainInt":
+$                                                                                                                                                                          [{"TagInt":
+$                                                                                                                                                                                []},
+$                                                                                                                                                                           []]}]}]}]]}}}}]}},
+$                                                                                                                        {"Constant":
+$                                                                                                                             {"ConstantInt":
+$                                                                                                                                  [{"TagInt":
+$                                                                                                                                        []},
+$                                                                                                                                   1]}}]]}}}}}]},
+$                                                                                       {"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []},
+$                                                                                                  1]}}]]}}}}]]}}}},
+$                                           {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}}}]}]}]]}],
+$       [{"Name": "A"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference":
+$                          [{"Name": "max_val"},
+$                           {"Alias":
+$                                {"Op":
+$                                     {"MkOpSum":
+$                                          {"AbstractLiteral":
+$                                               {"AbsLitMatrix":
+$                                                    [{"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                     [{"Op":
+$                                                           {"MkOpMinus":
+$                                                                [{"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Op":
+$                                                                                            {"MkOpPow":
+$                                                                                                 [{"Reference":
+$                                                                                                       [{"Name":
+$                                                                                                             "order"},
+$                                                                                                        {"DeclHasRepr":
+$                                                                                                             ["Given",
+$                                                                                                              {"Name":
+$                                                                                                                   "order"},
+$                                                                                                              {"DomainInt":
+$                                                                                                                   [{"TagInt":
+$                                                                                                                         []},
+$                                                                                                                    []]}]}]},
+$                                                                                                  {"Constant":
+$                                                                                                       {"ConstantInt":
+$                                                                                                            [{"TagInt":
+$                                                                                                                  []},
+$                                                                                                             2]}}]}}]]}}}},
+$                                                                 {"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Reference":
+$                                                                                            [{"Name": "order"},
+$                                                                                             {"DeclHasRepr":
+$                                                                                                  ["Given",
+$                                                                                                   {"Name": "order"},
+$                                                                                                   {"DomainInt":
+$                                                                                                        [{"TagInt": []},
+$                                                                                                         []]}]}]}]]}}}}]}},
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]]}}}}}]}]}]]}],
+$       [{"Name": "B"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference":
+$                          [{"Name": "max_val"},
+$                           {"Alias":
+$                                {"Op":
+$                                     {"MkOpSum":
+$                                          {"AbstractLiteral":
+$                                               {"AbsLitMatrix":
+$                                                    [{"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                     [{"Op":
+$                                                           {"MkOpMinus":
+$                                                                [{"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Op":
+$                                                                                            {"MkOpPow":
+$                                                                                                 [{"Reference":
+$                                                                                                       [{"Name":
+$                                                                                                             "order"},
+$                                                                                                        {"DeclHasRepr":
+$                                                                                                             ["Given",
+$                                                                                                              {"Name":
+$                                                                                                                   "order"},
+$                                                                                                              {"DomainInt":
+$                                                                                                                   [{"TagInt":
+$                                                                                                                         []},
+$                                                                                                                    []]}]}]},
+$                                                                                                  {"Constant":
+$                                                                                                       {"ConstantInt":
+$                                                                                                            [{"TagInt":
+$                                                                                                                  []},
+$                                                                                                             2]}}]}}]]}}}},
+$                                                                 {"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Reference":
+$                                                                                            [{"Name": "order"},
+$                                                                                             {"DeclHasRepr":
+$                                                                                                  ["Given",
+$                                                                                                   {"Name": "order"},
+$                                                                                                   {"DomainInt":
+$                                                                                                        [{"TagInt": []},
+$                                                                                                         []]}]}]}]]}}}}]}},
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]]}}}}}]}]}]]}],
+$       [{"Name": "C"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference":
+$                          [{"Name": "max_val"},
+$                           {"Alias":
+$                                {"Op":
+$                                     {"MkOpSum":
+$                                          {"AbstractLiteral":
+$                                               {"AbsLitMatrix":
+$                                                    [{"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                     [{"Op":
+$                                                           {"MkOpMinus":
+$                                                                [{"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Op":
+$                                                                                            {"MkOpPow":
+$                                                                                                 [{"Reference":
+$                                                                                                       [{"Name":
+$                                                                                                             "order"},
+$                                                                                                        {"DeclHasRepr":
+$                                                                                                             ["Given",
+$                                                                                                              {"Name":
+$                                                                                                                   "order"},
+$                                                                                                              {"DomainInt":
+$                                                                                                                   [{"TagInt":
+$                                                                                                                         []},
+$                                                                                                                    []]}]}]},
+$                                                                                                  {"Constant":
+$                                                                                                       {"ConstantInt":
+$                                                                                                            [{"TagInt":
+$                                                                                                                  []},
+$                                                                                                             2]}}]}}]]}}}},
+$                                                                 {"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Reference":
+$                                                                                            [{"Name": "order"},
+$                                                                                             {"DeclHasRepr":
+$                                                                                                  ["Given",
+$                                                                                                   {"Name": "order"},
+$                                                                                                   {"DomainInt":
+$                                                                                                        [{"TagInt": []},
+$                                                                                                         []]}]}]}]]}}}}]}},
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]]}}}}}]}]}]]}],
+$       [{"Name": "D"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference":
+$                          [{"Name": "max_val"},
+$                           {"Alias":
+$                                {"Op":
+$                                     {"MkOpSum":
+$                                          {"AbstractLiteral":
+$                                               {"AbsLitMatrix":
+$                                                    [{"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                     [{"Op":
+$                                                           {"MkOpMinus":
+$                                                                [{"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Op":
+$                                                                                            {"MkOpPow":
+$                                                                                                 [{"Reference":
+$                                                                                                       [{"Name":
+$                                                                                                             "order"},
+$                                                                                                        {"DeclHasRepr":
+$                                                                                                             ["Given",
+$                                                                                                              {"Name":
+$                                                                                                                   "order"},
+$                                                                                                              {"DomainInt":
+$                                                                                                                   [{"TagInt":
+$                                                                                                                         []},
+$                                                                                                                    []]}]}]},
+$                                                                                                  {"Constant":
+$                                                                                                       {"ConstantInt":
+$                                                                                                            [{"TagInt":
+$                                                                                                                  []},
+$                                                                                                             2]}}]}}]]}}}},
+$                                                                 {"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Reference":
+$                                                                                            [{"Name": "order"},
+$                                                                                             {"DeclHasRepr":
+$                                                                                                  ["Given",
+$                                                                                                   {"Name": "order"},
+$                                                                                                   {"DomainInt":
+$                                                                                                        [{"TagInt": []},
+$                                                                                                         []]}]}]}]]}}}}]}},
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]]}}}}}]}]}]]}],
+$       [{"Name": "E"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference":
+$                          [{"Name": "max_val"},
+$                           {"Alias":
+$                                {"Op":
+$                                     {"MkOpSum":
+$                                          {"AbstractLiteral":
+$                                               {"AbsLitMatrix":
+$                                                    [{"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                     [{"Op":
+$                                                           {"MkOpMinus":
+$                                                                [{"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Op":
+$                                                                                            {"MkOpPow":
+$                                                                                                 [{"Reference":
+$                                                                                                       [{"Name":
+$                                                                                                             "order"},
+$                                                                                                        {"DeclHasRepr":
+$                                                                                                             ["Given",
+$                                                                                                              {"Name":
+$                                                                                                                   "order"},
+$                                                                                                              {"DomainInt":
+$                                                                                                                   [{"TagInt":
+$                                                                                                                         []},
+$                                                                                                                    []]}]}]},
+$                                                                                                  {"Constant":
+$                                                                                                       {"ConstantInt":
+$                                                                                                            [{"TagInt":
+$                                                                                                                  []},
+$                                                                                                             2]}}]}}]]}}}},
+$                                                                 {"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Reference":
+$                                                                                            [{"Name": "order"},
+$                                                                                             {"DeclHasRepr":
+$                                                                                                  ["Given",
+$                                                                                                   {"Name": "order"},
+$                                                                                                   {"DomainInt":
+$                                                                                                        [{"TagInt": []},
+$                                                                                                         []]}]}]}]]}}}}]}},
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]]}}}}}]}]}]]}],
+$       [{"Name": "F"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference":
+$                          [{"Name": "max_val"},
+$                           {"Alias":
+$                                {"Op":
+$                                     {"MkOpSum":
+$                                          {"AbstractLiteral":
+$                                               {"AbsLitMatrix":
+$                                                    [{"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                     [{"Op":
+$                                                           {"MkOpMinus":
+$                                                                [{"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Op":
+$                                                                                            {"MkOpPow":
+$                                                                                                 [{"Reference":
+$                                                                                                       [{"Name":
+$                                                                                                             "order"},
+$                                                                                                        {"DeclHasRepr":
+$                                                                                                             ["Given",
+$                                                                                                              {"Name":
+$                                                                                                                   "order"},
+$                                                                                                              {"DomainInt":
+$                                                                                                                   [{"TagInt":
+$                                                                                                                         []},
+$                                                                                                                    []]}]}]},
+$                                                                                                  {"Constant":
+$                                                                                                       {"ConstantInt":
+$                                                                                                            [{"TagInt":
+$                                                                                                                  []},
+$                                                                                                             2]}}]}}]]}}}},
+$                                                                 {"Op":
+$                                                                      {"MkOpProduct":
+$                                                                           {"AbstractLiteral":
+$                                                                                {"AbsLitMatrix":
+$                                                                                     [{"DomainInt":
+$                                                                                           [{"TagInt": []},
+$                                                                                            [{"RangeBounded":
+$                                                                                                  [{"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              1]}},
+$                                                                                                   {"Constant":
+$                                                                                                        {"ConstantInt":
+$                                                                                                             [{"TagInt":
+$                                                                                                                   []},
+$                                                                                                              2]}}]}]]},
+$                                                                                      [{"Constant":
+$                                                                                            {"ConstantInt":
+$                                                                                                 [{"TagInt": []}, 3]}},
+$                                                                                       {"Reference":
+$                                                                                            [{"Name": "order"},
+$                                                                                             {"DeclHasRepr":
+$                                                                                                  ["Given",
+$                                                                                                   {"Name": "order"},
+$                                                                                                   {"DomainInt":
+$                                                                                                        [{"TagInt": []},
+$                                                                                                         []]}]}]}]]}}}}]}},
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}]]}}}}}]}]}]]}]],
+$  "representationsTree":
+$      [[{"Name": "A"}, [{"rootLabel": null, "subForest": []}]], [{"Name": "B"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "C"}, [{"rootLabel": null, "subForest": []}]], [{"Name": "D"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "E"}, [{"rootLabel": null, "subForest": []}]], [{"Name": "F"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "hexagon"},
+$        [{"rootLabel": null,
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": [{"rootLabel": null, "subForest": [{"rootLabel": null, "subForest": []}]}]}]}]],
+$       [{"Name": "order"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "sumsto"}, [{"rootLabel": null, "subForest": []}]]],
+$  "originalDomains":
+$      [[{"Name": "order"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "hexagon"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Reference": [{"MachineName": ["let", 1, []]}, null]},
+$                           {"Reference": [{"Name": "ix"}, null]}]}]]},
+$              {"DomainMatrix":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Reference": [{"MachineName": ["let", 2, []]}, null]},
+$                                 {"Reference": [{"Name": "ix"}, null]}]}]]},
+$                    {"DomainMatrix":
+$                         [{"DomainInt":
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Reference": [{"MachineName": ["let", 3, []]}, null]},
+$                                       {"Reference": [{"Name": "ix"}, null]}]}]]},
+$                          {"DomainInt":
+$                               [{"TagInt": []},
+$                                [{"RangeBounded":
+$                                      [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                                       {"Reference": [{"Name": "max_val"}, null]}]}]]}]}]}]}],
+$       [{"Name": "sumsto"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference": [{"Name": "total_sum"}, null]}]}]]}],
+$       [{"Name": "A"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference": [{"Name": "max_val"}, null]}]}]]}],
+$       [{"Name": "B"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference": [{"Name": "max_val"}, null]}]}]]}],
+$       [{"Name": "C"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference": [{"Name": "max_val"}, null]}]}]]}],
+$       [{"Name": "D"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference": [{"Name": "max_val"}, null]}]}]]}],
+$       [{"Name": "E"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference": [{"Name": "max_val"}, null]}]}]]}],
+$       [{"Name": "F"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference": [{"Name": "max_val"}, null]}]}]]}]],
+$  "trailGeneralised":
+$      [[-8251747697753926853, 877653631630266906], [8644712897058633701, 8360616792660820024],
+$       [2415150025595973119, -8621812092508107810], [-71046865487087955, -7855247962618099456],
+$       [3500131496463229155, 1506766404409587978], [-3292327439636889275, 3211142694889633592],
+$       [4557072690866104731, -4501355618599108106], [-4591974823239953832, -7097933147824592171],
+$       [-549162232289960266, -7881834256331784138], [5779294215922421433, 7043303016180916306],
+$       [3288137428516986776, -6356105329233311086], [5865086462382393363, -8891898973788887410],
+$       [8811441520012019994, -8682481488378622346], [-7674459088903651259, -5247187392229149190],
+$       [-5093865544207752617, 5964042437397139488], [-3141905343817325487, -6936678779476367202],
+$       [-9015239854991969556, 7843407802983362278], [6140114437339560786, -1550353316167190228],
+$       [6316615554517291560, -5453177657254075370], [135991562250556708, 8076242811932989350],
+$       [4329265992569191523, -5517404646949966584], [6663926523392547529, 4805067388072100086],
+$       [-2693391218913360154, 9122104488273390936], [-750738851793514864, -471208389458707762],
+$       [-2758375424258482348, 890867341209117641], [8259309363950934210, -7876553570853867543],
+$       [5984683197506315428, 1365269388760181317], [2969624046481701190, 2350652022070976625],
+$       [1043870515726468000, 5800234955083747133], [8407081450565870742, 7573560194450204737],
+$       [-8534424160788661536, 9125878267513559640], [-6970741269970176260, -8075412640312102309],
+$       [5699749207899157458, 163089153070234311], [-6588933023347616, -1013381062849730185],
+$       [-1671461052219525247, 6878211349680340772]],
+$  "trailVerbose": [], "trailRewrites": []}

@@ -1,0 +1,828 @@
+language ESSENCE' 1.0
+
+given nonRenewableResources_EnumSize: int
+given renewableResources_EnumSize: int
+given jobs_EnumSize: int
+given startDummy: int(1..jobs_EnumSize)
+given endDummy: int(1..jobs_EnumSize)
+given modes_EnumSize: int
+given fin1: int
+given fin2: int
+given fin3: int
+given renewableLimits_Function1D: matrix indexed by [int(1..renewableResources_EnumSize)] of int(fin2..fin3)
+given fin4: int
+given fin5: int
+given fin6: int
+given nonRenewableLimits_Function1D: matrix indexed by [int(1..nonRenewableResources_EnumSize)] of int(fin5..fin6)
+given fin7: int
+given fin8: int
+given successors_Function1DR6_ExplicitVarSizeWithDummy:
+        matrix indexed by [int(1..jobs_EnumSize), int(1..fin8)] of int(1..jobs_EnumSize + 1)
+given fin9: int
+given fin10: int
+given fin11: int
+given renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_1:
+        matrix indexed by [int(1..fin9)] of int(1..jobs_EnumSize)
+given renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_2:
+        matrix indexed by [int(1..fin9)] of int(1..modes_EnumSize)
+given renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_3:
+        matrix indexed by [int(1..fin9)] of int(1..renewableResources_EnumSize)
+given renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_2:
+        matrix indexed by [int(1..fin9)] of int(fin10..fin11)
+given fin12: int
+given fin13: int
+given fin14: int
+given nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_1:
+        matrix indexed by [int(1..fin12)] of int(1..jobs_EnumSize)
+given nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_2:
+        matrix indexed by [int(1..fin12)] of int(1..modes_EnumSize)
+given nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_3:
+        matrix indexed by [int(1..fin12)] of int(1..nonRenewableResources_EnumSize)
+given nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_2:
+        matrix indexed by [int(1..fin12)] of int(fin13..fin14)
+given fin15: int
+given fin16: int
+given fin17: int
+given duration_FunctionAsRelation_RelationAsSet_Explicit_1_1: matrix indexed by [int(1..fin15)] of int(1..jobs_EnumSize)
+given duration_FunctionAsRelation_RelationAsSet_Explicit_1_2:
+        matrix indexed by [int(1..fin15)] of int(1..modes_EnumSize)
+given duration_FunctionAsRelation_RelationAsSet_Explicit_2: matrix indexed by [int(1..fin15)] of int(fin16..fin17)
+given horizon: int
+find start_Function1D: matrix indexed by [int(1..jobs_EnumSize)] of int(1..horizon)
+find mode_Function1D: matrix indexed by [int(1..jobs_EnumSize)] of int(1..modes_EnumSize)
+find jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker: int(0..jobs_EnumSize * horizon * 2)
+find jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1:
+        matrix indexed by [int(1..jobs_EnumSize * horizon * 2)] of int(1..jobs_EnumSize)
+find jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2:
+        matrix indexed by [int(1..jobs_EnumSize * horizon * 2)] of int(1..horizon)
+find jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2:
+        matrix indexed by [int(1..jobs_EnumSize * horizon * 2)] of bool
+branching on
+    [start_Function1D, mode_Function1D, jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker,
+     jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1,
+     jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2,
+     jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2]
+minimising start_Function1D[endDummy]
+such that
+    and([and([start_Function1D[successors_Function1DR6_ExplicitVarSizeWithDummy[job, q12]] >=
+              start_Function1D[job] +
+              sum([toInt(duration_FunctionAsRelation_RelationAsSet_Explicit_1_1[q10] = job /\
+                         duration_FunctionAsRelation_RelationAsSet_Explicit_1_2[q10] = mode_Function1D[job])
+                   * catchUndef(duration_FunctionAsRelation_RelationAsSet_Explicit_2[q10], 0)
+                       | q10 : int(1..fin15)])
+              /\
+              table([job, mode_Function1D[job]; int(1..2)],
+                    [[duration_FunctionAsRelation_RelationAsSet_Explicit_1_1[q11],
+                      duration_FunctionAsRelation_RelationAsSet_Explicit_1_2[q11];
+                          int(1..2)]
+                         | q11 : int(1..fin15)])
+                  | q12 : int(1..fin8),
+                    successors_Function1DR6_ExplicitVarSizeWithDummy[job, q12] != jobs_EnumSize + 1])
+             | job : int(1..jobs_EnumSize)]),
+    and([and([or([q17 <= jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                  (jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q17] = job /\
+                   jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q17] = time)
+                  /\ jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q17]
+                      | q17 : int(1..jobs_EnumSize * horizon * 2)])
+              <->
+              time >= start_Function1D[job] /\
+              (time <
+               start_Function1D[job] +
+               sum([toInt(duration_FunctionAsRelation_RelationAsSet_Explicit_1_1[q14] = job /\
+                          duration_FunctionAsRelation_RelationAsSet_Explicit_1_2[q14] = mode_Function1D[job])
+                    * catchUndef(duration_FunctionAsRelation_RelationAsSet_Explicit_2[q14], 0)
+                        | q14 : int(1..fin15)])
+               /\
+               table([job, mode_Function1D[job]; int(1..2)],
+                     [[duration_FunctionAsRelation_RelationAsSet_Explicit_1_1[q15],
+                       duration_FunctionAsRelation_RelationAsSet_Explicit_1_2[q15];
+                           int(1..2)]
+                          | q15 : int(1..fin15)]))
+                  | time : int(1..horizon)])
+             | job : int(1..jobs_EnumSize)]),
+    and([sum([sum([toInt(and([nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_1[q19] = job,
+                              nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_2[q19] =
+                              mode_Function1D[job],
+                              nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_3[q19] = resource;
+                                  int(1..3)]))
+                   * catchUndef(nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_2[q19], 0)
+                       | q19 : int(1..fin12)])
+                  | job : int(1..jobs_EnumSize)])
+         <= nonRenewableLimits_Function1D[resource]
+         /\
+         and([table([job, mode_Function1D[job], resource; int(1..3)],
+                    [[nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_1[q20],
+                      nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_2[q20],
+                      nonRenewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_3[q20];
+                          int(1..3)]
+                         | q20 : int(1..fin12)])
+                  | job : int(1..jobs_EnumSize)])
+             | resource : int(1..nonRenewableResources_EnumSize)]),
+    and([and([sum([toInt(or([q25 <= jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                             (jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q25] = job
+                              /\
+                              jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q25] =
+                              time)
+                             /\ jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q25]
+                                 | q25 : int(1..jobs_EnumSize * horizon * 2)]))
+                   *
+                   catchUndef(sum([toInt(and([renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_1[q22]
+                                              = job,
+                                              renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_2[q22]
+                                              = mode_Function1D[job],
+                                              renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_3[q22]
+                                              = resource;
+                                                  int(1..3)]))
+                                   *
+                                   catchUndef(renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_2[q22],
+                                              0)
+                                       | q22 : int(1..fin9)]),
+                              0)
+                       | job : int(1..jobs_EnumSize)])
+              <= renewableLimits_Function1D[resource]
+              /\
+              and([or([q25 <= jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                       (jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q25] = job /\
+                        jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q25] = time)
+                       /\ jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q25]
+                           | q25 : int(1..jobs_EnumSize * horizon * 2)])
+                   ->
+                   table([job, mode_Function1D[job], resource; int(1..3)],
+                         [[renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_1[q23],
+                           renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_2[q23],
+                           renewableResourceUsage_FunctionAsRelation_RelationAsSet_Explicit_1_3[q23];
+                               int(1..3)]
+                              | q23 : int(1..fin9)])
+                       | job : int(1..jobs_EnumSize)])
+                  | time : int(1..horizon)])
+             | resource : int(1..renewableResources_EnumSize)]),
+    start_Function1D[startDummy] = 1,
+    and([q3 + 1 <= jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker ->
+         flatten([flatten([[jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q3];
+                                int(1)],
+                           [jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q3];
+                                int(1)];
+                               int(1..2)]),
+                  [-toInt(jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q3]); int(1)];
+                      int(1..2)])
+         <lex
+         flatten([flatten([[jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q3 + 1];
+                                int(1)],
+                           [jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q3 + 1];
+                                int(1)];
+                               int(1..2)]),
+                  [-toInt(jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q3 + 1]);
+                       int(1)];
+                      int(1..2)])
+             | q3 : int(1..jobs_EnumSize * horizon * 2 - 1)]),
+    and([q4 > jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker ->
+         jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q4] = 1 /\
+         jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q4] = 1
+         /\ jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q4] = false
+             | q4 : int(1..jobs_EnumSize * horizon * 2)]),
+    and([1 =
+         sum([toInt(q8 <= jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                    (jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q8] = q6_1 /\
+                     jobActive_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q8] = q6_2))
+                  | q8 : int(1..jobs_EnumSize * horizon * 2)])
+             | q6_1 : int(1..jobs_EnumSize), q6_2 : int(1..horizon)])
+
+$ Conjure's
+$ {"finds": [{"Name": "start"}, {"Name": "mode"}, {"Name": "jobActive"}],
+$  "givens":
+$      [{"Name": "startDummy"}, {"Name": "endDummy"}, {"Name": "renewableLimits"}, {"Name": "nonRenewableLimits"},
+$       {"Name": "successors"}, {"Name": "renewableResourceUsage"}, {"Name": "nonRenewableResourceUsage"},
+$       {"Name": "duration"}, {"Name": "horizon"}],
+$  "enumGivens": [{"Name": "nonRenewableResources"}, {"Name": "renewableResources"}, {"Name": "jobs"}, {"Name": "modes"}],
+$  "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "nonRenewableResources"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagEnum": "nonRenewableResources"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagEnum": "nonRenewableResources"}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "nonRenewableResources_EnumSize"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "nonRenewableResources_EnumSize"},
+$                                      {"DomainInt": [{"TagEnum": "nonRenewableResources"}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "renewableResources"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagEnum": "renewableResources"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagEnum": "renewableResources"}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "renewableResources_EnumSize"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "renewableResources_EnumSize"},
+$                                      {"DomainInt": [{"TagEnum": "renewableResources"}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "jobs"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagEnum": "jobs"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "jobs_EnumSize"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "jobs_EnumSize"}, {"DomainInt": [{"TagEnum": "jobs"}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "modes"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagEnum": "modes"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagEnum": "modes"}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "modes_EnumSize"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "modes_EnumSize"}, {"DomainInt": [{"TagEnum": "modes"}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "timesRange"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "horizon"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "horizon"}, {"DomainInt": [{"TagInt": []}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 2], [1, 1, 1], [1, 1, 2], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 2, 2],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["fin", 18], ["q", 26]], "nbExtraGivens": 17,
+$  "representations":
+$      [[{"Name": "jobs_EnumSize"}, {"DomainInt": [{"TagEnum": "jobs"}, []]}],
+$       [{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "renewableResources_EnumSize"}, {"DomainInt": [{"TagEnum": "renewableResources"}, []]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "nonRenewableResources_EnumSize"}, {"DomainInt": [{"TagEnum": "nonRenewableResources"}, []]}],
+$       [{"MachineName": ["fin", 5, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 6, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 7, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 8, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 9, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "modes_EnumSize"}, {"DomainInt": [{"TagEnum": "modes"}, []]}],
+$       [{"MachineName": ["fin", 10, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 11, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 12, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 13, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 14, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 15, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 16, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 17, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "horizon"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "start"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagEnum": "jobs"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "jobs_EnumSize"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "jobs_EnumSize"},
+$                                       {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "horizon"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "horizon"}, {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "duration"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsSet": {"Set_Explicit": []}}},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 15, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 15, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagEnum": "jobs"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "jobs_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "jobs_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagEnum": "modes"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "modes"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "modes_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "modes_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "modes"}, []]}]}]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Reference":
+$                                [{"MachineName": ["fin", 16, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 16, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 17, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 17, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "mode"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagEnum": "jobs"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "jobs_EnumSize"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "jobs_EnumSize"},
+$                                       {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagEnum": "modes"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "modes"}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "modes_EnumSize"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "modes_EnumSize"},
+$                                       {"DomainInt": [{"TagEnum": "modes"}, []]}]}]}]}]]}]}],
+$       [{"Name": "successors"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 7, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 7, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagEnum": "jobs"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "jobs_EnumSize"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "jobs_EnumSize"},
+$                                       {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]},
+$              {"DomainSet":
+$                   [{"Set_ExplicitVarSizeWithDummy": []},
+$                    {"SizeAttr_MaxSize":
+$                         {"Reference":
+$                              [{"MachineName": ["fin", 8, []]},
+$                               {"DeclHasRepr":
+$                                    ["Given", {"MachineName": ["fin", 8, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$                    {"DomainInt":
+$                         [{"TagEnum": "jobs"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "jobs_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "jobs_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]}]}]}],
+$       [{"Name": "jobActive"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsSet": {"Set_ExplicitVarSizeWithMarker": []}}},
+$              [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagEnum": "jobs"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "jobs_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "jobs_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "horizon"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "horizon"},
+$                                             {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]},
+$              {"DomainBool": []}]}],
+$       [{"Name": "nonRenewableResourceUsage"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsSet": {"Set_Explicit": []}}},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 12, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 12, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagEnum": "jobs"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "jobs_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "jobs_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagEnum": "modes"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "modes"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "modes_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "modes_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "modes"}, []]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagEnum": "nonRenewableResources"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "nonRenewableResources"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "nonRenewableResources_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "nonRenewableResources_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "nonRenewableResources"}, []]}]}]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Reference":
+$                                [{"MachineName": ["fin", 13, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 13, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 14, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 14, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "nonRenewableLimits"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 4, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagEnum": "nonRenewableResources"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "nonRenewableResources"}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "nonRenewableResources_EnumSize"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "nonRenewableResources_EnumSize"},
+$                                       {"DomainInt": [{"TagEnum": "nonRenewableResources"}, []]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Reference":
+$                                [{"MachineName": ["fin", 5, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 5, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 6, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 6, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "renewableResourceUsage"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsSet": {"Set_Explicit": []}}},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 9, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 9, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagEnum": "jobs"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "jobs_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "jobs_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagEnum": "modes"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "modes"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "modes_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "modes_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "modes"}, []]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagEnum": "renewableResources"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "renewableResources"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "renewableResources_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "renewableResources_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "renewableResources"}, []]}]}]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Reference":
+$                                [{"MachineName": ["fin", 10, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 10, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 11, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 11, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "renewableLimits"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 1, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagEnum": "renewableResources"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "renewableResources"}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "renewableResources_EnumSize"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "renewableResources_EnumSize"},
+$                                       {"DomainInt": [{"TagEnum": "renewableResources"}, []]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Reference":
+$                                [{"MachineName": ["fin", 2, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 3, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 3, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "startDummy"},
+$        {"DomainInt":
+$             [{"TagEnum": "jobs"},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                     {"Reference":
+$                          [{"Name": "jobs_EnumSize"},
+$                           {"DeclHasRepr":
+$                                ["Given", {"Name": "jobs_EnumSize"}, {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]}],
+$       [{"Name": "endDummy"},
+$        {"DomainInt":
+$             [{"TagEnum": "jobs"},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagEnum": "jobs"}, 1]}},
+$                     {"Reference":
+$                          [{"Name": "jobs_EnumSize"},
+$                           {"DeclHasRepr":
+$                                ["Given", {"Name": "jobs_EnumSize"}, {"DomainInt": [{"TagEnum": "jobs"}, []]}]}]}]}]]}]],
+$  "representationsTree":
+$      [[{"Name": "duration"},
+$        [{"rootLabel": {"Function_AsRelation": {"Relation_AsSet": {"Set_Explicit": []}}},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "endDummy"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 10, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 11, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 12, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 13, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 14, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 15, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 16, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 17, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 4, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 5, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 6, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 7, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 8, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 9, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "horizon"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "jobActive"},
+$        [{"rootLabel": {"Function_AsRelation": {"Relation_AsSet": {"Set_ExplicitVarSizeWithMarker": []}}},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "jobs_EnumSize"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "mode"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "modes_EnumSize"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "nonRenewableLimits"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "nonRenewableResourceUsage"},
+$        [{"rootLabel": {"Function_AsRelation": {"Relation_AsSet": {"Set_Explicit": []}}},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest":
+$                    [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []},
+$                     {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "nonRenewableResources_EnumSize"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "renewableLimits"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "renewableResourceUsage"},
+$        [{"rootLabel": {"Function_AsRelation": {"Relation_AsSet": {"Set_Explicit": []}}},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest":
+$                    [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []},
+$                     {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "renewableResources_EnumSize"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "start"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "startDummy"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "successors"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest":
+$              [{"rootLabel": null, "subForest": []},
+$               {"rootLabel": {"Set_ExplicitVarSizeWithDummy": []},
+$                "subForest": [{"rootLabel": null, "subForest": []}]}]}]]],
+$  "originalDomains":
+$      [[{"Name": "startDummy"}, {"DomainEnum": [{"Name": "jobs"}, null, null]}],
+$       [{"Name": "endDummy"}, {"DomainEnum": [{"Name": "jobs"}, null, null]}],
+$       [{"Name": "renewableLimits"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainEnum": [{"Name": "renewableResources"}, null, null]}, {"DomainInt": [{"TagInt": []}, []]}]}],
+$       [{"Name": "nonRenewableLimits"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainEnum": [{"Name": "nonRenewableResources"}, null, null]}, {"DomainInt": [{"TagInt": []}, []]}]}],
+$       [{"Name": "successors"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainEnum": [{"Name": "jobs"}, null, null]},
+$              {"DomainSet": [[], {"SizeAttr_None": []}, {"DomainEnum": [{"Name": "jobs"}, null, null]}]}]}],
+$       [{"Name": "renewableResourceUsage"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainEnum": [{"Name": "jobs"}, null, null]}, {"DomainEnum": [{"Name": "modes"}, null, null]},
+$                    {"DomainEnum": [{"Name": "renewableResources"}, null, null]}]},
+$              {"DomainInt": [{"TagInt": []}, []]}]}],
+$       [{"Name": "nonRenewableResourceUsage"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainEnum": [{"Name": "jobs"}, null, null]}, {"DomainEnum": [{"Name": "modes"}, null, null]},
+$                    {"DomainEnum": [{"Name": "nonRenewableResources"}, null, null]}]},
+$              {"DomainInt": [{"TagInt": []}, []]}]}],
+$       [{"Name": "duration"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainEnum": [{"Name": "jobs"}, null, null]}, {"DomainEnum": [{"Name": "modes"}, null, null]}]},
+$              {"DomainInt": [{"TagInt": []}, []]}]}],
+$       [{"Name": "horizon"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "start"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainEnum": [{"Name": "jobs"}, null, null]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "horizon"}, null]}]}]]}]}],
+$       [{"Name": "mode"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainEnum": [{"Name": "jobs"}, null, null]}, {"DomainEnum": [{"Name": "modes"}, null, null]}]}],
+$       [{"Name": "jobActive"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainEnum": [{"Name": "jobs"}, null, null]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "horizon"}, null]}]}]]}]},
+$              {"DomainBool": []}]}]],
+$  "trailGeneralised":
+$      [[6614231993283092180, -4584788380027088967], [-4858915198086579689, 4541364593676873830],
+$       [-1521723773892077839, 8315230070627762200], [984677888268807234, -4239436536708386477],
+$       [2927559496683730699, -1669760432394959285], [-4467583891268515269, 4828607798291269453],
+$       [7161061837421241082, -7416060925131964047], [-5838804712280055362, 5317723362081907585],
+$       [-636919123197483059, 3456198674079147760], [537448061383955179, -1491788159094767967],
+$       [8735807126846444389, 2388769312402765352], [-3236716786647401169, 4766587984571286245],
+$       [8468871283148211980, 3070100846351786512], [3342875621726926256, -3112647832686777370],
+$       [960886231392280710, 7057197277470409084], [-2476219575387598864, -1757351755893699971],
+$       [1774671367839891549, -1209241135016476028], [324980383012998356, -8824109122061092187],
+$       [6043017074288875503, -7608659319544569164], [6601335263729475506, 7538676993173605109],
+$       [-1679905607631428150, 5805021628170738679], [-6991066449956645505, -2144841644734736836],
+$       [4579184821879630926, -4929772515947658676], [2193742580900386740, -4742763750874080635],
+$       [-6879647310538274760, 7137570061426504850], [4290498282602224972, 8049951561461878075],
+$       [-1497760452571674215, -6395609134029112077], [1987228004846317550, -1762841896132991437],
+$       [523963689479268576, 775326028391423457], [5474662955439624168, -7164461361543733938],
+$       [-1561559656429383772, -2972282093237278272], [-3787536933467208617, 4849037291349124120],
+$       [-6077704107616132585, -3619486895533051763], [8637030336538554944, 1667012229218043299],
+$       [1264171750037460008, -249568931202178923], [4797425446357674307, 1455958765767375588],
+$       [6447403009825538239, 5634012425342999425], [7205527658611420203, -6132571929576269843],
+$       [3181242972089633831, 7426839870298637800], [8735523085176492094, -4428892154576722055],
+$       [5471955744382780174, -6472949530988519657], [-1163787402283193312, -655049823825673588],
+$       [-559705486304400224, 7074330238492948201], [6723183852129305489, 6121132670191403249],
+$       [-2878577593715428534, -1648043209970730879], [5928930550635466236, 7957395449443459883],
+$       [6633846308409516086, -6364134269611051812], [230371934775296426, 2270200939609872326],
+$       [3591961107026860403, -4858062313239771749], [4087291045159671257, -3619486895533051763],
+$       [-2816314075875359005, 2136421215101585840], [-4383595987036841407, -1209565693079049034],
+$       [-8284221248785866119, 3869632322698765740], [4442290929161494413, 6859872520708602077],
+$       [4840992480573070932, -1186298027232086588], [-913405113735442433, -3620148785054447419],
+$       [8732728844795192830, 6164363675666116644], [-8861138150627945847, -2758362665775439835],
+$       [349530383575433257, -4104859750981369825], [-4235721324524945525, -3372544884641265195],
+$       [-6065254946180479789, -2900583442818551103], [-3091339211826966207, -7634205905795247171],
+$       [-285066512952768742, -3536676740598738531], [7182461009345848869, 8950172357077239565],
+$       [-2524274202283470352, -8471900101815234401], [-6165942246396998971, -2600362532285327975],
+$       [-5364900087722357902, 7798550707183439621], [9187979799363288564, 3471954491811308163],
+$       [-604714675688830881, 1948918358001802475], [-8817022439825681903, 384711462266046351],
+$       [-5699634659595031319, -7877330346099350823], [-6543414670986283510, 5942735540652532422],
+$       [-1755266538519723308, -5403206813011765452], [6953928440510004952, -3685480172502352078],
+$       [-3973596150339387009, -3619486895533051763], [-4917738448730557197, 3029963806798107283],
+$       [8213165293343860495, 3029963806798107283], [-3280300512484597127, 5192009477582010675],
+$       [-4240369137554956256, -5080507871400019947], [-5646559934020191402, 5582913027384786267],
+$       [275479046308013642, 2407544937267612148], [-5701774506068333759, 883992739894167013],
+$       [6652484615960491785, 5735834965643737137], [-3595315428246485999, -4169725463865051291],
+$       [5203834310542201480, 7300989515997133685], [4082656047100048768, -1208176165571194875],
+$       [-3993111917782519946, 37880576656613843], [-1443373330741947802, -6324221624173679751],
+$       [4004084964613434090, 7485453668874002077], [-5843229908713704992, -1422332337135350125],
+$       [-3853037818459955779, -1449819658042977733], [7752420865598448586, -6791295868284171769],
+$       [-2345015528567213282, -6787552238595072503], [-2149773208020312618, -7334293332473724954],
+$       [-4674166776222041398, -6127314605113250380], [-2998766752613472951, 4272855417000835094],
+$       [967023963310952531, -3619486895533051763], [-7430328369020705298, 3029963806798107283],
+$       [-8023732123762249214, 4166591128357287495], [-1825971726310270374, -649942792695403612],
+$       [-649447018974787588, -8438055240862190397], [-302378150163863580, 2280780080944491900],
+$       [4214428612139929008, 7536473885445870488], [-8987034837461058774, 78037643266730948],
+$       [2863066079124060115, 395274280931741719], [-648972942711289066, 8770867956322148885],
+$       [6230909165167493086, -822791338413627987], [-1968378144271935812, 8623293795491011082],
+$       [-24695005525119958, 5072293210628948726], [3167488646324128598, 6853213610086041158],
+$       [8134707186328664897, -6398333086935166945], [-1530820444679653351, 7308316279441562436],
+$       [1814419671231886200, -8957099444720873260], [-2717744042806936586, -2569405569849133901],
+$       [-381518872838349214, 3986584109728450462], [-5714169778573026756, -2305430825067709693],
+$       [3141869232399394052, 7027313645500492792], [5788048520535261070, -5475999570156150609],
+$       [-5510224185154466574, 7395188636868102487], [1539066271473207333, 6010720883341098668],
+$       [4275951931854321323, 2210861095268301433], [-3214576929014397387, -4203775743043398988],
+$       [-6094301916436894634, -5405310045016884792], [-6181777747432496868, -4294309604109407668],
+$       [7308149302206474653, -3788121313283759708], [4828182191272780289, 2846552440579327817],
+$       [-8010542821557135211, 7236795685301712112], [5437076575111388620, 1381523685220308990],
+$       [7384715968516448167, 478741211299528474], [5410525266468675356, 5418759358366063016],
+$       [7624395075285571998, 1345977182210138632], [8751768694730766580, -5927798130119327754],
+$       [4086252933637097697, -501955472822522986], [-8860736204522725566, 4231682877125339062],
+$       [1545994632530262714, -421003243286518168], [-194373171272751980, -836092265292740462],
+$       [-421921966537383028, 2641226598406618584], [-1866231753710533864, 379940740949107780],
+$       [2232254331330068743, 1348737577735587536], [4810227255052825614, -9012275725393363324],
+$       [1070597017399457525, 3620749154753816816], [-2844194290447036780, -750403782853387372],
+$       [-4060003564270909029, 2408356871145831264], [2284995846969496010, 2814755158545304900],
+$       [-1130472197909705623, 3678479103325363760], [2745047030771276835, 2436960179373127394],
+$       [-1540057894209536768, 9155905616984201828], [-1231221212233234753, 6974599349954485152],
+$       [-5615676392060802058, -8807052422931912332], [5337321014454198845, 5778719259770357248],
+$       [-4894401536737872996, 5668485079573765364], [396338580245375103, 8513705771113746048],
+$       [-3254467883099200877, -5420071290108198448], [-8940990002979762542, 4110457826774952372],
+$       [-3722262881154758639, 6794018145404485952], [-2963797025828114243, 7104718691589357184],
+$       [1391725996931715816, -2717752761680935708], [-7521033904055914715, 84013989309667504]],
+$  "trailVerbose": [], "trailRewrites": []}

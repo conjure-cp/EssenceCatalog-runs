@@ -1,0 +1,666 @@
+language ESSENCE' 1.0
+
+given numNodes: int(1..)
+given numLeaves: int(1..)
+given numPeriods: int(1..)
+given maxStock: int(1..)
+given fin1: int
+given holdingCost: matrix indexed by [int(1..numNodes)] of int(0..fin1)
+given fin2: int
+given procCost: matrix indexed by [int(1..numNodes)] of int(0..fin2)
+given fin3: int
+given demand: matrix indexed by [int(1..numLeaves), int(1..numPeriods)] of int(0..fin3)
+given fin4: int
+given children_ExplicitVarSizeWithDummy: matrix indexed by [int(1..numNodes), int(1..fin4)] of int(1..numNodes + 1)
+find orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker: int(0..numNodes * numPeriods * maxStock)
+find orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1:
+        matrix indexed by [int(1..numNodes * numPeriods * maxStock)] of int(1..numNodes)
+find orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2:
+        matrix indexed by [int(1..numNodes * numPeriods * maxStock)] of int(1..numPeriods)
+find orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2:
+        matrix indexed by [int(1..numNodes * numPeriods * maxStock)] of int(1..maxStock)
+find stock_FunctionND: matrix indexed by [int(1..numNodes), int(0..numPeriods)] of int(0..maxStock)
+branching on
+    [orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker,
+     orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1,
+     orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2,
+     orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2, stock_FunctionND]
+minimising
+    sum([holdingCost[i] * stock_FunctionND[i, t] | t : int(1..numPeriods), i : int(1..numNodes)]) +
+    sum([toInt(q12 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker) *
+         catchUndef(procCost[orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q12]], 0)
+             | q12 : int(1..numNodes * numPeriods * maxStock)])
+such that
+    and([stock_FunctionND[i, 0] = 0 | i : int(1..numNodes)]),
+    and([and([and([stock_FunctionND[i, t] =
+                   stock_FunctionND[i, t - 1] +
+                   toInt(or([q20 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                             (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q20] = i /\
+                              orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q20] = t)
+                                 | q20 : int(1..numNodes * numPeriods * maxStock)]))
+                   *
+                   catchUndef(sum([toInt(q14 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker
+                                         /\
+                                         (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1
+                                              [q14]
+                                          = i
+                                          /\
+                                          orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2
+                                              [q14]
+                                          = t))
+                                   *
+                                   catchUndef(orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2
+                                                  [q14],
+                                              0)
+                                       | q14 : int(1..numNodes * numPeriods * maxStock)]),
+                              0)
+                   -
+                   sum([toInt(or([q29 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                                  (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q29] =
+                                   children_ExplicitVarSizeWithDummy[i, q21]
+                                   /\
+                                   orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q29] =
+                                   t) | q29 : int(1..numNodes * numPeriods * maxStock)]))
+                        *
+                        catchUndef(sum([toInt(q23 <=
+                                              orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker
+                                              /\
+                                              (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1
+                                                   [q23]
+                                               = children_ExplicitVarSizeWithDummy[i, q21]
+                                               /\
+                                               orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2
+                                                   [q23]
+                                               = t))
+                                        *
+                                        catchUndef(orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2
+                                                       [q23],
+                                                   0)
+                                            | q23 : int(1..numNodes * numPeriods * maxStock)]),
+                                   0)
+                            | q21 : int(1..fin4), children_ExplicitVarSizeWithDummy[i, q21] != numNodes + 1]),
+                   or([q17 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                       (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q17] = i /\
+                        orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q17] = t)
+                           | q17 : int(1..numNodes * numPeriods * maxStock)]),
+                   and([or([q29 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                            (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q29] =
+                             children_ExplicitVarSizeWithDummy[i, q21]
+                             /\ orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q29] = t)
+                                | q29 : int(1..numNodes * numPeriods * maxStock)])
+                        ->
+                        or([q26 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                            (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q26] =
+                             children_ExplicitVarSizeWithDummy[i, q21]
+                             /\ orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q26] = t)
+                                | q26 : int(1..numNodes * numPeriods * maxStock)])
+                            | q21 : int(1..fin4), children_ExplicitVarSizeWithDummy[i, q21] != numNodes + 1]);
+                       int(1..3)])
+                  | i : int(numLeaves + 1..numNodes)])
+             | t : int(1..numPeriods)]),
+    and([and([stock_FunctionND[i, t] =
+              stock_FunctionND[i, t - 1] +
+              toInt(or([q38 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                        (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q38] = i /\
+                         orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q38] = t)
+                            | q38 : int(1..numNodes * numPeriods * maxStock)]))
+              *
+              catchUndef(sum([toInt(q32 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                                    (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q32] =
+                                     i
+                                     /\
+                                     orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q32] =
+                                     t))
+                              *
+                              catchUndef(orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2
+                                             [q32],
+                                         0)
+                                  | q32 : int(1..numNodes * numPeriods * maxStock)]),
+                         0)
+              - demand[i, t]
+              /\
+              or([q35 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                  (orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q35] = i /\
+                   orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q35] = t)
+                      | q35 : int(1..numNodes * numPeriods * maxStock)])
+                  | i : int(1..numLeaves)])
+             | t : int(1..numPeriods)]),
+    and([q3 + 1 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker ->
+         flatten([flatten([[orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q3]; int(1)],
+                           [orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q3]; int(1)];
+                               int(1..2)]),
+                  [orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q3]; int(1)];
+                      int(1..2)])
+         <lex
+         flatten([flatten([[orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q3 + 1];
+                                int(1)],
+                           [orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q3 + 1];
+                                int(1)];
+                               int(1..2)]),
+                  [orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q3 + 1]; int(1)];
+                      int(1..2)])
+             | q3 : int(1..numNodes * numPeriods * maxStock - 1)]),
+    and([q4 > orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker ->
+         orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q4] = 1 /\
+         orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q4] = 1
+         /\ orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q4] = 1
+             | q4 : int(1..numNodes * numPeriods * maxStock)]),
+    and([q8 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+         q9 <= orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Marker
+         ->
+         orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q8] !=
+         orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_1[q9]
+         \/
+         orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q8] !=
+         orders_FunctionAsRelation_RelationAsSet_ExplicitVarSizeWithMarker_Values_1_2[q9]
+             | q8 : int(1..numNodes * numPeriods * maxStock), q9 : int(1..numNodes * numPeriods * maxStock), q9 > q8])
+
+$ Conjure's
+$ {"finds": [{"Name": "orders"}, {"Name": "stock"}],
+$  "givens":
+$      [{"Name": "numNodes"}, {"Name": "numLeaves"}, {"Name": "numPeriods"}, {"Name": "maxStock"},
+$       {"Name": "holdingCost"}, {"Name": "procCost"}, {"Name": "demand"}, {"Name": "children"}],
+$  "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "dNodes"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "numNodes"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "numNodes"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "dLeaves"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "numLeaves"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "numLeaves"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "dAllPeriods"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                          {"Reference":
+$                               [{"Name": "numPeriods"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "numPeriods"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "dPeriods"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "numPeriods"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "numPeriods"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Sparse": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["fin", 5], ["q", 40]], "nbExtraGivens": 4,
+$  "representations":
+$      [[{"Name": "numNodes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "numLeaves"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "numPeriods"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "maxStock"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "holdingCost"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "numNodes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "numNodes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 1, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 1, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "stock"},
+$        {"DomainFunction":
+$             [{"Function_ND": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "numNodes"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "numNodes"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                                 {"Reference":
+$                                      [{"Name": "numPeriods"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "numPeriods"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"Name": "maxStock"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "maxStock"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "procCost"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "numNodes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "numNodes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 2, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 2, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "orders"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsSet": {"Set_ExplicitVarSizeWithMarker": []}}},
+$              [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "numNodes"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "numNodes"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "numPeriods"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "numPeriods"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "maxStock"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "maxStock"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "children"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "numNodes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "numNodes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainSet":
+$                   [{"Set_ExplicitVarSizeWithDummy": []},
+$                    {"SizeAttr_MaxSize":
+$                         {"Reference":
+$                              [{"MachineName": ["fin", 4, []]},
+$                               {"DeclHasRepr":
+$                                    ["Given", {"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "numNodes"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "numNodes"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]}],
+$       [{"Name": "demand"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "numLeaves"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "numLeaves"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainMatrix":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "numPeriods"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "numPeriods"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                                 {"Reference":
+$                                      [{"MachineName": ["fin", 3, []]},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"MachineName": ["fin", 3, []]},
+$                                             {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}]}]],
+$  "representationsTree":
+$      [[{"Name": "children"},
+$        [{"rootLabel": null,
+$          "subForest":
+$              [{"rootLabel": {"Set_ExplicitVarSizeWithDummy": []},
+$                "subForest": [{"rootLabel": null, "subForest": []}]}]}]],
+$       [{"Name": "demand"},
+$        [{"rootLabel": null, "subForest": [{"rootLabel": null, "subForest": [{"rootLabel": null, "subForest": []}]}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 4, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "holdingCost"}, [{"rootLabel": null, "subForest": [{"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "maxStock"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "numLeaves"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "numNodes"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "numPeriods"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "orders"},
+$        [{"rootLabel": {"Function_AsRelation": {"Relation_AsSet": {"Set_ExplicitVarSizeWithMarker": []}}},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "procCost"}, [{"rootLabel": null, "subForest": [{"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "stock"},
+$        [{"rootLabel": {"Function_ND": []},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "numNodes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "numLeaves"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "numPeriods"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "maxStock"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "holdingCost"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "numNodes"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 0]}}}]]}]}],
+$       [{"Name": "procCost"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "numNodes"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 0]}}}]]}]}],
+$       [{"Name": "demand"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "numLeaves"}, null]}]}]]},
+$              {"DomainMatrix":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "numPeriods"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 0]}}}]]}]}]}],
+$       [{"Name": "children"},
+$        {"DomainMatrix":
+$             [{"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "numNodes"}, null]}]}]]},
+$              {"DomainSet":
+$                   [[], {"SizeAttr_None": []},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "numNodes"}, null]}]}]]}]}]}],
+$       [{"Name": "orders"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Partial", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "numNodes"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "numPeriods"}, null]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "maxStock"}, null]}]}]]}]}],
+$       [{"Name": "stock"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "numNodes"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                                 {"Reference": [{"Name": "numPeriods"}, null]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference": [{"Name": "maxStock"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[1353384376398310913, 21809294202499528], [-5900945666157782188, 9160098361169805429],
+$       [-7719168696558964567, 2398134534783003745], [3671758956705385801, 1262328604029166137],
+$       [-2113297122101058470, 1487728808679763221], [-7965314713567763085, 2332715854535600081],
+$       [-2370334052303170809, 601425654114085947], [-6895320902085361206, 2502554114119764443],
+$       [-4256705527468982706, -7965663791687283970], [5028012872098228735, 7798105698868021397],
+$       [-5718760303701149384, 2575195944382805189], [5389490260735819888, 2510021362128748233],
+$       [-5574304310608541543, 4167346801747220347], [3608259810078296875, -6665910722704763272],
+$       [8123453366566421063, 3048908758767813918], [4986149894660580091, -6632644360939238145],
+$       [6958325207068654465, -3470132778403937086], [-2212925352000573927, -7693355342135217905],
+$       [-1107401356816811043, 6627066755542751332], [-1940142719820422589, -4319356998613357826],
+$       [2063293437458462293, -5143954121441942215], [663466069138727539, -9066869501073311735],
+$       [3693659512609743899, -7228378217559782170], [-8102815359084526668, 8973044378300452882],
+$       [3771483844943749783, -8506056444144483715], [-1930771155184552283, 395093709501958476],
+$       [288502742347400567, 6558718377356238661], [-2536524711104311229, -4091274839262639614],
+$       [8164186256684878110, -6558328889912105494], [269518906955744105, 5528738439639166382],
+$       [-7868049590765475593, 1680849295856361048], [5382017725512075785, 846948717543058832],
+$       [6466476894342834734, 987966807535367954], [1974758426006109177, -5031878634804997466],
+$       [-15103060553007939, -4194899648037689720], [-8466388699885163925, 9182871216513087394],
+$       [-5155773089607423358, 5395804106935784616], [4139267978947948824, -4300400987658855372],
+$       [-2624048940647854800, -1810602535247759124], [695987289938230540, 2577239072605265628],
+$       [-7868146954359216732, -7551866037036658668], [6042914292663245339, -227193967186185678],
+$       [-9209669721699603013, -4018169762506786023], [-3936503443070731857, -2435053250227101924],
+$       [5088352046198611418, 1579339563775398435], [-9204952082160192389, 7085207539208677457],
+$       [4364862827741696654, 7578285556303690154], [4452051247007136504, -7464046863582845957],
+$       [3938428339270638108, -7464046863582845957], [5282037744720811270, -7826095711097482100],
+$       [-834431007435059223, 6179576966612981893], [-3285711296216881729, -1533197407647746142],
+$       [5414001953905000125, 1582184967370969166], [8652381363765585319, 6369993239014968369],
+$       [-926232965144720243, -8218873593708459976], [-1082710142267518155, -5832974930169645343],
+$       [1246502228291279453, -660873306184497374], [7835618825887131007, 4727888947059512282],
+$       [30223678076703335, 3062275286445701884], [-6526606812010926055, -6981041138049741073],
+$       [7377639506834835667, -4682931308488809220], [-1138446185549288772, 4429540701185484054],
+$       [-6440841846482770249, 5091241459171706115], [8334864027852746509, -2197698047751780466],
+$       [5214731938626331267, -4927658781707209169], [-5192478938725529661, -3328628644088952720],
+$       [7535561349012575294, 3291149970124327658], [8980777629451879082, -586191327211297931],
+$       [-6210561664261088980, -9154391136881009886], [2118791131971983464, 339768959442093134],
+$       [1852926020208916409, -4366542593187715958], [7858403316242598010, 8324808329169982494],
+$       [-4162912920302057488, -4232297928923520014], [-1318857038568259446, 2940596634085211564],
+$       [6148633955642393643, 8899322411046031266], [6540056073449432609, -3201554917924660182],
+$       [-7049486556981179168, -7834656115790351953], [-3466430099205622780, -6008505220370235078],
+$       [-7345519176905480850, -8601594421423018645], [-1527775556515950690, 2569172937117926381],
+$       [5309238278254038102, 8397719677982707007], [7942148905139476596, -1239784585873183121],
+$       [1949095411880681754, -3655621386156233698], [8485700703115435613, -1598952238568803903],
+$       [6789381897762407686, 509067829022331171], [-5064980308123406963, -3902634970981529693],
+$       [5358607010706571656, -477177006153827843], [835448456221585729, 3893853752293515656],
+$       [-2694390528014819165, 7813400561204612130], [-1612037098668749702, -837785330625215351],
+$       [-8231884946737846352, 7246960511009971792], [-4379072963009953872, 5606087829085418949],
+$       [3270566195317403520, -5431481145288716430], [-2619488620234220604, -1535446940710231464],
+$       [2055363115948233643, -5966054024077363145], [-6627851550953913400, 506036627633734439],
+$       [8498288493367960535, -3105142334332588038], [-880896989132312110, -2899396083395443122],
+$       [142809438664438860, 4585761003540934163], [7797018449728349570, -6261065162007808862],
+$       [7755381276755109584, -778284665336724061], [4226587223949576916, -4714190273605084048],
+$       [2483487491642283435, 301797522942234852], [1454056080731700887, 568105056839863940],
+$       [-2059762127001212488, 5474067584778352556], [2674649817104822663, 8903288004561895132],
+$       [318709400431515706, 5996558356482473246], [855897377159669246, -1768772805568897278],
+$       [2127681688596114682, 6607436793183227166], [8880133441864428764, 581311652555665268],
+$       [-234287702870653529, 2932976411696659870], [-3588435378495122799, -242619149108879966],
+$       [1250315673118755688, 3489129256595737991], [-7389640706197535654, -4937670594455695924],
+$       [6243358815509527477, 8451590060638459964], [-4097506281303987750, 1682292312711911439],
+$       [-6015792824985457988, -1262492593423765074], [3553854891376524699, 5401665784827683138],
+$       [-9176652647013078552, 2734131100157946175], [7698950989494308222, -2112374848239081598],
+$       [7923023310972110450, -6306753602739476137], [5767127189115418062, -1089397203209454632],
+$       [-4702840187485599706, 3122483567651476898], [2552139214441753938, -4861840610160971796],
+$       [8680493373526281530, -7225304843114681724], [5535858668242526638, 66972593705358609],
+$       [4824787751825661646, -4547859402647289264], [-7664437215439643424, 5888591832979814655],
+$       [-4100384276713008960, -6291955142818227522], [7736687240422914557, -8464681927547172302],
+$       [4852028726916715824, -3238012462531762824], [135991907677789488, -2222236716254167252],
+$       [5701967256401388510, 8903212453351717234], [6876550082858628518, -811217856128853609],
+$       [-6089675775001449730, 3303156668047449398], [6485670632701229051, 5003715188877424278],
+$       [-1960387789588663176, 5182354893056890222], [-2941811092688894637, 4535178068954418720],
+$       [968513778844153304, -8303598264170715824], [-7065316205413424156, -5730354644324057931],
+$       [-4064042851390473604, -3903629919517512134], [-4919247155898554810, -3820653300428808969],
+$       [-7182176199219831196, -6845483720750784908], [-8801579702440534909, -3502548067475949678],
+$       [-1391266859995382772, -9124439379446324072], [5047637892550071012, 3215227668755917684],
+$       [470140567919443966, 1508287999462675891], [3388606065889450346, 9047521870185014404],
+$       [3754546801954182012, -8897943955481793874], [1544785440058745988, 214121716802143428],
+$       [-4288615634245231652, 3853547013725747984], [-7845514458670810354, 3645424797226553869],
+$       [8310915200411467691, 5607057465987173342], [7284448336570238882, -896041870192787317],
+$       [-9044047383882273399, -3573896007298903604], [6138466364562320174, -9104490342438867669],
+$       [8950399714245421606, -7584661441393588156], [-5437454830317746941, -797044223528835226],
+$       [-3254467883099200877, -5420071290108198448], [-8940990002979762542, 4110457826774952372],
+$       [-1474534386231492249, 3286475733564955178], [-5325928614930201306, -3727667263194840088],
+$       [-3722262881154758639, 6794018145404485952], [1391725996931715816, -2717752761680935708],
+$       [-1460712790352185212, -3171580028343017866]],
+$  "trailVerbose": [], "trailRewrites": []}

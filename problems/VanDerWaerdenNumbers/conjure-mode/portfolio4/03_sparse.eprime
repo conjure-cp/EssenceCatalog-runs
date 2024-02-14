@@ -1,0 +1,154 @@
+language ESSENCE' 1.0
+
+given k: int(1..)
+given l: int(1..)
+given n: int(1..)
+find p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy: matrix indexed by [int(1..k), int(1..n)] of int(1..n + 1)
+branching on [p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy]
+such that
+    and([and([and([!and([or([p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q17, q20] != n + 1 /\
+                             p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q17, q20] = start + i * width
+                                 | q20 : int(1..n)])
+                             | i : int(0..l - 1)])
+                       | width : int(1..(n - start + 1) / (l - 1))])
+                  | start : int(1..n - l + 1)])
+             | q17 : int(1..k)]),
+    alldifferent_except([toInt(p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q24, q25] != n + 1) *
+                         catchUndef(p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q24, q25], 0)
+                             | q24 : int(1..k), q25 : int(1..n)],
+                        0),
+    and([sum([toInt(p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q26, q28] != n + 1) | q28 : int(1..n)]) >= 1
+             | q26 : int(1..k)]),
+    and([[p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q4, q11] | q11 : int(1..n)] <lex
+         [p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q4 + 1, q12] | q12 : int(1..n)]
+             | q4 : int(1..k - 1)]),
+    and([and([p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q5, q6] <
+              p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q5, q6 + 1]
+              \/ p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q5, q6] = n + 1
+                  | q6 : int(1..n - 1)])
+             | q5 : int(1..k)]),
+    and([and([p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q5, q7] = n + 1 ->
+              p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q5, q7 + 1] = n + 1
+                  | q7 : int(1..n - 1)])
+             | q5 : int(1..k)]),
+    and([sum([toInt(p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q5, q8] != n + 1) | q8 : int(1..n)]) <= n
+             | q5 : int(1..k)]),
+    n =
+    sum([sum([toInt(p_PartitionAsSet_ExplicitR6_ExplicitVarSizeWithDummy[q13, q15] != n + 1) | q15 : int(1..n)])
+             | q13 : int(1..k)])
+
+$ Conjure's
+$ {"finds": [{"Name": "p"}], "givens": [{"Name": "k"}, {"Name": "l"}, {"Name": "n"}], "enumGivens": [],
+$  "enumLettings": [], "lettings": [], "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Sparse": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["q", 30]], "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "l"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "p"},
+$        {"DomainPartition":
+$             [{"Partition_AsSet": [{"Set_Explicit": []}, {"Set_ExplicitVarSizeWithDummy": []}]},
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_Size":
+$                        {"Reference":
+$                             [{"Name": "k"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "k"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "n"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]],
+$  "representationsTree":
+$      [[{"Name": "k"}, [{"rootLabel": null, "subForest": []}]], [{"Name": "l"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "n"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "p"},
+$        [{"rootLabel": {"Partition_AsSet": [{"Set_Explicit": []}, {"Set_ExplicitVarSizeWithDummy": []}]},
+$          "subForest": [{"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "l"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "p"},
+$        {"DomainPartition":
+$             [[],
+$              {"isRegular": false, "partsNum": {"SizeAttr_Size": {"Reference": [{"Name": "k"}, null]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n"},
+$                              {"DeclNoRepr":
+$                                   ["Given", {"Name": "n"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                    {"NoRegion": []}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[4861771634953160077, -8598997038585545473], [-3005328832599899177, 6771164867874054424],
+$       [-4057049242863234959, 351991052487153542], [-111270907376996537, -2215994125219990578],
+$       [-3717366545496033339, 1787528877968201524], [5063350591209321084, -8438055240862190397],
+$       [2098545027709329249, 597684718772810843], [-1507510197686239889, -2107028080534652281],
+$       [-2943119116259322993, 6241496811013716934], [-5730627717653222754, 4258267266949422894],
+$       [-5842231309895610080, 3964047790277530933], [8804572976240803092, 6702904424974198860],
+$       [8864448250022034278, -2851285059468864021], [-943243046831014212, -2107028080534652281],
+$       [2663417856210981722, 6866724955331522811], [6932079057452382388, 7240172482255393063],
+$       [2121644717209951542, 3909192712513745741], [-9182683031912978836, -7726985210057976391],
+$       [1191041081763204347, 3725609753460002039], [8389116400859572431, -2107028080534652281],
+$       [3840758662606812436, -7897049846409690533], [-707264695473664611, -634392439915705940],
+$       [-6223011432608448023, 9174041536840550758], [1568593163171318204, -5563063519019774128],
+$       [5988105116455522262, 6417412549807176255], [-7960484967945646974, -2168594620994209064],
+$       [-6386520534737395052, -6035503672199796020], [-6178140250124727141, -8438055240862190397],
+$       [35394531431496966, -6717805380077640519], [-7230340514360060104, -2107028080534652281],
+$       [7650715399293944128, 2970467024731661636], [-5479784800912307517, 752038793280514144],
+$       [-4354410883858897518, 7216384780736326308], [8743545504643652804, 601992053336275010],
+$       [-5165180943048904364, 5360080455228662623], [4244681230387242994, -9121844334635639714],
+$       [-1332956229667435132, -9009448128412024268], [-6882857378238127308, -4510263873512383981],
+$       [2582749751434592320, 2880311897520535987], [-4619299286830011573, -7444830103062506530],
+$       [-6569763151970969252, 56893084699071339], [1908951014710111126, 2444074012501673288],
+$       [7171822696270793624, -6626465717906787656], [7503736382026211076, 2144535894653264],
+$       [-7853569609573782339, -1652183572343419014], [-5772454097968226989, -6919353264326216672],
+$       [2845694426527805476, -3713092180921230359], [-1864946426893325845, 5567729163795912149],
+$       [1153870288622334508, 5334644301898664040], [4444113489788309271, -5137364396459196068],
+$       [5584748791779627536, 2300985640473920688], [-8885217818970742234, 4954208069202000752],
+$       [1266500862258960272, 1068700198003755196], [-8978873102988052529, 4333340139893289032]],
+$  "trailVerbose": [], "trailRewrites": []}

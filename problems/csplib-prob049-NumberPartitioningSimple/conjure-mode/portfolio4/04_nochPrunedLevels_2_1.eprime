@@ -1,0 +1,182 @@
+language ESSENCE' 1.0
+
+given n: int(1..)
+where n % 2 = 0
+letting let1 be n / 2
+find setA_Occurrence: matrix indexed by [int(1..n)] of bool
+letting let2 be n / 2
+find setB_Explicit: matrix indexed by [int(1..let2)] of int(1..n)
+branching on [setA_Occurrence, setB_Explicit]
+such that
+    sum([toInt(setA_Occurrence[q16]) | q16 : int(1..n)]) +
+    sum([toInt(!setA_Occurrence[setB_Explicit[q17]]) | q17 : int(1..let2)])
+    = n,
+    sum([toInt(setA_Occurrence[q20] /\ or([setB_Explicit[q22] = q20 | q22 : int(1..let2)])) | q20 : int(1..n)]) = 0,
+    sum([toInt(setA_Occurrence[i]) * catchUndef(i, 0) | i : int(1..n)]) = sum([setB_Explicit[q6] | q6 : int(1..let2)]),
+    sum([toInt(setA_Occurrence[i]) * catchUndef(i * i, 0) | i : int(1..n)]) =
+    sum([setB_Explicit[q9] * setB_Explicit[q9] | q9 : int(1..let2)]),
+    let1 = sum([toInt(setA_Occurrence[q1]) | q1 : int(1..n)]),
+    and([setB_Explicit[q2] < setB_Explicit[q2 + 1] | q2 : int(1..let2 - 1)])
+
+$ Conjure's
+$ {"finds": [{"Name": "setA"}, {"Name": "setB"}], "givens": [{"Name": "n"}], "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "dNum"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"MachineName": ["let", 1, []]},
+$        {"Op":
+$             {"MkOpDiv":
+$                  [{"Reference":
+$                        [{"Name": "n"},
+$                         {"DeclNoRepr":
+$                              ["Given", {"Name": "n"},
+$                               {"DomainInt":
+$                                    [{"TagInt": []},
+$                                     [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                               {"NoRegion": []}]}]},
+$                   {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}}],
+$       [{"MachineName": ["let", 2, []]},
+$        {"Op":
+$             {"MkOpDiv":
+$                  [{"Reference":
+$                        [{"Name": "n"},
+$                         {"DeclNoRepr":
+$                              ["Given", {"Name": "n"},
+$                               {"DomainInt":
+$                                    [{"TagInt": []},
+$                                     [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                               {"NoRegion": []}]}]},
+$                   {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 2, 2], [1, 1, 2], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["let", 3], ["q", 23]], "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "setA"},
+$        {"DomainSet":
+$             [{"Set_Occurrence": []},
+$              {"SizeAttr_Size":
+$                   {"Reference":
+$                        [{"MachineName": ["let", 1, []]},
+$                         {"Alias":
+$                              {"Op":
+$                                   {"MkOpDiv":
+$                                        [{"Reference":
+$                                              [{"Name": "n"},
+$                                               {"DeclHasRepr":
+$                                                    ["Given", {"Name": "n"},
+$                                                     {"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeLowerBounded":
+$                                                                 {"Constant":
+$                                                                      {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]},
+$                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}}}]}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "setB"},
+$        {"DomainSet":
+$             [{"Set_Explicit": []},
+$              {"SizeAttr_Size":
+$                   {"Reference":
+$                        [{"MachineName": ["let", 2, []]},
+$                         {"Alias":
+$                              {"Op":
+$                                   {"MkOpDiv":
+$                                        [{"Reference":
+$                                              [{"Name": "n"},
+$                                               {"DeclHasRepr":
+$                                                    ["Given", {"Name": "n"},
+$                                                     {"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeLowerBounded":
+$                                                                 {"Constant":
+$                                                                      {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]},
+$                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}}}]}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]],
+$  "representationsTree":
+$      [[{"Name": "n"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "setA"}, [{"rootLabel": {"Set_Occurrence": []}, "subForest": [{"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "setB"}, [{"rootLabel": {"Set_Explicit": []}, "subForest": [{"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "setA"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_Size": {"Reference": [{"MachineName": ["let", 1, []]}, null]}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n"}, null]}]}]]}]}],
+$       [{"Name": "setB"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_Size": {"Reference": [{"MachineName": ["let", 2, []]}, null]}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[-2678065133450268103, 458867755330228416], [-6359588240068740588, -8438055240862190397],
+$       [1527579812757026406, -7049485784405269508], [-5884874040051059975, -8157356536468438952],
+$       [-2305186092126284806, 2048779951933116782], [-4866118859718752559, -8237201303392340525],
+$       [1243840252686250894, -8960181730495973211], [-3320592646586825740, -976943483197560304],
+$       [552742991118976461, -5433600797369723661], [7240543912358801146, 7101165852257588578],
+$       [7089869976111498196, -5745445789296896056], [6332688073241529779, -8438055240862190397],
+$       [-2659888352896239338, -1499836800842848363], [-2231735273933175678, -5651921081228225980],
+$       [-5115757429726738656, -8438055240862190397], [669608238405541225, -4563153091406590949],
+$       [5960389143682832020, -8586870842609236640], [-7704561475050841100, 1243813576425164435],
+$       [-3647770933726680026, -1924888528517358438], [5607990045504963095, 4925559974816073246],
+$       [6469714243719274969, 6369831822603445240], [-1677591225552432864, 738564637317973993],
+$       [8673587669788071677, 7429630267181850683], [472403082349132444, -4662083386800102698],
+$       [8163052145158688361, 7558447167038828280], [-9187693014967551437, -3430041898846725338],
+$       [-7374948742945383853, -9178725866482106679], [-7769787880635136395, -32496200968589261],
+$       [-9196677117828708856, -6373732443639633363], [5221025425145656158, -8893894945937781922],
+$       [7455517831157873769, 8104497917038011921], [5820484157600245680, 3978703038923868920],
+$       [-4200531597307326947, 6149015375934603442], [-1887746946420138482, 2496340515110134391],
+$       [3750779156429062521, 181716615941878315], [-6518396507302063313, -8149315985198399950],
+$       [5689125297402044444, -2618562727192212286], [5916920086352657889, 1598549454291565939],
+$       [5225456267814185516, 3922963345676231641], [2167774441842478927, 7559731046407471814],
+$       [-1829967679886466669, -3872960050445686926], [-2506246438682453323, -2331625795713140263],
+$       [4188135339737957450, 1068700198003755196]],
+$  "trailVerbose": [], "trailRewrites": []}

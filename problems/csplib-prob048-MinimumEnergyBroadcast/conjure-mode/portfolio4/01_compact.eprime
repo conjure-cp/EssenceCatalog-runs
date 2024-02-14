@@ -1,0 +1,748 @@
+language ESSENCE' 1.0
+
+given numberNodes: int(1..)
+given initialNode: int(1..numberNodes)
+given fin1: int
+given fin2: int
+given linkCosts_FunctionND: matrix indexed by [int(1..numberNodes), int(1..numberNodes)] of int(0..fin2)
+find parents_Function1D: matrix indexed by [int(1..numberNodes)] of int(1..numberNodes)
+find depths_Function1D: matrix indexed by [int(1..numberNodes)] of int(1..numberNodes)
+letting let1 be
+        numberNodes *
+        max([linkCosts_FunctionND[q10_1, q10_2] | q10_1 : int(1..numberNodes), q10_2 : int(1..numberNodes)])
+find optVar: int(0..let1)
+branching on [parents_Function1D, depths_Function1D, optVar]
+minimising optVar
+such that
+    parents_Function1D[initialNode] = initialNode,
+    and([q6 != initialNode -> parents_Function1D[q6] != q6 /\ linkCosts_FunctionND[parents_Function1D[q6], q6] != 0
+             | q6 : int(1..numberNodes)]),
+    and([q8 != initialNode -> depths_Function1D[q8] > depths_Function1D[parents_Function1D[q8]]
+             | q8 : int(1..numberNodes)]),
+    optVar =
+    sum([max([linkCosts_FunctionND[parent, q4] * toInt(parents_Function1D[q4] = parent) | q4 : int(1..numberNodes)])
+             | parent : int(1..numberNodes)])
+
+$ Conjure's
+$ {"finds": [{"Name": "parents"}, {"Name": "depths"}, {"Name": "optVar"}],
+$  "givens": [{"Name": "numberNodes"}, {"Name": "initialNode"}, {"Name": "linkCosts"}], "enumGivens": [],
+$  "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "dNodes"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "numberNodes"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "numberNodes"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "dDepths"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "numberNodes"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "numberNodes"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"MachineName": ["let", 1, []]},
+$        {"Op":
+$             {"MkOpProduct":
+$                  {"AbstractLiteral":
+$                       {"AbsLitMatrix":
+$                            [{"DomainInt":
+$                                  [{"TagInt": []},
+$                                   [{"RangeBounded":
+$                                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                          {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                             [{"Reference":
+$                                   [{"Name": "numberNodes"},
+$                                    {"DeclNoRepr":
+$                                         ["Given", {"Name": "numberNodes"},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                          {"NoRegion": []}]}]},
+$                              {"Op":
+$                                   {"MkOpMax":
+$                                        {"Comprehension":
+$                                             [{"Reference":
+$                                                   [{"Name": "cost"},
+$                                                    {"InComprehension":
+$                                                         {"GenInExpr":
+$                                                              [{"AbsPatTuple":
+$                                                                    [{"Single": {"Name": "UNDERSCORE__"}},
+$                                                                     {"Single": {"Name": "cost"}}]},
+$                                                               {"Reference":
+$                                                                    [{"Name": "linkCosts"},
+$                                                                     {"DeclNoRepr":
+$                                                                          ["Given", {"Name": "linkCosts"},
+$                                                                           {"DomainFunction":
+$                                                                                [[],
+$                                                                                 [{"SizeAttr_Size":
+$                                                                                       {"Reference":
+$                                                                                            [{"MachineName":
+$                                                                                                  ["fin", 1, []]},
+$                                                                                             {"DeclNoRepr":
+$                                                                                                  ["Given",
+$                                                                                                   {"MachineName":
+$                                                                                                        ["fin", 1, []]},
+$                                                                                                   {"DomainInt":
+$                                                                                                        [{"TagInt": []},
+$                                                                                                         []]},
+$                                                                                                   {"NoRegion": []}]}]}},
+$                                                                                  "PartialityAttr_Total",
+$                                                                                  "JectivityAttr_None"],
+$                                                                                 {"DomainTuple":
+$                                                                                      [{"DomainInt":
+$                                                                                            [{"TagInt": []},
+$                                                                                             [{"RangeBounded":
+$                                                                                                   [{"Constant":
+$                                                                                                         {"ConstantInt":
+$                                                                                                              [{"TagInt":
+$                                                                                                                    []},
+$                                                                                                               1]}},
+$                                                                                                    {"Reference":
+$                                                                                                         [{"Name":
+$                                                                                                               "numberNodes"},
+$                                                                                                          {"DeclNoRepr":
+$                                                                                                               ["Given",
+$                                                                                                                {"Name":
+$                                                                                                                     "numberNodes"},
+$                                                                                                                {"DomainInt":
+$                                                                                                                     [{"TagInt":
+$                                                                                                                           []},
+$                                                                                                                      [{"RangeLowerBounded":
+$                                                                                                                            {"Constant":
+$                                                                                                                                 {"ConstantInt":
+$                                                                                                                                      [{"TagInt":
+$                                                                                                                                            []},
+$                                                                                                                                       1]}}}]]},
+$                                                                                                                {"NoRegion":
+$                                                                                                                     []}]}]}]}]]},
+$                                                                                       {"DomainInt":
+$                                                                                            [{"TagInt": []},
+$                                                                                             [{"RangeBounded":
+$                                                                                                   [{"Constant":
+$                                                                                                         {"ConstantInt":
+$                                                                                                              [{"TagInt":
+$                                                                                                                    []},
+$                                                                                                               1]}},
+$                                                                                                    {"Reference":
+$                                                                                                         [{"Name":
+$                                                                                                               "numberNodes"},
+$                                                                                                          {"DeclNoRepr":
+$                                                                                                               ["Given",
+$                                                                                                                {"Name":
+$                                                                                                                     "numberNodes"},
+$                                                                                                                {"DomainInt":
+$                                                                                                                     [{"TagInt":
+$                                                                                                                           []},
+$                                                                                                                      [{"RangeLowerBounded":
+$                                                                                                                            {"Constant":
+$                                                                                                                                 {"ConstantInt":
+$                                                                                                                                      [{"TagInt":
+$                                                                                                                                            []},
+$                                                                                                                                       1]}}}]]},
+$                                                                                                                {"NoRegion":
+$                                                                                                                     []}]}]}]}]]}]},
+$                                                                                 {"DomainInt":
+$                                                                                      [{"TagInt": []},
+$                                                                                       [{"RangeBounded":
+$                                                                                             [{"Constant":
+$                                                                                                   {"ConstantInt":
+$                                                                                                        [{"TagInt": []},
+$                                                                                                         0]}},
+$                                                                                              {"Reference":
+$                                                                                                   [{"MachineName":
+$                                                                                                         ["fin", 2, []]},
+$                                                                                                    {"DeclNoRepr":
+$                                                                                                         ["Given",
+$                                                                                                          {"MachineName":
+$                                                                                                               ["fin", 2,
+$                                                                                                                []]},
+$                                                                                                          {"DomainInt":
+$                                                                                                               [{"TagInt":
+$                                                                                                                     []},
+$                                                                                                                []]},
+$                                                                                                          {"NoRegion":
+$                                                                                                               []}]}]}]}]]}]},
+$                                                                           {"NoRegion": []}]}]}]}}]},
+$                                              [{"Generator":
+$                                                    {"GenInExpr":
+$                                                         [{"AbsPatTuple":
+$                                                               [{"Single": {"Name": "UNDERSCORE__"}},
+$                                                                {"Single": {"Name": "cost"}}]},
+$                                                          {"Reference":
+$                                                               [{"Name": "linkCosts"},
+$                                                                {"DeclNoRepr":
+$                                                                     ["Given", {"Name": "linkCosts"},
+$                                                                      {"DomainFunction":
+$                                                                           [[],
+$                                                                            [{"SizeAttr_Size":
+$                                                                                  {"Reference":
+$                                                                                       [{"MachineName": ["fin", 1, []]},
+$                                                                                        {"DeclNoRepr":
+$                                                                                             ["Given",
+$                                                                                              {"MachineName":
+$                                                                                                   ["fin", 1, []]},
+$                                                                                              {"DomainInt":
+$                                                                                                   [{"TagInt": []}, []]},
+$                                                                                              {"NoRegion": []}]}]}},
+$                                                                             "PartialityAttr_Total",
+$                                                                             "JectivityAttr_None"],
+$                                                                            {"DomainTuple":
+$                                                                                 [{"DomainInt":
+$                                                                                       [{"TagInt": []},
+$                                                                                        [{"RangeBounded":
+$                                                                                              [{"Constant":
+$                                                                                                    {"ConstantInt":
+$                                                                                                         [{"TagInt": []},
+$                                                                                                          1]}},
+$                                                                                               {"Reference":
+$                                                                                                    [{"Name":
+$                                                                                                          "numberNodes"},
+$                                                                                                     {"DeclNoRepr":
+$                                                                                                          ["Given",
+$                                                                                                           {"Name":
+$                                                                                                                "numberNodes"},
+$                                                                                                           {"DomainInt":
+$                                                                                                                [{"TagInt":
+$                                                                                                                      []},
+$                                                                                                                 [{"RangeLowerBounded":
+$                                                                                                                       {"Constant":
+$                                                                                                                            {"ConstantInt":
+$                                                                                                                                 [{"TagInt":
+$                                                                                                                                       []},
+$                                                                                                                                  1]}}}]]},
+$                                                                                                           {"NoRegion":
+$                                                                                                                []}]}]}]}]]},
+$                                                                                  {"DomainInt":
+$                                                                                       [{"TagInt": []},
+$                                                                                        [{"RangeBounded":
+$                                                                                              [{"Constant":
+$                                                                                                    {"ConstantInt":
+$                                                                                                         [{"TagInt": []},
+$                                                                                                          1]}},
+$                                                                                               {"Reference":
+$                                                                                                    [{"Name":
+$                                                                                                          "numberNodes"},
+$                                                                                                     {"DeclNoRepr":
+$                                                                                                          ["Given",
+$                                                                                                           {"Name":
+$                                                                                                                "numberNodes"},
+$                                                                                                           {"DomainInt":
+$                                                                                                                [{"TagInt":
+$                                                                                                                      []},
+$                                                                                                                 [{"RangeLowerBounded":
+$                                                                                                                       {"Constant":
+$                                                                                                                            {"ConstantInt":
+$                                                                                                                                 [{"TagInt":
+$                                                                                                                                       []},
+$                                                                                                                                  1]}}}]]},
+$                                                                                                           {"NoRegion":
+$                                                                                                                []}]}]}]}]]}]},
+$                                                                            {"DomainInt":
+$                                                                                 [{"TagInt": []},
+$                                                                                  [{"RangeBounded":
+$                                                                                        [{"Constant":
+$                                                                                              {"ConstantInt":
+$                                                                                                   [{"TagInt": []}, 0]}},
+$                                                                                         {"Reference":
+$                                                                                              [{"MachineName":
+$                                                                                                    ["fin", 2, []]},
+$                                                                                               {"DeclNoRepr":
+$                                                                                                    ["Given",
+$                                                                                                     {"MachineName":
+$                                                                                                          ["fin", 2,
+$                                                                                                           []]},
+$                                                                                                     {"DomainInt":
+$                                                                                                          [{"TagInt":
+$                                                                                                                []},
+$                                                                                                           []]},
+$                                                                                                     {"NoRegion":
+$                                                                                                          []}]}]}]}]]}]},
+$                                                                      {"NoRegion": []}]}]}]}}]]}}}]]}}}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Compact": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["fin", 3], ["let", 2], ["q", 11]], "nbExtraGivens": 2,
+$  "representations":
+$      [[{"Name": "numberNodes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "parents"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "numberNodes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "numberNodes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "numberNodes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "numberNodes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "initialNode"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                     {"Reference":
+$                          [{"Name": "numberNodes"},
+$                           {"DeclHasRepr":
+$                                ["Given", {"Name": "numberNodes"},
+$                                 {"DomainInt":
+$                                      [{"TagInt": []},
+$                                       [{"RangeLowerBounded":
+$                                             {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}],
+$       [{"Name": "linkCosts"},
+$        {"DomainFunction":
+$             [{"Function_ND": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 1, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "numberNodes"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "numberNodes"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "numberNodes"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "numberNodes"},
+$                                             {"DomainInt":
+$                                                  [{"TagInt": []},
+$                                                   [{"RangeLowerBounded":
+$                                                         {"Constant":
+$                                                              {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 2, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 2, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "depths"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "numberNodes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "numberNodes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "numberNodes"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "numberNodes"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "optVar"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference":
+$                          [{"MachineName": ["let", 1, []]},
+$                           {"Alias":
+$                                {"Op":
+$                                     {"MkOpProduct":
+$                                          {"AbstractLiteral":
+$                                               {"AbsLitMatrix":
+$                                                    [{"DomainInt":
+$                                                          [{"TagInt": []},
+$                                                           [{"RangeBounded":
+$                                                                 [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                  {"Constant":
+$                                                                       {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                     [{"Reference":
+$                                                           [{"Name": "numberNodes"},
+$                                                            {"DeclHasRepr":
+$                                                                 ["Given", {"Name": "numberNodes"},
+$                                                                  {"DomainInt":
+$                                                                       [{"TagInt": []},
+$                                                                        [{"RangeLowerBounded":
+$                                                                              {"Constant":
+$                                                                                   {"ConstantInt":
+$                                                                                        [{"TagInt": []}, 1]}}}]]}]}]},
+$                                                      {"Op":
+$                                                           {"MkOpMax":
+$                                                                {"Comprehension":
+$                                                                     [{"Reference":
+$                                                                           [{"Name": "cost"},
+$                                                                            {"InComprehension":
+$                                                                                 {"GenInExpr":
+$                                                                                      [{"AbsPatTuple":
+$                                                                                            [{"Single":
+$                                                                                                  {"Name":
+$                                                                                                       "UNDERSCORE__"}},
+$                                                                                             {"Single":
+$                                                                                                  {"Name": "cost"}}]},
+$                                                                                       {"Reference":
+$                                                                                            [{"Name": "linkCosts"},
+$                                                                                             {"DeclHasRepr":
+$                                                                                                  ["Given",
+$                                                                                                   {"Name": "linkCosts"},
+$                                                                                                   {"DomainFunction":
+$                                                                                                        [{"Function_ND":
+$                                                                                                              []},
+$                                                                                                         [{"SizeAttr_Size":
+$                                                                                                               {"Reference":
+$                                                                                                                    [{"MachineName":
+$                                                                                                                          ["fin",
+$                                                                                                                           1,
+$                                                                                                                           []]},
+$                                                                                                                     {"DeclHasRepr":
+$                                                                                                                          ["Given",
+$                                                                                                                           {"MachineName":
+$                                                                                                                                ["fin",
+$                                                                                                                                 1,
+$                                                                                                                                 []]},
+$                                                                                                                           {"DomainInt":
+$                                                                                                                                [{"TagInt":
+$                                                                                                                                      []},
+$                                                                                                                                 []]}]}]}},
+$                                                                                                          "PartialityAttr_Total",
+$                                                                                                          "JectivityAttr_None"],
+$                                                                                                         {"DomainTuple":
+$                                                                                                              [{"DomainInt":
+$                                                                                                                    [{"TagInt":
+$                                                                                                                          []},
+$                                                                                                                     [{"RangeBounded":
+$                                                                                                                           [{"Constant":
+$                                                                                                                                 {"ConstantInt":
+$                                                                                                                                      [{"TagInt":
+$                                                                                                                                            []},
+$                                                                                                                                       1]}},
+$                                                                                                                            {"Reference":
+$                                                                                                                                 [{"Name":
+$                                                                                                                                       "numberNodes"},
+$                                                                                                                                  {"DeclHasRepr":
+$                                                                                                                                       ["Given",
+$                                                                                                                                        {"Name":
+$                                                                                                                                             "numberNodes"},
+$                                                                                                                                        {"DomainInt":
+$                                                                                                                                             [{"TagInt":
+$                                                                                                                                                   []},
+$                                                                                                                                              [{"RangeLowerBounded":
+$                                                                                                                                                    {"Constant":
+$                                                                                                                                                         {"ConstantInt":
+$                                                                                                                                                              [{"TagInt":
+$                                                                                                                                                                    []},
+$                                                                                                                                                               1]}}}]]}]}]}]}]]},
+$                                                                                                               {"DomainInt":
+$                                                                                                                    [{"TagInt":
+$                                                                                                                          []},
+$                                                                                                                     [{"RangeBounded":
+$                                                                                                                           [{"Constant":
+$                                                                                                                                 {"ConstantInt":
+$                                                                                                                                      [{"TagInt":
+$                                                                                                                                            []},
+$                                                                                                                                       1]}},
+$                                                                                                                            {"Reference":
+$                                                                                                                                 [{"Name":
+$                                                                                                                                       "numberNodes"},
+$                                                                                                                                  {"DeclHasRepr":
+$                                                                                                                                       ["Given",
+$                                                                                                                                        {"Name":
+$                                                                                                                                             "numberNodes"},
+$                                                                                                                                        {"DomainInt":
+$                                                                                                                                             [{"TagInt":
+$                                                                                                                                                   []},
+$                                                                                                                                              [{"RangeLowerBounded":
+$                                                                                                                                                    {"Constant":
+$                                                                                                                                                         {"ConstantInt":
+$                                                                                                                                                              [{"TagInt":
+$                                                                                                                                                                    []},
+$                                                                                                                                                               1]}}}]]}]}]}]}]]}]},
+$                                                                                                         {"DomainInt":
+$                                                                                                              [{"TagInt":
+$                                                                                                                    []},
+$                                                                                                               [{"RangeBounded":
+$                                                                                                                     [{"Constant":
+$                                                                                                                           {"ConstantInt":
+$                                                                                                                                [{"TagInt":
+$                                                                                                                                      []},
+$                                                                                                                                 0]}},
+$                                                                                                                      {"Reference":
+$                                                                                                                           [{"MachineName":
+$                                                                                                                                 ["fin",
+$                                                                                                                                  2,
+$                                                                                                                                  []]},
+$                                                                                                                            {"DeclHasRepr":
+$                                                                                                                                 ["Given",
+$                                                                                                                                  {"MachineName":
+$                                                                                                                                       ["fin",
+$                                                                                                                                        2,
+$                                                                                                                                        []]},
+$                                                                                                                                  {"DomainInt":
+$                                                                                                                                       [{"TagInt":
+$                                                                                                                                             []},
+$                                                                                                                                        []]}]}]}]}]]}]}]}]}]}}]},
+$                                                                      [{"Generator":
+$                                                                            {"GenInExpr":
+$                                                                                 [{"AbsPatTuple":
+$                                                                                       [{"Single":
+$                                                                                             {"Name": "UNDERSCORE__"}},
+$                                                                                        {"Single": {"Name": "cost"}}]},
+$                                                                                  {"Reference":
+$                                                                                       [{"Name": "linkCosts"},
+$                                                                                        {"DeclHasRepr":
+$                                                                                             ["Given",
+$                                                                                              {"Name": "linkCosts"},
+$                                                                                              {"DomainFunction":
+$                                                                                                   [{"Function_ND": []},
+$                                                                                                    [{"SizeAttr_Size":
+$                                                                                                          {"Reference":
+$                                                                                                               [{"MachineName":
+$                                                                                                                     ["fin",
+$                                                                                                                      1,
+$                                                                                                                      []]},
+$                                                                                                                {"DeclHasRepr":
+$                                                                                                                     ["Given",
+$                                                                                                                      {"MachineName":
+$                                                                                                                           ["fin",
+$                                                                                                                            1,
+$                                                                                                                            []]},
+$                                                                                                                      {"DomainInt":
+$                                                                                                                           [{"TagInt":
+$                                                                                                                                 []},
+$                                                                                                                            []]}]}]}},
+$                                                                                                     "PartialityAttr_Total",
+$                                                                                                     "JectivityAttr_None"],
+$                                                                                                    {"DomainTuple":
+$                                                                                                         [{"DomainInt":
+$                                                                                                               [{"TagInt":
+$                                                                                                                     []},
+$                                                                                                                [{"RangeBounded":
+$                                                                                                                      [{"Constant":
+$                                                                                                                            {"ConstantInt":
+$                                                                                                                                 [{"TagInt":
+$                                                                                                                                       []},
+$                                                                                                                                  1]}},
+$                                                                                                                       {"Reference":
+$                                                                                                                            [{"Name":
+$                                                                                                                                  "numberNodes"},
+$                                                                                                                             {"DeclHasRepr":
+$                                                                                                                                  ["Given",
+$                                                                                                                                   {"Name":
+$                                                                                                                                        "numberNodes"},
+$                                                                                                                                   {"DomainInt":
+$                                                                                                                                        [{"TagInt":
+$                                                                                                                                              []},
+$                                                                                                                                         [{"RangeLowerBounded":
+$                                                                                                                                               {"Constant":
+$                                                                                                                                                    {"ConstantInt":
+$                                                                                                                                                         [{"TagInt":
+$                                                                                                                                                               []},
+$                                                                                                                                                          1]}}}]]}]}]}]}]]},
+$                                                                                                          {"DomainInt":
+$                                                                                                               [{"TagInt":
+$                                                                                                                     []},
+$                                                                                                                [{"RangeBounded":
+$                                                                                                                      [{"Constant":
+$                                                                                                                            {"ConstantInt":
+$                                                                                                                                 [{"TagInt":
+$                                                                                                                                       []},
+$                                                                                                                                  1]}},
+$                                                                                                                       {"Reference":
+$                                                                                                                            [{"Name":
+$                                                                                                                                  "numberNodes"},
+$                                                                                                                             {"DeclHasRepr":
+$                                                                                                                                  ["Given",
+$                                                                                                                                   {"Name":
+$                                                                                                                                        "numberNodes"},
+$                                                                                                                                   {"DomainInt":
+$                                                                                                                                        [{"TagInt":
+$                                                                                                                                              []},
+$                                                                                                                                         [{"RangeLowerBounded":
+$                                                                                                                                               {"Constant":
+$                                                                                                                                                    {"ConstantInt":
+$                                                                                                                                                         [{"TagInt":
+$                                                                                                                                                               []},
+$                                                                                                                                                          1]}}}]]}]}]}]}]]}]},
+$                                                                                                    {"DomainInt":
+$                                                                                                         [{"TagInt": []},
+$                                                                                                          [{"RangeBounded":
+$                                                                                                                [{"Constant":
+$                                                                                                                      {"ConstantInt":
+$                                                                                                                           [{"TagInt":
+$                                                                                                                                 []},
+$                                                                                                                            0]}},
+$                                                                                                                 {"Reference":
+$                                                                                                                      [{"MachineName":
+$                                                                                                                            ["fin",
+$                                                                                                                             2,
+$                                                                                                                             []]},
+$                                                                                                                       {"DeclHasRepr":
+$                                                                                                                            ["Given",
+$                                                                                                                             {"MachineName":
+$                                                                                                                                  ["fin",
+$                                                                                                                                   2,
+$                                                                                                                                   []]},
+$                                                                                                                             {"DomainInt":
+$                                                                                                                                  [{"TagInt":
+$                                                                                                                                        []},
+$                                                                                                                                   []]}]}]}]}]]}]}]}]}]}}]]}}}]]}}}}}]}]}]]}]],
+$  "representationsTree":
+$      [[{"Name": "depths"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "initialNode"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "linkCosts"},
+$        [{"rootLabel": {"Function_ND": []},
+$          "subForest":
+$              [{"rootLabel": null,
+$                "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]},
+$               {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "numberNodes"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "optVar"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "parents"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "numberNodes"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "initialNode"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                     {"Reference": [{"Name": "numberNodes"}, null]}]}]]}],
+$       [{"Name": "linkCosts"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainTuple":
+$                   [{"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "numberNodes"}, null]}]}]]},
+$                    {"DomainInt":
+$                         [{"TagInt": []},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                 {"Reference": [{"Name": "numberNodes"}, null]}]}]]}]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 0]}}}]]}]}],
+$       [{"Name": "parents"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "numberNodes"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "numberNodes"}, null]}]}]]}]}],
+$       [{"Name": "depths"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "numberNodes"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "numberNodes"}, null]}]}]]}]}],
+$       [{"Name": "optVar"},
+$        {"DomainInt":
+$             [{"TagInt": []},
+$              [{"RangeBounded":
+$                    [{"Constant": {"ConstantInt": [{"TagInt": []}, 0]}},
+$                     {"Reference": [{"MachineName": ["let", 1, []]}, null]}]}]]}]],
+$  "trailGeneralised":
+$      [[5117904800592498124, 5210366993802047387], [862302821593140467, 674964170902710626],
+$       [-4989624562056655323, -2079315819800921761], [-6921037932789155599, -5646743244234259888],
+$       [5467693910132489191, 6582676543632779632], [7883290623569196557, -3206293992506048657],
+$       [-9002643219225375765, -7320959306908638374], [7795086070799559557, -1623840179539440912],
+$       [-5681953777485034961, -1623840179539440912], [9129407853168657274, -744068783128595265],
+$       [309462695874281332, 1895751134017110741], [-8940368195522457690, 6385371706980343944],
+$       [193833108327687435, -1129002256265825829], [5318129984189756640, -548119606015028325],
+$       [3282542750408252415, -1453728658794663980], [4561932087385808141, -7189995129163820610],
+$       [-1362148285358678871, -1453728658794663980], [1337018016553784196, -7189995129163820610],
+$       [-380086623811955567, -1453728658794663980], [2113248579860506026, 8686747008358124115],
+$       [7592889062936426480, -6591269046391918639], [1326231132827051434, 8088731754505717918],
+$       [-2470200307731906229, -2642552627719262573], [55840572863125145, -6568998093393257459],
+$       [-3564081078267524652, -5161898387919048035], [8416601316476525232, 5580377950749561425],
+$       [-6397942416497664606, 2035756772994343703], [1914992870996834359, 7925597502297056050],
+$       [4654654470095137312, 1299117333945692416], [-3827378573938601403, -246039017266780177],
+$       [3023440832740425673, 8991635750042799019], [8789879276259736251, -9184756525902270455],
+$       [1059407412900961587, 3424096189732551361], [3613942674571681478, -3762687058060353203],
+$       [174576979846852325, 8008055417709749270], [-6920153105766599178, -7897675147461979509],
+$       [3156286251248282576, 6214242968521890875], [3507176870260390791, 2636911040792670992],
+$       [4810900041045108616, 1327152210191655669], [-3722262881154758639, 6794018145404485952],
+$       [1391725996931715816, -2717752761680935708], [307890477494249698, -4150812578699819432]],
+$  "trailVerbose": [], "trailRewrites": []}

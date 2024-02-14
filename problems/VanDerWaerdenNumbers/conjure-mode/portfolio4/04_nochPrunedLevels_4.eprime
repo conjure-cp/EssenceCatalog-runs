@@ -1,0 +1,145 @@
+language ESSENCE' 1.0
+
+given k: int(1..)
+given l: int(1..)
+given n: int(1..)
+find p_PartitionOccurrence_NumParts: int(1..k)
+find p_PartitionOccurrence_WhichPart: matrix indexed by [int(1..n)] of int(1..k)
+find p_PartitionOccurrence_PartSizes: matrix indexed by [int(1..k)] of int(0..n)
+find p_PartitionOccurrence_FirstIndex: matrix indexed by [int(1..k)] of int(1..n)
+branching on
+    [p_PartitionOccurrence_NumParts, p_PartitionOccurrence_WhichPart, p_PartitionOccurrence_PartSizes,
+     p_PartitionOccurrence_FirstIndex]
+such that
+    and([q11 <= p_PartitionOccurrence_NumParts ->
+         and([and([!and([or([p_PartitionOccurrence_WhichPart[q16] = q11 /\ q16 = start + i * width | q16 : int(1..n)])
+                             | i : int(0..l - 1)])
+                       | width : int(1..(n - start + 1) / (l - 1))])
+                  | start : int(1..n - l + 1)])
+             | q11 : int(1..k)]),
+    and([q1 <= p_PartitionOccurrence_NumParts -> p_PartitionOccurrence_PartSizes[q1] <= n | q1 : int(1..k)]),
+    and([q1 > p_PartitionOccurrence_NumParts -> p_PartitionOccurrence_PartSizes[q1] = 0 | q1 : int(1..k)]),
+    k = p_PartitionOccurrence_NumParts,
+    and([q2 <= p_PartitionOccurrence_NumParts -> or([p_PartitionOccurrence_WhichPart[q3] = q2 | q3 : int(1..n)])
+             | q2 : int(3..k)]),
+    p_PartitionOccurrence_NumParts = max([p_PartitionOccurrence_WhichPart[q4] | q4 : int(1..n)]),
+    and([p_PartitionOccurrence_PartSizes[q5] = sum([toInt(p_PartitionOccurrence_WhichPart[q6] = q5) | q6 : int(1..n)])
+             | q5 : int(1..k)]),
+    and([q7 <= p_PartitionOccurrence_NumParts ->
+         and([p_PartitionOccurrence_WhichPart[q8] = q7 -> p_PartitionOccurrence_FirstIndex[q7] <= q8 | q8 : int(1..n)])
+             | q7 : int(1..k)]),
+    and([q7 <= p_PartitionOccurrence_NumParts ->
+         or([p_PartitionOccurrence_WhichPart[q8] = q7 /\ p_PartitionOccurrence_FirstIndex[q7] = q8 | q8 : int(1..n)])
+             | q7 : int(1..k)]),
+    and([q7 > p_PartitionOccurrence_NumParts -> p_PartitionOccurrence_FirstIndex[q7] = 1 | q7 : int(1..k)]),
+    and([q9 <= p_PartitionOccurrence_NumParts /\ q10 <= p_PartitionOccurrence_NumParts ->
+         (q9 < q10 <-> p_PartitionOccurrence_FirstIndex[q9] < p_PartitionOccurrence_FirstIndex[q10])
+             | q9 : int(1..k), q10 : int(1..k)])
+
+$ Conjure's
+$ {"finds": [{"Name": "p"}], "givens": [{"Name": "k"}, {"Name": "l"}, {"Name": "n"}], "enumGivens": [],
+$  "enumLettings": [], "lettings": [], "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 4, 4], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["q", 20]], "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "l"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "p"},
+$        {"DomainPartition":
+$             [{"Partition_Occurrence": []},
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_Size":
+$                        {"Reference":
+$                             [{"Name": "k"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "k"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "n"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]],
+$  "representationsTree":
+$      [[{"Name": "k"}, [{"rootLabel": null, "subForest": []}]], [{"Name": "l"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "n"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "p"},
+$        [{"rootLabel": {"Partition_Occurrence": []}, "subForest": [{"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "l"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "p"},
+$        {"DomainPartition":
+$             [[],
+$              {"isRegular": false, "partsNum": {"SizeAttr_Size": {"Reference": [{"Name": "k"}, null]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n"},
+$                              {"DeclNoRepr":
+$                                   ["Given", {"Name": "n"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                    {"NoRegion": []}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[1361348462390122521, 5924072837824325568], [2090104597730034496, -6231357634193929518],
+$       [55394130397606288, 2518670862033697075], [-4718631703566999766, 7687825362023239162],
+$       [758613396900019598, -4570545888684217195], [1479264114686005385, 4661454282079849897],
+$       [-5416134701549602642, -7428299580570177439], [8261518507653423748, -157597296022285127],
+$       [-6170991344488543278, 4797475105073513266], [-5272162204725311942, -7429774626651545054],
+$       [-6442666739961404192, -3388135651802306520], [766879234910786508, 7777400965553216778],
+$       [-667067637886458746, 8448144068804302608], [-1403782722792471505, 7186158709148564018],
+$       [7975514667286264392, -3882796862313380541], [6760369636014291030, 6729465212692372820],
+$       [-1788696865272071437, 5749962364861213203], [496207914786922084, 70926013302528588],
+$       [-4862723406010424582, 4364944947868409900], [3114137818526991222, -8163679637771526563],
+$       [1894802571340848680, -2352711121073956560], [5951691420564226277, -5850032693243676928],
+$       [-7667773947334936129, -8438055240862190397], [5357587996855735632, 3073995687042058435],
+$       [-6160609652795097318, -5580272161116353912], [8138988130541176108, -9017064291522342983],
+$       [-3721580649708661188, 111741678577575850], [7293587362319165070, 5384599673204978492],
+$       [-2633374370193904739, -6231056722827055916], [2099800972483254900, -4813599558687606885],
+$       [-7036843840296104226, 7969887580711788384], [-1016809800942803782, -8713742184222080887],
+$       [993669430171165609, -304278695752724156], [2392236247945394480, 457004040330145282],
+$       [-6268860590460855476, -5858360469425561225], [-1864946426893325845, -986986288031887045],
+$       [1153870288622334508, 5334644301898664040], [4444113489788309271, -5137364396459196068],
+$       [5584748791779627536, 2300985640473920688], [-8885217818970742234, 4954208069202000752],
+$       [1266500862258960272, 1068700198003755196], [-8978873102988052529, 4333340139893289032]],
+$  "trailVerbose": [], "trailRewrites": []}

@@ -1,0 +1,211 @@
+language ESSENCE' 1.0
+
+given Tasks_EnumSize: int
+given fin1: int
+given fin2: int
+given shifts_ExplicitR6_ExplicitVarSizeWithDummy:
+        matrix indexed by [int(1..fin1), int(1..fin2)] of int(1..Tasks_EnumSize + 1)
+find sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker: int(0..Tasks_EnumSize)
+find sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence:
+        matrix indexed by [int(1..Tasks_EnumSize), int(1..Tasks_EnumSize)] of bool
+branching on
+    [sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker,
+     sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence]
+minimising sum([toInt(q28 <= sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker) | q28 : int(1..Tasks_EnumSize)])
+such that
+    and([q16 <= sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         or([and([sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence
+                      [q16, shifts_ExplicitR6_ExplicitVarSizeWithDummy[q18, q20]]
+                      | q20 : int(1..fin2), shifts_ExplicitR6_ExplicitVarSizeWithDummy[q18, q20] != Tasks_EnumSize + 1])
+             /\
+             and([sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q16, q21] ->
+                  or([shifts_ExplicitR6_ExplicitVarSizeWithDummy[q18, q23] = q21
+                          | q23 : int(1..fin2),
+                            shifts_ExplicitR6_ExplicitVarSizeWithDummy[q18, q23] != Tasks_EnumSize + 1])
+                      | q21 : int(1..Tasks_EnumSize)])
+                 | q18 : int(1..fin1)])
+             | q16 : int(1..Tasks_EnumSize)]),
+    and([1 =
+         sum([toInt(q9 <= sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker /\
+                    sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q9, q1])
+                  | q9 : int(1..Tasks_EnumSize)])
+             | q1 : int(1..Tasks_EnumSize)]),
+    and([q24 <= sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         sum([toInt(sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q24, q25])
+                  | q25 : int(1..Tasks_EnumSize)])
+         >= 1
+             | q24 : int(1..Tasks_EnumSize)]),
+    and([q4 + 1 <= sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         [-toInt(sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q4, q10])
+              | q10 : int(1..Tasks_EnumSize)]
+         <lex
+         [-toInt(sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q4 + 1, q11])
+              | q11 : int(1..Tasks_EnumSize)]
+             | q4 : int(1..Tasks_EnumSize - 1)]),
+    and([q5 > sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         and([sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q5, q12] = false
+                  | q12 : int(1..Tasks_EnumSize)])
+             | q5 : int(1..Tasks_EnumSize)]),
+    sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker <= Tasks_EnumSize,
+    and([q6 <= sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         sum([toInt(sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q6, q7])
+                  | q7 : int(1..Tasks_EnumSize)])
+         <= Tasks_EnumSize
+             | q6 : int(1..Tasks_EnumSize)]),
+    Tasks_EnumSize =
+    sum([toInt(q13 <= sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker) *
+         catchUndef(sum([toInt(sched_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q13, q14])
+                             | q14 : int(1..Tasks_EnumSize)]),
+                    0)
+             | q13 : int(1..Tasks_EnumSize)])
+
+$ Conjure's
+$ {"finds": [{"Name": "sched"}], "givens": [{"Name": "shifts"}], "enumGivens": [{"Name": "Tasks"}], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "Tasks"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagEnum": "Tasks"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagEnum": "Tasks"}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "Tasks_EnumSize"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagEnum": "Tasks"}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Compact": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 4], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1]],
+$  "nameGenState": [["fin", 3], ["q", 29]], "nbExtraGivens": 2,
+$  "representations":
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagEnum": "Tasks"}, []]}],
+$       [{"Name": "sched"},
+$        {"DomainPartition":
+$             [{"Partition_AsSet": [{"Set_ExplicitVarSizeWithMarker": []}, {"Set_Occurrence": []}]},
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "Tasks_EnumSize"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagEnum": "Tasks"}, []]}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "Tasks_EnumSize"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagEnum": "Tasks"}, []]}]}]}}},
+$              {"DomainInt":
+$                   [{"TagEnum": "Tasks"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "Tasks"}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "Tasks_EnumSize"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "Tasks_EnumSize"},
+$                                       {"DomainInt": [{"TagEnum": "Tasks"}, []]}]}]}]}]]}]}],
+$       [{"Name": "shifts"},
+$        {"DomainSet":
+$             [{"Set_Explicit": []},
+$              {"SizeAttr_Size":
+$                   {"Reference":
+$                        [{"MachineName": ["fin", 1, []]},
+$                         {"DeclHasRepr":
+$                              ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$              {"DomainSet":
+$                   [{"Set_ExplicitVarSizeWithDummy": []},
+$                    {"SizeAttr_MaxSize":
+$                         {"Reference":
+$                              [{"MachineName": ["fin", 2, []]},
+$                               {"DeclHasRepr":
+$                                    ["Given", {"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$                    {"DomainInt":
+$                         [{"TagEnum": "Tasks"},
+$                          [{"RangeBounded":
+$                                [{"Constant": {"ConstantInt": [{"TagEnum": "Tasks"}, 1]}},
+$                                 {"Reference":
+$                                      [{"Name": "Tasks_EnumSize"},
+$                                       {"DeclHasRepr":
+$                                            ["Given", {"Name": "Tasks_EnumSize"},
+$                                             {"DomainInt": [{"TagEnum": "Tasks"}, []]}]}]}]}]]}]}]}]],
+$  "representationsTree":
+$      [[{"Name": "Tasks_EnumSize"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "sched"},
+$        [{"rootLabel": {"Partition_AsSet": [{"Set_ExplicitVarSizeWithMarker": []}, {"Set_Occurrence": []}]},
+$          "subForest": [{"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "shifts"},
+$        [{"rootLabel": {"Set_Explicit": []},
+$          "subForest":
+$              [{"rootLabel": {"Set_ExplicitVarSizeWithDummy": []},
+$                "subForest": [{"rootLabel": null, "subForest": []}]}]}]]],
+$  "originalDomains":
+$      [[{"Name": "shifts"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_None": []},
+$              {"DomainSet": [[], {"SizeAttr_None": []}, {"DomainEnum": [{"Name": "Tasks"}, null, null]}]}]}],
+$       [{"Name": "sched"},
+$        {"DomainPartition":
+$             [[],
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "Tasks_EnumSize"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "Tasks_EnumSize"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "Tasks_EnumSize"}, {"DomainInt": [{"TagInt": []}, []]}]}]}}},
+$              {"DomainEnum": [{"Name": "Tasks"}, null, null]}]}]],
+$  "trailGeneralised":
+$      [[-716729725122125150, -7655455941790303129], [-3444253757852626065, 335736040656479828],
+$       [-3039175495406420321, -8438055240862190397], [-556035675165295999, 8339940993146013945],
+$       [-2768421634129412045, 4202043414093114106], [-6228310180478232163, 6577386378376304515],
+$       [7635755660847465417, 6305055822840611758], [-1040267766306340172, 4730581464891774],
+$       [8854282698622659878, 5398734105617643876], [-7017169566522432123, 1175456529882811356],
+$       [4395632914875488042, -8438055240862190397], [5593765295987849183, -2844892319332880847],
+$       [-3516893657254870951, 3429485677361803400], [-2384675074148443460, -2713260215850247841],
+$       [81420016325522192, -2114782408645958729], [-8852515438255485980, -5268345409085805821],
+$       [1100654765399299206, 7329955209915625996], [5663342748489152550, 9170942262073789878],
+$       [5798379099634883229, -7649753757026067136], [4135130085082204706, -6926696131232957237],
+$       [-1246777008086191528, -4268241007345113865], [1482092667382252806, -6511450567126850485],
+$       [4799961871568059871, 1508624774021037091], [1784770560299014009, -5250653085956124005],
+$       [2605814277566380133, 4799816407565218897], [5585207504846720125, -7551018344737654042],
+$       [2261946464973521143, -6926696131232957237], [7999242709234820495, 8121961591132678949],
+$       [5275169289266184335, 7814944653875895719], [-3165480386188314387, -7679986922845268869],
+$       [-6908462420705608481, 4087242553276913707], [9178112827679490552, 2121987061532061815],
+$       [6422600389470042235, 730650459306459286], [-7665919790554048491, 2489272573679332391],
+$       [6554419975823435367, -6961142452419064212], [-5391387504091364038, -7933502413153162527],
+$       [3410129839694119694, -5794847126488623280], [-3650551902814659306, 8603305432871885549],
+$       [-3634025971936301130, -8394676505374427319], [2531933499210396544, 5293030718174371984],
+$       [-2533848063007966223, -8438055240862190397], [2667513757723526822, 2441643264409915437],
+$       [5240573576659372112, -7396627583300954336], [-2003219844891733211, -3519543040339887037],
+$       [6264292959692217256, 7159360862742223708], [4435403989055679311, -5910625897767832185],
+$       [-4740096482507156677, 4682155346449119432], [-844527101953583, -1826589284072206652],
+$       [5487901311542943888, -1612972432691984149], [-706746285324408050, 810410705618761528],
+$       [9011220274418911643, 5673323044547356066], [-8518006923680786283, -1805390821920445860],
+$       [4844268492301376017, 3563879206639852536], [-4721316843820250962, 6739918762772592960],
+$       [8682160667235258908, 7073151506741198039], [-4060528625190054534, 6718409842121560716],
+$       [-5544564712000830895, 4293171925407621036], [2290410450133952978, -4785371734792469622],
+$       [-3433676729832914172, 3194862569719252082], [-2106427089970486362, 2154687556166604332],
+$       [8704152697054195300, -8438055240862190397], [-2592917585030498212, 2449773871956720312],
+$       [7107753791314340376, 1373363700102366045], [-1764392295605013796, 159781450215252805],
+$       [7751258041610894196, -8996942587456503918], [3260187442627737672, 4535291573067135378],
+$       [6069672303242434613, 5326694773269435961], [-8233485590392696906, 1767052829194348695],
+$       [8228541780869755003, 1402899549994805842], [-3722262881154758639, 6794018145404485952],
+$       [1391725996931715816, -2717752761680935708]],
+$  "trailVerbose": [], "trailRewrites": []}

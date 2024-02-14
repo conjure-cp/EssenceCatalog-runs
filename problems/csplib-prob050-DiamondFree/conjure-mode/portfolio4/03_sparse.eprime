@@ -1,0 +1,258 @@
+language ESSENCE' 1.0
+
+given n: int
+find edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker: int(0..n * n)
+find edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1: matrix indexed by [int(1..n * n)] of int(1..n)
+find edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2: matrix indexed by [int(1..n * n)] of int(1..n)
+find degrees_Function1D: matrix indexed by [int(1..n)] of int(1..n)
+branching on [degrees_Function1D]
+such that
+    and([degrees_Function1D[i] =
+         sum([toInt(or([q30 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                        (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q30] = i /\
+                         edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q30] = j)
+                            | q30 : int(1..n * n)]))
+                  | j : int(1..n)])
+             | i : int(1..n)]),
+    and([degrees_Function1D[i - 1] >= degrees_Function1D[i] | i : int(2..n)]),
+    and([sum([toInt(or([q12 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                        (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q12] = i /\
+                         edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q12] = j)
+                            | q12 : int(1..n * n)])),
+              toInt(or([q14 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                        (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q14] = i /\
+                         edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q14] = k)
+                            | q14 : int(1..n * n)])),
+              toInt(or([q16 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                        (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q16] = i /\
+                         edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q16] = l)
+                            | q16 : int(1..n * n)])),
+              toInt(or([q18 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                        (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q18] = j /\
+                         edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q18] = k)
+                            | q18 : int(1..n * n)])),
+              toInt(or([q20 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                        (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q20] = j /\
+                         edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q20] = l)
+                            | q20 : int(1..n * n)])),
+              toInt(or([q22 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+                        (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q22] = k /\
+                         edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q22] = l)
+                            | q22 : int(1..n * n)]));
+                  int(1..6)])
+         <= 4
+         /\
+         and([!([i, i, i, j, j, k; int(1..6)][q8] = [i, i, i, j, j, k; int(1..6)][q9] /\
+                [j, k, l, k, l, l; int(1..6)][q8] = [j, k, l, k, l, l; int(1..6)][q9])
+                  | q8 : int(1..6), q9 : int(1..6), q8 < q9])
+             | i : int(1..n), j : int(1..n), k : int(1..n), l : int(1..n), i < j /\ j < k /\ k < l]),
+    and([degrees_Function1D[i] % 3 = 0 | i : int(1..n)]),
+    sum([degrees_Function1D[i] | i : int(1..n)]) % 12 = 0,
+    and([q5 + 1 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker ->
+         flatten([[edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q5]; int(1)],
+                  [edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q5]; int(1)];
+                      int(1..2)])
+         <lex
+         flatten([[edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q5 + 1]; int(1)],
+                  [edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q5 + 1]; int(1)];
+                      int(1..2)])
+             | q5 : int(1..n * n - 1)]),
+    and([q6 > edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker ->
+         edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q6] = 1 /\
+         edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q6] = 1
+             | q6 : int(1..n * n)]),
+    and([!or([q24 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+              (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q24] = q2 /\
+               edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q24] = q2)
+                  | q24 : int(1..n * n)])
+             | q2 : int(1..n)]),
+    and([or([q26 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+             (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q26] = q2 /\
+              edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q26] = q3)
+                 | q26 : int(1..n * n)])
+         ->
+         or([q28 <= edges_RelationAsSet_ExplicitVarSizeWithMarker_Marker /\
+             (edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_1[q28] = q3 /\
+              edges_RelationAsSet_ExplicitVarSizeWithMarker_Values_2[q28] = q2)
+                 | q28 : int(1..n * n)])
+             | q2 : int(1..n), q3 : int(1..n)])
+
+$ Conjure's
+$ {"finds": [{"Name": "edges"}, {"Name": "degrees"}], "givens": [{"Name": "n"}], "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "NODE"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Sparse": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1]],
+$  "nameGenState": [["q", 31]], "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "degrees"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr": ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "edges"},
+$        {"DomainRelation":
+$             [{"Relation_AsSet": {"Set_ExplicitVarSizeWithMarker": []}},
+$              [{"SizeAttr_None": []}, ["BinRelAttr_Irreflexive", "BinRelAttr_Symmetric"]],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n"},
+$                                  {"DeclHasRepr": ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n"},
+$                                  {"DeclHasRepr":
+$                                       ["Given", {"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]]}]],
+$  "representationsTree":
+$      [[{"Name": "degrees"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "edges"},
+$        [{"rootLabel": {"Relation_AsSet": {"Set_ExplicitVarSizeWithMarker": []}},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "n"}, [{"rootLabel": null, "subForest": []}]]],
+$  "originalDomains":
+$      [[{"Name": "n"}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "edges"},
+$        {"DomainRelation":
+$             [[], [{"SizeAttr_None": []}, ["BinRelAttr_Irreflexive", "BinRelAttr_Symmetric"]],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n"}, null]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n"}, null]}]}]]}]]}],
+$       [{"Name": "degrees"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}, {"Reference": [{"Name": "n"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[6173696041050771422, 3893123045472967563], [1008067822787893125, 7043851525017187604],
+$       [-244224589755864169, 3497151432178871037], [-1572235494067123963, -4937866908211379868],
+$       [-8224312650464403961, 2074425397321426147], [2818388280964993889, -3933745770609400576],
+$       [-3984008324266371791, -4724640046882882721], [-8001276713441599366, 1893759110898519758],
+$       [-8700598280542725458, -3502736133707309663], [8271576168977153273, 4936863458886455633],
+$       [-1554445781330005617, -2405827195927020568], [-4234851627079658912, 4050868618411161651],
+$       [6046397958179759852, 6586271968243475504], [1599682395150632766, -61615035252314781],
+$       [7268297820877249749, -8029499551886994720], [-3481346142030188775, 7128950240476413064],
+$       [8997294426252783672, -5825764012512742607], [-3171577275899991388, 1025841654917783400],
+$       [6059197334219571571, 5214759855329038107], [3715493494244766663, 4068899892259792212],
+$       [-5088697171584711863, -5113733023272154885], [8497432991901772996, 8771339298464659686],
+$       [-7172484911159455620, -950498714303220088], [2525641671015312784, -753824268429196817],
+$       [-4208264195827423216, -8557439709678819707], [7337536923072933910, 6415773459739163129],
+$       [8911530211303707836, 410217821016620200], [-5445013522579955613, 6458783984529596487],
+$       [-1195363813858107317, 3876370139904441864], [-380877222418965491, 6171063851645057875],
+$       [-8547694554145840328, 1966394025000999848], [-7384486129533971022, -5167870844956091028],
+$       [5041558948792193498, 4416574079801984071], [5706247254521539801, -5360084199248240094],
+$       [-5913066318183052994, -2051138792873172926], [402735953584959912, 2835406328191148880],
+$       [2384010994426841564, 2229293426015282493], [5072040561684793766, 535500555987713138],
+$       [-7085043840819334812, -2516353659728408043], [-6342768910175282086, 2455273579610831902],
+$       [-3722377744733429842, -3502736133707309663], [1438071893636355647, -1626634579421803004],
+$       [-5292451903765608113, -3502736133707309663], [-4894889907157070116, -3150272605403763226],
+$       [-7606250587426951874, 168610970998723159], [3647770009187929758, 4497942707168617573],
+$       [7621357473783209840, -5216058613629829391], [8407548384130463256, 8773018404182226337],
+$       [-6658964813532367814, 5954085452846302457], [-1094397547494355554, 7722681109189496509],
+$       [-3087416651834227994, -7959116503423797187], [6985150542461511940, 6821234926543838285],
+$       [5445017539681005304, 1748393428834013224], [-7377941381227330351, 739639305596756866],
+$       [-2201266222904846142, -8438055240862190397], [5375521586184027682, -2402142143066619519],
+$       [-1125410988693614204, 407867528259716248], [-3074585346510592159, -1629213157670749666],
+$       [-2396387200616368754, -8438055240862190397], [-7336905847565913218, -4958510210235095839],
+$       [-8352239977771564168, -5034085299629667700], [174921649449298353, 5473264493420976278],
+$       [-5699442599031723826, -8438055240862190397], [-6958603506995029342, 3071616147453814301],
+$       [6075783152836591092, -9003529626854205604], [-8537034546161043281, 3998563388464404258],
+$       [-885383860622545766, -8438055240862190397], [1822783847343169282, -220385156232500195],
+$       [-5282171828684913160, -481470476277989980], [-9215784228503914709, -2135096189976751050],
+$       [7406294057802578558, -8438055240862190397], [-5870219607993689034, -5986753549134035291],
+$       [7555670323262841096, -987429010763513512], [2008658692206687027, -4547570946533881234],
+$       [7511266137966422066, -8438055240862190397], [-5652376378574152362, -6298544979630153951],
+$       [3440909281556141229, -4868901050911072476], [4471863189195029588, -9042570090702561421],
+$       [-8852799785697557379, -7316089289909581439], [307180612994035624, 5525952470065158289],
+$       [-6161886820769487061, 1563691432681561875], [3285491090802138982, 9222900167380051845],
+$       [2226053068000880591, 1581960671818946169], [2820098337262146724, 7966655123250312677],
+$       [4327270608334736526, 6373491057472612568], [5805285773249092736, 8033443649447788139],
+$       [-1582006780563702190, 5561991727891852538], [8341856388187611954, -3587013375845359267],
+$       [1709134897889471237, -6432717283627649913], [-4198418138804963430, -761041955711692403],
+$       [2479966700322827456, -6171873473939052908], [-7268489698726908608, 361417841045096751],
+$       [361062916302875830, -494848103344772694], [2319120564632677294, 7201779568324656405],
+$       [-6233653108612942587, 1959976195923071313], [1546762192268992074, 6783970073381298929],
+$       [-2147954482519858720, -814152924718993236], [8861261371116632446, 1255507028234088291],
+$       [3635973609756040140, -6523667600794061042], [1293535636125725556, -8851894743576387743],
+$       [237046890897585695, -88141145078795885], [-799374235947716864, 9077380495727185],
+$       [-7085688981033181744, 2473970389537300316], [6375922458854084954, -688954041289638113],
+$       [244679791407367900, 317461547648087386], [2895342982680538612, -510656752825033643],
+$       [1825526255539096061, 7620699771011925869], [6362738728532846148, 744514749330752553],
+$       [3902394158602391672, 4587263132804010292], [-3047546363852346552, 3124579186620445687],
+$       [-49690516233176862, -8153029728076975270], [7876289714497067026, -2460115465612095043],
+$       [3446542430772914255, 5945026935330946607], [-8867570757817319750, -33254873331785099],
+$       [7024635042674545454, -1707468557763147596], [7883528388254837992, -5514389555194904665],
+$       [962204819129013022, 6501824167944632566], [7630157127416650294, 2847768036265813897],
+$       [-190804008316802673, -2695975311799610047], [67679407620909097, 2311747834605500237],
+$       [1027592431428400473, -1644576267764343279], [-2107781224072282105, -4144730933126571061],
+$       [922996652340304346, -2575201740875132448], [8261686338901923012, 8107908638017795433],
+$       [-1229044459666239625, -4313542822793471451], [2212057486143975406, 5487696601537360983],
+$       [-7544182929880146293, 8187147494324319205], [-3550788144897325843, -8522272924682079488],
+$       [3653113290115232303, 675014188187185045], [-3483027276723727964, 1732417538452331488],
+$       [-8075588906304009824, -7433852386945603374], [8851583011527973180, 6037024086775798358],
+$       [4167636673106925236, 8297809263639021332], [6584861676072990268, -5205006959362419463],
+$       [3426854785089623347, -8235520035939464279], [4557863283459076306, -1288175777288654877],
+$       [6057751103843173891, -5758558566314890415], [9033394676623335390, 4207009678491869010],
+$       [9069988565345412944, -632645802079813327], [-7349110628473817720, -1283343838098582726],
+$       [5115775814277408243, -8121825376957859116]],
+$  "trailVerbose": [], "trailRewrites": []}

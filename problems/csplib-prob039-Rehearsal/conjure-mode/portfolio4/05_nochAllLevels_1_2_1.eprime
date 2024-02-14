@@ -1,0 +1,408 @@
+language ESSENCE' 1.0
+
+given n_pieces: int(1..)
+given n_players: int(1..)
+given fin1: int
+given fin2: int
+given duration_Function1D: matrix indexed by [int(1..n_pieces)] of int(1..fin2)
+given fin3: int
+given plays_in_RelationAsSet_Explicit_1: matrix indexed by [int(1..fin3)] of int(1..n_players)
+given plays_in_RelationAsSet_Explicit_2: matrix indexed by [int(1..fin3)] of int(1..n_pieces)
+find order_Function1D: matrix indexed by [int(1..n_pieces)] of int(1..n_pieces)
+find arrive_FunctionAsRelation_RelationAsMatrix: matrix indexed by [int(1..n_players), int(1..n_pieces)] of bool
+find leave_Function1D: matrix indexed by [int(1..n_players)] of int(1..n_pieces)
+branching on [order_Function1D, arrive_FunctionAsRelation_RelationAsMatrix, leave_Function1D]
+maximising
+    sum([sum([toInt(or([arrive_FunctionAsRelation_RelationAsMatrix[q15_1, q15_2] /\ (q15_1 = p /\ q15_2 >= i)
+                            | q15_1 : int(1..n_players), q15_2 : int(1..n_pieces)]))
+              * catchUndef(duration_Function1D[order_Function1D[i]], 0)
+                  | i : int(1..n_pieces)])
+         +
+         sum([toInt(i >= leave_Function1D[p]) * catchUndef(duration_Function1D[order_Function1D[i]], 0)
+                  | i : int(1..n_pieces), i <= n_pieces])
+             | p : int(1..n_players)])
+such that
+    and([table([p,
+                sum([toInt(arrive_FunctionAsRelation_RelationAsMatrix[q18_1, q18_2]) * catchUndef(q18_2, 0)
+                         | q18_1 : int(1..n_players), q18_2 : int(1..n_pieces), q18_1 = p]);
+                    int(1..2)],
+               [[plays_in_RelationAsSet_Explicit_1[q16], plays_in_RelationAsSet_Explicit_2[q16]; int(1..2)]
+                    | q16 : int(1..fin3)])
+         /\
+         or([arrive_FunctionAsRelation_RelationAsMatrix[q21_1, q21_2] /\ q21_1 = p
+                 | q21_1 : int(1..n_players), q21_2 : int(1..n_pieces)])
+             | p : int(1..n_players)]),
+    and([table([p, leave_Function1D[p]; int(1..2)],
+               [[plays_in_RelationAsSet_Explicit_1[q9], plays_in_RelationAsSet_Explicit_2[q9]; int(1..2)]
+                    | q9 : int(1..fin3)])
+             | p : int(1..n_players)]),
+    and([and([table([p, order_Function1D[i]; int(1..2)],
+                    [[plays_in_RelationAsSet_Explicit_1[q12], plays_in_RelationAsSet_Explicit_2[q12]; int(1..2)]
+                         | q12 : int(1..fin3)])
+              ->
+              or([arrive_FunctionAsRelation_RelationAsMatrix[q11_1, q11_2] /\ (q11_1 = p /\ q11_2 <= i)
+                      | q11_1 : int(1..n_players), q11_2 : int(1..n_pieces)])
+              /\ leave_Function1D[p] >= i
+                  | i : int(1..n_pieces)])
+             | p : int(1..n_players)]),
+    allDiff(order_Function1D),
+    and([or([order_Function1D[q2] = q1 | q2 : int(1..n_pieces)]) | q1 : int(1..n_pieces)]),
+    and([1 =
+         sum([toInt(arrive_FunctionAsRelation_RelationAsMatrix[q13_1, q13_2])
+                  | q13_1 : int(1..n_players), q13_2 : int(1..n_pieces), q13_1 = q6])
+             | q6 : int(1..n_players)])
+
+$ Conjure's
+$ {"finds": [{"Name": "order"}, {"Name": "arrive"}, {"Name": "leave"}],
+$  "givens": [{"Name": "n_pieces"}, {"Name": "n_players"}, {"Name": "duration"}, {"Name": "plays_in"}], "enumGivens": [],
+$  "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "Piece"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_pieces"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_pieces"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Index"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_pieces"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_pieces"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Player"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_players"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_players"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 2], [1, 2, 2],
+$       [1, 1, 1], [1, 1, 2], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["fin", 4], ["q", 22]], "nbExtraGivens": 3,
+$  "representations":
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_pieces"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_players"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "duration"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 1, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_pieces"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_pieces"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 2, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 2, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "order"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_Bijective"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_pieces"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_pieces"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_pieces"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_pieces"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "arrive"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsMatrix": []}},
+$              [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_players"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_players"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_pieces"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_pieces"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "leave"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_players"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_players"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_pieces"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_pieces"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "plays_in"},
+$        {"DomainRelation":
+$             [{"Relation_AsSet": {"Set_Explicit": []}},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 3, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               []],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n_players"},
+$                                  {"DeclHasRepr":
+$                                       ["Given", {"Name": "n_players"},
+$                                        {"DomainInt":
+$                                             [{"TagInt": []},
+$                                              [{"RangeLowerBounded":
+$                                                    {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference":
+$                                 [{"Name": "n_pieces"},
+$                                  {"DeclHasRepr":
+$                                       ["Given", {"Name": "n_pieces"},
+$                                        {"DomainInt":
+$                                             [{"TagInt": []},
+$                                              [{"RangeLowerBounded":
+$                                                    {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]]}]],
+$  "representationsTree":
+$      [[{"Name": "arrive"},
+$        [{"rootLabel": {"Function_AsRelation": {"Relation_AsMatrix": []}},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "duration"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "leave"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "n_pieces"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "n_players"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "order"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "plays_in"},
+$        [{"rootLabel": {"Relation_AsSet": {"Set_Explicit": []}},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "n_pieces"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "n_players"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "duration"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_pieces"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}],
+$       [{"Name": "plays_in"},
+$        {"DomainRelation":
+$             [[], [{"SizeAttr_None": []}, []],
+$              [{"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n_players"}, null]}]}]]},
+$               {"DomainInt":
+$                    [{"TagInt": []},
+$                     [{"RangeBounded":
+$                           [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                            {"Reference": [{"Name": "n_pieces"}, null]}]}]]}]]}],
+$       [{"Name": "order"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_Bijective"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_pieces"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_pieces"}, null]}]}]]}]}],
+$       [{"Name": "arrive"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_players"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_pieces"}, null]}]}]]}]}],
+$       [{"Name": "leave"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_players"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_pieces"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[-5932927451421192094, -2504832610484714321], [-4673505092431671041, -390535895531641362],
+$       [-1877007769683615529, 4343939643597052342], [5609086726871275921, 9036882322631065495],
+$       [3317237064661183109, 6118121997011533261], [-3469556733923771985, 5891491130749524693],
+$       [2161227561792707561, 6845635339839245], [-1254361012249617893, 8723200538215810649],
+$       [-596859760445093684, -7191869802045963704], [8255876862992262299, -7191869802045963704],
+$       [5478807454625291719, -4797202040248013107], [6248197520183237797, -3306528835629454996],
+$       [3815199475529091960, 5301587293546602688], [7288108217630642330, 2422080579484880700],
+$       [133860739129344083, 7641538874035647814], [-4093869557809504030, 5238665701463570531],
+$       [-6588926539299362068, -3402298365038706591], [3000037157234953613, -4986704891946248132],
+$       [3364207505471912475, -4075988604437185409], [-5203559537166035623, 7788506701736488133],
+$       [-963842532587901072, -4986704891946248132], [7666396731267728364, 7788506701736488133],
+$       [-303972166012838976, -1353212997576166249], [570712695078832351, 1423840982400877825],
+$       [-5565969477297699538, 8202976849423829060], [-3946420725502443509, -5871457870012426515],
+$       [1352138176943696562, 2431190641192014443], [-622649815591978628, -8799937743690460107],
+$       [8341164725162119275, -3698233096039275931], [-1536024835676009758, 7936034236918355844],
+$       [-8095237956608525671, 6046215637378836395], [-2729722825111808876, 1700465043002417037],
+$       [-4814474921388780764, 8453547416881868372], [1941794525502875245, -6408344279389975314],
+$       [-5097430469003051589, 5943524774866356855], [5865949813755684076, 9144897264679623961],
+$       [-4825420627059282358, 945806790562085793], [-3395478100326012782, -1302120723427521256],
+$       [2592715454602938543, 945806790562085793], [3698509492443143443, 7565646479249922749],
+$       [616783382351667596, -1302120723427521256], [537261896181227568, -5993339234276915395],
+$       [7861265356885111862, -7605438258566428276], [8655226932234180548, 2384273513586749098],
+$       [6530030902727314616, -3505431199059574776], [1859317160055320390, 8453547416881868372],
+$       [-8908650338020910893, -6408344279389975314], [4876162333286044960, 7253031662886168968],
+$       [-8804535729343184091, -8438055240862190397], [4881990560219005170, -138059520690323135],
+$       [-1128297717496698349, 7874959470471229944], [-7102766248563162245, 4050392423748706909],
+$       [-5162217912507212389, 6991059316512659593], [-4390097925081914506, 7874959470471229944],
+$       [-6915312400526110340, -6642686022413283890], [-3723038092378945850, -8463899947093415647],
+$       [-639829830103652320, -5088048103170797478], [-4051892939319078189, -3201047578797875502],
+$       [-4644170556495371212, 5366150324973080404], [3423246779965702468, -1823397057057034164],
+$       [-2743156582254780000, 9087637183674766605], [2302830374989713991, -5767956256154394467],
+$       [-7437341553073248954, 5324242638347833132], [-1534669209082882179, 8453547416881868372],
+$       [-1585238811113391301, 1700465043002417037], [2384478088448015187, 8817143929727343141],
+$       [3562825914631287789, -4892816844808391671], [-3390583022094052001, -9122159901122633784],
+$       [2732851803259740483, -4892816844808391671], [4235548698956011439, 7937509600375355357],
+$       [-9108126741591375501, -9122159901122633784], [-1161400213563557625, 3697871608390457901],
+$       [-6009653214432498275, -3623089378020652966], [4614953079960362253, -2738981730993543536],
+$       [2691664518159886057, 9044326060079996303], [-4651660106830478434, -2370917725721424586],
+$       [-5570970799339031028, 6403320058608828478], [-5192879759314390144, -6017222253860299577],
+$       [-4655836490454136235, 5751003123608548268], [-1272946488200058256, -1007833567450041644],
+$       [3869742911244065083, 1700465043002417037], [7463752099448865584, 5938195088356938201],
+$       [642221998679882763, -3854939600281299975], [-7707821385887192234, 8683152258838010951],
+$       [-1696969662919439582, 8877798054329338629], [-3209569509351727109, -7749126257395136008],
+$       [-7943831046566946064, 2104531642754382484], [1615577741900993656, -6750141667060569367],
+$       [2231706402792231523, -856439842240842689], [-6602021704973151459, -7471563727683974805],
+$       [-2394773761797838517, 7318036037277645763], [5584821212400408129, 8626470032437109644],
+$       [-8940990002979762542, 4110457826774952372], [-3722262881154758639, 6794018145404485952],
+$       [-273580896010664505, 6944484484380954206], [1391725996931715816, -2717752761680935708]],
+$  "trailVerbose": [], "trailRewrites": []}

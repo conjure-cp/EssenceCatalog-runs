@@ -1,0 +1,448 @@
+language ESSENCE' 1.0
+
+given Colour_EnumSize: int
+given n_orders: int(1..)
+given col_per_slab: int(1..)
+given fin1: int
+given fin2: int
+given slabSizes_Explicit: matrix indexed by [int(1..fin1)] of int(1..fin2)
+given fin3: int
+given fin4: int
+given ordSize_Function1D: matrix indexed by [int(1..n_orders)] of int(1..fin4)
+given fin5: int
+given ordCol_Function1D: matrix indexed by [int(1..n_orders)] of int(1..Colour_EnumSize)
+letting max_slab_size be slabSizes_Explicit[fin1]
+find cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker: int(0..n_orders)
+find cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence:
+        matrix indexed by [int(1..n_orders), int(1..n_orders)] of bool
+find conjure_aux1: matrix indexed by [int(1..n_orders)] of int(1..fin2)
+find conjure_aux2_Occurrence: matrix indexed by [int(1..n_orders), int(1..Colour_EnumSize)] of bool
+branching on
+    [cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker,
+     cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence]
+minimising
+    sum([toInt(q16 <= cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker) * catchUndef(conjure_aux1[q16], 0)
+             | q16 : int(1..n_orders)])
+such that
+    and([and([slabSizes_Explicit[q17] >=
+              sum([toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q16, o]) *
+                   catchUndef(ordSize_Function1D[o], 0)
+                       | o : int(1..n_orders)])
+              -> slabSizes_Explicit[q17] >= conjure_aux1[q16]
+                  | q17 : int(1..fin1)])
+             | q16 : int(1..n_orders)]),
+    and([(sum([toInt(slabSizes_Explicit[q17] >=
+                     sum([toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q16, o]) *
+                          catchUndef(ordSize_Function1D[o], 0)
+                              | o : int(1..n_orders)]))
+                   | q17 : int(1..fin1)])
+          > 0
+          ->
+          or([slabSizes_Explicit[q17] >=
+              sum([toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q16, o]) *
+                   catchUndef(ordSize_Function1D[o], 0)
+                       | o : int(1..n_orders)])
+              /\ slabSizes_Explicit[q17] = conjure_aux1[q16]
+                  | q17 : int(1..fin1)]))
+         /\
+         (sum([toInt(slabSizes_Explicit[q17] >=
+                     sum([toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q16, o]) *
+                          catchUndef(ordSize_Function1D[o], 0)
+                              | o : int(1..n_orders)]))
+                   | q17 : int(1..fin1)])
+          = 0
+          -> conjure_aux1[q16] = 1)
+             | q16 : int(1..n_orders)]),
+    and([q16 <= cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         sum([toInt(slabSizes_Explicit[q17] >=
+                    sum([toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q16, o]) *
+                         catchUndef(ordSize_Function1D[o], 0)
+                             | o : int(1..n_orders)]))
+                  | q17 : int(1..fin1)])
+         > 0 | q16 : int(1..n_orders)]),
+    and([q20 <= cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         max_slab_size >=
+         sum([toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q20, o]) *
+              catchUndef(ordSize_Function1D[o], 0)
+                  | o : int(1..n_orders)])
+             | q20 : int(1..n_orders)]),
+    and([and([cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q22, o] ->
+              conjure_aux2_Occurrence[q22, ordCol_Function1D[o]]
+                  | o : int(1..n_orders)])
+             | q22 : int(1..n_orders)]),
+    and([and([conjure_aux2_Occurrence[q22, q23] ->
+              or([cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q22, o] /\ q23 = ordCol_Function1D[o]
+                      | o : int(1..n_orders)])
+                  | q23 : int(1..Colour_EnumSize)])
+             | q22 : int(1..n_orders)]),
+    and([q22 <= cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         sum([toInt(conjure_aux2_Occurrence[q22, q25]) | q25 : int(1..Colour_EnumSize)]) <= col_per_slab
+             | q22 : int(1..n_orders)]),
+    and([1 =
+         sum([toInt(q9 <= cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker /\
+                    cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q9, q1])
+                  | q9 : int(1..n_orders)])
+             | q1 : int(1..n_orders)]),
+    and([q28 <= cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         sum([toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q28, q29])
+                  | q29 : int(1..n_orders)])
+         >= 1
+             | q28 : int(1..n_orders)]),
+    and([q4 + 1 <= cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         [-toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q4, q10]) | q10 : int(1..n_orders)]
+         <lex
+         [-toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q4 + 1, q11])
+              | q11 : int(1..n_orders)]
+             | q4 : int(1..n_orders - 1)]),
+    and([q5 > cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         and([cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q5, q12] = false
+                  | q12 : int(1..n_orders)])
+             | q5 : int(1..n_orders)]),
+    cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker <= n_orders,
+    and([q6 <= cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker ->
+         sum([toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q6, q7]) | q7 : int(1..n_orders)])
+         <= n_orders
+             | q6 : int(1..n_orders)]),
+    n_orders =
+    sum([toInt(q13 <= cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Marker) *
+         catchUndef(sum([toInt(cut_PartitionAsSet_ExplicitVarSizeWithMarkerR2_Values_Occurrence[q13, q14])
+                             | q14 : int(1..n_orders)]),
+                    0)
+             | q13 : int(1..n_orders)])
+
+$ Conjure's
+$ {"finds": [{"Name": "cut"}],
+$  "givens":
+$      [{"Name": "n_orders"}, {"Name": "col_per_slab"}, {"Name": "slabSizes"}, {"Name": "ordSize"}, {"Name": "ordCol"}],
+$  "enumGivens": [{"Name": "Colour"}], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "Colour"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagEnum": "Colour"},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagEnum": "Colour"}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "Colour_EnumSize"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "Colour_EnumSize"}, {"DomainInt": [{"TagEnum": "Colour"}, []]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "Order"},
+$        {"Domain":
+$             {"DomainInt":
+$                  [{"TagInt": []},
+$                   [{"RangeBounded":
+$                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                          {"Reference":
+$                               [{"Name": "n_orders"},
+$                                {"DeclNoRepr":
+$                                     ["Given", {"Name": "n_orders"},
+$                                      {"DomainInt":
+$                                           [{"TagInt": []},
+$                                            [{"RangeLowerBounded":
+$                                                  {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                      {"NoRegion": []}]}]}]}]]}}],
+$       [{"Name": "max_slab_size"},
+$        {"Op":
+$             {"MkOpMax":
+$                  {"Reference":
+$                       [{"Name": "slabSizes"},
+$                        {"DeclNoRepr":
+$                             ["Given", {"Name": "slabSizes"},
+$                              {"DomainSet":
+$                                   [[],
+$                                    {"SizeAttr_Size":
+$                                         {"Reference":
+$                                              [{"MachineName": ["fin", 1, []]},
+$                                               {"DeclNoRepr":
+$                                                    ["Given", {"MachineName": ["fin", 1, []]},
+$                                                     {"DomainInt": [{"TagInt": []}, []]}, {"NoRegion": []}]}]}},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeBounded":
+$                                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                 {"Reference":
+$                                                      [{"MachineName": ["fin", 2, []]},
+$                                                       {"DeclNoRepr":
+$                                                            ["Given", {"MachineName": ["fin", 2, []]},
+$                                                             {"DomainInt": [{"TagInt": []}, []]},
+$                                                             {"NoRegion": []}]}]}]}]]}]},
+$                              {"NoRegion": []}]}]}}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Compact": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 4],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 4], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["conjure_aux", 3], ["fin", 6], ["q", 30]], "nbExtraGivens": 5,
+$  "representations":
+$      [[{"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 2, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "n_orders"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"MachineName": ["fin", 4, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"MachineName": ["fin", 5, []]}, {"DomainInt": [{"TagInt": []}, []]}],
+$       [{"Name": "Colour_EnumSize"}, {"DomainInt": [{"TagEnum": "Colour"}, []]}],
+$       [{"Name": "slabSizes"},
+$        {"DomainSet":
+$             [{"Set_Explicit": []},
+$              {"SizeAttr_Size":
+$                   {"Reference":
+$                        [{"MachineName": ["fin", 1, []]},
+$                         {"DeclHasRepr":
+$                              ["Given", {"MachineName": ["fin", 1, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 2, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 2, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "ordSize"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 3, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 3, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_orders"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_orders"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"MachineName": ["fin", 4, []]},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"MachineName": ["fin", 4, []]},
+$                                       {"DomainInt": [{"TagInt": []}, []]}]}]}]}]]}]}],
+$       [{"Name": "cut"},
+$        {"DomainPartition":
+$             [{"Partition_AsSet": [{"Set_ExplicitVarSizeWithMarker": []}, {"Set_Occurrence": []}]},
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n_orders"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "n_orders"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n_orders"},
+$                              {"DeclHasRepr":
+$                                   ["Given", {"Name": "n_orders"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded":
+$                                                {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_orders"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_orders"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}],
+$       [{"Name": "ordCol"},
+$        {"DomainFunction":
+$             [{"Function_1D": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"MachineName": ["fin", 5, []]},
+$                          {"DeclHasRepr":
+$                               ["Given", {"MachineName": ["fin", 5, []]}, {"DomainInt": [{"TagInt": []}, []]}]}]}},
+$               "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n_orders"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n_orders"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagEnum": "Colour"},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagEnum": "Colour"}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "Colour_EnumSize"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "Colour_EnumSize"},
+$                                       {"DomainInt": [{"TagEnum": "Colour"}, []]}]}]}]}]]}]}],
+$       [{"Name": "col_per_slab"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]],
+$  "representationsTree":
+$      [[{"Name": "Colour_EnumSize"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "col_per_slab"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "cut"},
+$        [{"rootLabel": {"Partition_AsSet": [{"Set_ExplicitVarSizeWithMarker": []}, {"Set_Occurrence": []}]},
+$          "subForest": [{"rootLabel": null, "subForest": []}]}]],
+$       [{"MachineName": ["fin", 1, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 2, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 3, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 4, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"MachineName": ["fin", 5, []]}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "n_orders"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "ordCol"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "ordSize"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]],
+$       [{"Name": "slabSizes"},
+$        [{"rootLabel": {"Set_Explicit": []}, "subForest": [{"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "n_orders"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "col_per_slab"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "slabSizes"},
+$        {"DomainSet":
+$             [[], {"SizeAttr_None": []},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}],
+$       [{"Name": "ordSize"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_orders"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}],
+$       [{"Name": "ordCol"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_orders"}, null]}]}]]},
+$              {"DomainEnum": [{"Name": "Colour"}, null, null]}]}],
+$       [{"Name": "cut"},
+$        {"DomainPartition":
+$             [[],
+$              {"isRegular": false,
+$               "partsNum":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n_orders"},
+$                              {"DeclNoRepr":
+$                                   ["Given", {"Name": "n_orders"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                    {"NoRegion": []}]}]}},
+$               "partsSize":
+$                   {"SizeAttr_MaxSize":
+$                        {"Reference":
+$                             [{"Name": "n_orders"},
+$                              {"DeclNoRepr":
+$                                   ["Given", {"Name": "n_orders"},
+$                                    {"DomainInt":
+$                                         [{"TagInt": []},
+$                                          [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                    {"NoRegion": []}]}]}}},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n_orders"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[-5673561909822406195, -5179913906495295264], [-4655169594217448853, 3673123332558052866],
+$       [619607798411588774, -1350899480157791864], [1419564890644038624, -8187747988630090476],
+$       [-3011447949592116585, -8438055240862190397], [422898318943192590, -6035757094262156611],
+$       [-6549932563144695636, 2557021184868874052], [7745309033222298422, 6414954214055553028],
+$       [-2289581134743425784, -6225727374452112721], [-3311197519054365442, -7589118991578035559],
+$       [-3251487653500755418, -5845171673249534893], [-5136132111003230541, 1239479489257766541],
+$       [2605852188107058617, -7019577862712908610], [2474836330621664304, -2630502359167609409],
+$       [2683053635921731283, 5149022917051234503], [-2267851510722356447, -8369008547703671564],
+$       [-5344166916445908287, -8438055240862190397], [4680989591301743967, 179670719663175493],
+$       [5723098031144873337, 1681942175835546346], [-725443093208036553, -2767416989275733854],
+$       [-2927008373883687157, 7950014638381722373], [-8390925906441132810, 9183708057612513149],
+$       [6908062837169959189, -312973981218235212], [4832835673197213565, -4575375516858339287],
+$       [-5034433114057406117, 8464588863868565580], [4986022006277933342, -668126940424497927],
+$       [-8417211627594702863, 5884835664946431557], [-4619632662984262371, 8964436102346986239],
+$       [-5357571784848120983, 6075849959821723386], [-1039493456977495427, 7322675524081787498],
+$       [-5045831955850666252, 8464588863868565580], [3372777560875115672, -6708922736858449072],
+$       [-6864464310177176442, -3780802793267659393], [5651099538419079083, -8459499374918544841],
+$       [6482405520232548420, 2234646248383956393], [4972357466945924779, 8536701107294805212],
+$       [-1132395422521165480, 557919519348707834], [-5341692669384164426, -2790354203343761635],
+$       [5592615167132120974, 1122368960987808922], [7458868557609277172, 6350424095649624092],
+$       [2209408556479946193, 5282816456833899853], [7720236240783980462, 7043184026461611042],
+$       [-6898850790782724666, -2052813687907959345], [-138925473118957745, 2929172484820960679],
+$       [7017679159758237924, 49275223248830020], [8639806626646591912, -5599987248716699179],
+$       [6465988641928404654, -8476166817478602428], [5295273845139648756, 3926499874842597929],
+$       [460032911886495737, 8292564437424119365], [-101094925496320910, -5648940436626552217],
+$       [-7779627319591335555, 3456665413880833984], [3963279873265548126, -6123739001239098344],
+$       [672903330761139900, 8307685333469111099], [4244925250588512297, -147692165298287545],
+$       [-7749993995412248286, -7488742785209947098], [4852891928065200094, 1975555446054884706],
+$       [494741501903481509, -8438055240862190397], [667553035605981690, -1929152041313396657],
+$       [1006629752929713866, 8993584646921416979], [5376136947917934758, 1975555446054884706],
+$       [3777743613148273193, -8438055240862190397], [1864924103556563272, -1929152041313396657],
+$       [4520734244201465736, 1975555446054884706], [-8408140281487231997, -8438055240862190397],
+$       [-3963017534815363338, -1929152041313396657], [-215525559338740912, 1038415883928151506],
+$       [8937450114707935636, -2361248428987479669], [-6512015849934959009, 3326027974993436700],
+$       [-4714342792771828584, -553301361647839603], [3820930822549581579, 7043184026461611042],
+$       [7257379795572563343, 5856986697691630015], [3973290611590427286, -801993701250586593],
+$       [8666676609686313504, -4737005434822459717], [-6804889474513120790, -5433693603956014611],
+$       [7897306504561888405, 1694823024675224700], [7390205315039418553, -3073432041180535487],
+$       [4985287528211536543, -3904361743474025280], [-9108378915066623171, -8410032679249767715],
+$       [8077615031862525891, -2403606586699756005], [2943763519745620169, 4583004098820872840],
+$       [-7043630373621785864, -8438055240862190397], [-79163768170515727, -2915854606771872493],
+$       [-4752522866425845761, 7753439179439094318], [2818380345020938323, 4938727473779070500],
+$       [7795021770993190988, -3199304144187729180], [2599513141204648273, -6202284012139426417],
+$       [-4775817821870430244, 3052931199299861961], [-5882110941738971603, 7748022500393040432],
+$       [-2577807528931067992, -9147171885205666065], [8695333913490743122, -7686954400998608972],
+$       [1535295062584604372, 386027771342869442], [5527777989526284252, 223390250726368196],
+$       [4157062855177841063, 278060352336621454], [162176940130937684, 3146749150636911823],
+$       [6413259365776270492, 7907835718728929125], [4627608566156906651, -9054064577385555956],
+$       [8623815641157003770, -3289889242138635546], [2270817408232314936, -5692864319637341290],
+$       [4512066030550985274, 4226539054866526422], [2063224034432728805, 5208860808930114328],
+$       [6522279545831694737, -8438055240862190397], [-1653823784128751783, 5823085630610793650],
+$       [-5443808819132064669, -424951741486431016], [-5104444559026410876, 2716641717541120937],
+$       [2729961920377489213, -84704760074789503], [-5299774490036596304, 4932188231199909842],
+$       [-8754343981347737454, 5515518840605257882], [-8598764857060251716, -463650777849697664],
+$       [5856469824422114348, 4151066295434842807], [-2275986727136835963, 4070501094370340421],
+$       [5169401742074531313, 4962502904474597386], [-3497114189922420603, 1382797965633614736],
+$       [-4894401536737872996, 5668485079573765364], [-3254467883099200877, -5420071290108198448],
+$       [3007113010794738965, -1876887991504440534], [-8940990002979762542, 4110457826774952372],
+$       [-3722262881154758639, 6794018145404485952], [1391725996931715816, -2717752761680935708]],
+$  "trailVerbose": [], "trailRewrites": []}

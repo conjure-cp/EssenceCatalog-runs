@@ -1,0 +1,125 @@
+language ESSENCE' 1.0
+
+given n: int(1..)
+letting let1 be -1
+find seq_Function1D: matrix indexed by [int(1..n)] of int(-1, 1)
+find seq_FunctionAsRelation_RelationAsMatrix: matrix indexed by [int(1..n), int(-1, 1)] of bool
+branching on [seq_FunctionAsRelation_RelationAsMatrix, seq_Function1D]
+minimising sum([sum([seq_Function1D[i] * seq_Function1D[i + k] | i : int(1..n - k)]) ** 2 | k : int(1..n)])
+such that
+    and([1 =
+         sum([toInt(seq_FunctionAsRelation_RelationAsMatrix[q6_1, q6_2])
+                  | q6_1 : int(1..n), q6_2 : int(-1, 1), q6_1 = q4])
+             | q4 : int(1..n)]),
+    and([seq_FunctionAsRelation_RelationAsMatrix[q8_1, q8_2] -> seq_Function1D[q8_1] = q8_2
+             | q8_1 : int(1..n), q8_2 : int(-1, 1)]),
+    and([or([seq_FunctionAsRelation_RelationAsMatrix[q11_1, q11_2] /\ (q11_1 = q9 /\ q11_2 = seq_Function1D[q9])
+                 | q11_1 : int(1..n), q11_2 : int(-1, 1)])
+             | q9 : int(1..n)])
+
+$ Conjure's
+$ {"finds": [{"Name": "seq"}], "givens": [{"Name": "n"}], "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"MachineName": ["let", 1, []]}, {"Op": {"MkOpNegate": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"PickAll": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 2], [1, 1, 1], [1, 1, 2], [1, 1, 1], [1, 1, 1], [1, 2, 2],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["let", 2], ["q", 12]], "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "seq"},
+$        {"DomainFunction":
+$             [{"Function_1D": []}, [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclNoRepr":
+$                                      ["Given", {"Name": "n"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                       {"NoRegion": []}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeSingle":
+$                          {"Reference":
+$                               [{"MachineName": ["let", 1, []]},
+$                                {"Alias": {"Op": {"MkOpNegate": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}}}]}},
+$                     {"RangeSingle": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "seq"},
+$        {"DomainFunction":
+$             [{"Function_AsRelation": {"Relation_AsMatrix": []}},
+$              [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeSingle": {"Constant": {"ConstantInt": [{"TagInt": []}, -1]}}},
+$                     {"RangeSingle": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]],
+$  "representationsTree":
+$      [[{"Name": "n"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "seq"},
+$        [{"rootLabel": {"Function_1D": []},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]},
+$         {"rootLabel": {"Function_AsRelation": {"Relation_AsMatrix": []}},
+$          "subForest": [{"rootLabel": null, "subForest": []}, {"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "seq"},
+$        {"DomainFunction":
+$             [[], [{"SizeAttr_None": []}, "PartialityAttr_Total", "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}, {"Reference": [{"Name": "n"}, null]}]}]]},
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeSingle": {"Reference": [{"MachineName": ["let", 1, []]}, null]}},
+$                     {"RangeSingle": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]],
+$  "trailGeneralised":
+$      [[-1386462000224790236, 2909992013652717213], [98605842030502911, 2246204461342830681],
+$       [-2177162257261256698, -2873502721150350585], [8909065336053432009, -4328770428001185929],
+$       [-8597239043707903330, 4840894354021320762], [-6915812511420044645, -2873502721150350585],
+$       [7273059369598289077, 4831892986156079488], [7042732615500530335, -8251878897754360176],
+$       [7494377773948947090, -4328770428001185929], [-7805316296441222380, -8001916831421757884],
+$       [3734930040142168157, -1258185815714686844], [-6699196802371805689, 7817183607086009207],
+$       [2750472507450230213, -1769173464230999643], [3782534113386897336, -206730421094990839],
+$       [-499105295440138567, -4508021244513140803], [-6556215936945854246, 1068700198003755196],
+$       [-8199985088312645358, 1979848677286402213], [-5469404242455380996, -168685246763863047],
+$       [5428089590330047698, 960634534398161564], [-1483662810866582039, -2588655417454092353],
+$       [-2067590343871934608, -8176154648940994153], [-7231268082033369231, -2588655417454092353],
+$       [9176475710058568387, -3271757471458631230], [8872714190477069556, -8176154648940994153],
+$       [-7111195597598426851, -2616974506431679438], [8967035066392457896, -2220803105611358571],
+$       [-8838654469476216106, 3375514805535129071], [-1722182869324279972, 791993312169055805],
+$       [2039116696926915324, 1816094766463220179], [6027665588987975846, -6186847369581793569],
+$       [3155080462384857015, 930908161040830892], [-4449436906816309314, -8438055240862190397],
+$       [-6349732826573582951, 417759862959015941], [-5593929240483689969, 278749448936525219],
+$       [-5246444181577780718, 1740894581288663962], [-6856607578926178585, 652729910233859795],
+$       [572814012872872114, 278749448936525219], [562090020764151179, 7006732263877860047],
+$       [-2352862849146861154, -3520274397512563420], [2254711026451565716, 2118626382338637810],
+$       [4404180896549594598, 2221207819371171818], [-5447370339845164903, 1068700198003755196],
+$       [8388284783194358215, 1068700198003755196], [-1191675859701654150, -1233777189247131555],
+$       [1266500862258960272, 1068700198003755196], [-6699257341632561973, 1543616196954456073],
+$       [-1235404473753595094, 3416902773832929155], [8006727633592139655, -1364163944297639545],
+$       [1839275506025692120, -6125500246089902997], [-1683782006523046621, -2662749901204029632]],
+$  "trailVerbose": [], "trailRewrites": []}
