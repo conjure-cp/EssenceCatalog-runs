@@ -25,7 +25,7 @@ for prob in *; do
                 for eprime in *.eprime; do
                     eprime_base="${eprime%.*}"
                     for savilerow_mode in O2; do
-                        for solver in kissat chuffed; do
+                        for solver in kissat chuffed or-tools; do
                             # echo $prob $param $param_base $eprime_base $solver
                             INFO_FILE="${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}/savilerow-mode/${savilerow_mode}/solver/${solver}/${eprime_base}-${param_base}.eprime-info"
                             if [ -f "${INFO_FILE}" ]; then

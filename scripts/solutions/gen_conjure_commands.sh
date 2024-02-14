@@ -20,7 +20,7 @@ for prob in *; do
                 pushd "${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}" > /dev/null
                 for eprime in *.eprime; do
                     for savilerow_mode in O2; do
-                        for solver in chuffed kissat; do
+                        for solver in chuffed kissat or-tools; do
                             echo "scripts/solutions/runConjure.sh ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}
                         done
                     done

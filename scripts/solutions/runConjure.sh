@@ -39,6 +39,8 @@ elif [ "${SOLVER}" == "chuffed" ]; then
     SOLVER_OPTIONS="-t ${LIMIT_TIME}000 --rnd-seed 0"
 elif [ "${SOLVER}" == "kissat" ]; then
     SOLVER_OPTIONS="--time=${LIMIT_TIME} --seed=0"
+elif [ "${SOLVER}" == "or-tools" ]; then
+    SOLVER_OPTIONS="--time_limit=${LIMIT_TIME} --cp_random_seed 0 --fz_seed 0"
 else
     echo "SOLVER not recognised: ${SOLVER}"
     exit 1
