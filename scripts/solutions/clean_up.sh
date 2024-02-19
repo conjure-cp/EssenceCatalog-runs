@@ -10,7 +10,7 @@ find problems -name '*.eprime-dimacs' -delete
 find problems -name '*.eprime-minion' -delete
 
 # these can now be deleted, assuming the collect_info was exeuted.
-find problems -name '*.eprime-info'   -delete
+# find problems -name '*.eprime-info'   -delete # commented out, just in case collect_info fails etc
 find problems -name '*.eprime-infor'  -delete
 
 # the eprimes are duplicated during solving. remove them here.
