@@ -62,6 +62,8 @@ rm -f ${TARGET_DIR}/*.eprime-minion         # no need to keep: generated minion 
 rm -f ${TARGET_DIR}/*.eprime-dimacs         # no need to keep: generated sat file
 rm -f ${TARGET_DIR}/*.eprime-param          # no need to keep
 rm -f ${TARGET_DIR}/*.eprime-fzn            # no need to keep
+rm -f ${TARGET_DIR}/*.eprime-param.fzn      # no need to keep
+rm -f ${TARGET_DIR}/*.eprime.mzn            # no need to keep
 
 # do not rm the eprime file yet, it may be needed by multiple parameter files
 # it will be removed by a call to clean_up.sh

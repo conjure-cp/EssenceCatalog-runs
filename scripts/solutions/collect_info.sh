@@ -7,14 +7,16 @@ shopt -s nullglob
 ROOT_DIR=$(pwd)
 mkdir -p "${ROOT_DIR}/logs"
 
-INFOS_TSV_FILE="${ROOT_DIR}/logs/infos.tsv"
-rm -f ${INFOS_TSV_FILE}
-touch ${INFOS_TSV_FILE}
+TODAY=$(date "+%Y-%m-%d")
 
-                                                        # go through all problems in EssenceCatalog
-pushd EssenceCatalog/problems > /dev/null
+pushd EssenceCatalog/problems > /dev/null               # go through all problems in EssenceCatalog
 for prob in *; do
     pushd "${prob}" > /dev/null
+
+    # this is the uncompressed filename for the infos.tsv, dated.
+    # we will compress it once we collect all the infos.
+    INFOS_TSV_FILE="${ROOT_DIR}/problems/${prob}"/infos-${TODAY}.tsv
+
     for essence in *.essence; do                        # go through all essence files for this problem
         essence_base="${essence%.*}"
         for param in params/*.param params/*/*.param; do
@@ -25,7 +27,7 @@ for prob in *; do
                 for eprime in *.eprime; do
                     eprime_base="${eprime%.*}"
                     for savilerow_mode in O2; do
-                        for solver in kissat chuffed or-tools; do
+                        for solver in kissat chuffed or-tools cplex; do
                             # echo $prob $param $param_base $eprime_base $solver
                             INFO_FILE="${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}/savilerow-mode/${savilerow_mode}/solver/${solver}/${eprime_base}-${param_base}.eprime-info"
                             if [ -f "${INFO_FILE}" ]; then
@@ -41,12 +43,10 @@ for prob in *; do
         done
     done
     popd > /dev/null
+    # remove the compressed one if it exists
+    rm -f ${INFOS_TSV_FILE}.gz
+    if [ -f ${INFOS_TSV_FILE} ]; then
+        gzip ${INFOS_TSV_FILE} # compress
+    fi
 done
 popd > /dev/null
-
-# "LC_ALL=C" seems to be a way of getting a consistent ordering between mac and linux
-# at least for the 2 machines I tried this on...
-# -d consider only blanks and alphanumeric characters
-# -f ignore case
-LC_ALL=C sort -df ${INFOS_TSV_FILE} -o ${INFOS_TSV_FILE}
-

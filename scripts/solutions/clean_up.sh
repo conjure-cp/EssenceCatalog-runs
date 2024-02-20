@@ -8,6 +8,8 @@ shopt -s nullglob
 # we really don't want them to stay since they can be so large.
 find problems -name '*.eprime-dimacs' -delete
 find problems -name '*.eprime-minion' -delete
+find problems -name '*.eprime-solution' -delete
+find problems -name '*.solution' -delete
 
 # these can now be deleted, assuming the collect_info was exeuted.
 # find problems -name '*.eprime-info'   -delete # commented out, just in case collect_info fails etc
