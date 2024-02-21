@@ -16,12 +16,18 @@ for prob in *; do
     for essence in *.essence; do                        # go through all essence files for this problem, ideally there is only one
         essence_base="${essence%.*}"
         for param in params/*.param params/*/*.param; do
+            param_base="${param##*/}"
+            param_base="${param_base%.*}"
             for conjure_mode in portfolio4; do
                 pushd "${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}" > /dev/null
                 for eprime in *.eprime; do
+                    eprime_base="${eprime%.*}"
                     for savilerow_mode in O2; do
                         for solver in chuffed kissat or-tools cplex; do
-                            echo "scripts/solutions/runConjure.sh ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}
+                            INFO_FILE="${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}/savilerow-mode/${savilerow_mode}/solver/${solver}/${eprime_base}-${param_base}.eprime-info"
+                            if ! [ -f "${INFO_FILE}" ]; then
+                                echo "scripts/solutions/runConjure.sh ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}
+                            fi
                         done
                     done
                 done
