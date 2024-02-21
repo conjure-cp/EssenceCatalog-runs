@@ -72,7 +72,7 @@ recording.
 -   Use `scripts/solutions/recompute.sh N` to generate solutions (Using
     N cores) Time limit for Savile Row, Minion, and Lingeling are all
     the same and is controlled by the `LIMIT_TIME` environment variable.
-    The default value is 60 (seconds). To use a different value, prepend
+    The default value is 3600 (seconds). To use a different value, prepend
     the following to the solutions recompute command: `LIMIT_TIME=SEC`.
 
 # Directory structure
