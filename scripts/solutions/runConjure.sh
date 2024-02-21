@@ -41,6 +41,12 @@ elif [ "${SOLVER}" == "kissat" ]; then
     SOLVER_OPTIONS="--time=${LIMIT_TIME} --seed=0"
 elif [ "${SOLVER}" == "or-tools" ]; then
     SOLVER_OPTIONS="--time_limit=${LIMIT_TIME} --cp_random_seed 0 --fz_seed 0"
+elif [ "${SOLVER}" == "or-tools1" ]; then
+    SOLVER="or-tools"
+    SOLVER_OPTIONS="--time_limit=${LIMIT_TIME} --cp_random_seed 0 --fz_seed 0 --threads=1"
+elif [ "${SOLVER}" == "or-tools4" ]; then
+    SOLVER="or-tools"
+    SOLVER_OPTIONS="--time_limit=${LIMIT_TIME} --cp_random_seed 0 --fz_seed 0 --threads=4"
 elif [ "${SOLVER}" == "cplex" ]; then
     SOLVER_OPTIONS="--time-limit ${LIMIT_TIME}"
 else
