@@ -18,6 +18,8 @@ EPRIME_SRC="problems/${PROBLEM}/conjure-mode/${CONJURE_MODE}/${EPRIME}"
 TARGET_DIR="problems/${PROBLEM}/conjure-mode/${CONJURE_MODE}/savilerow-mode/${SAVILEROW_MODE}/solver/${SOLVER}"
 mkdir -p "${TARGET_DIR}"
 
+LIMIT_TIME_PADDED=$(( LIMIT_TIME + 300 ))
+
 SAVILEROW_OPTIONS="-timelimit ${LIMIT_TIME}"
 if [ "${SAVILEROW_MODE}" == "O0" ]; then
     SAVILEROW_OPTIONS="${SAVILEROW_OPTIONS} -O0"
@@ -61,6 +63,7 @@ podman run -it --rm \
     -v "$PWD:/podmandir:z" \
     --cpus=2 \
     --memory=8g \
+    --timeout=${LIMIT_TIME_PADDED} \
     "ghcr.io/conjure-cp/conjure:main" \
     conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \
     --copy-solutions=off \
