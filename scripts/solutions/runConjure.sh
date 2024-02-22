@@ -56,7 +56,12 @@ fi
 
 cp ${EPRIME_SRC} ${TARGET_DIR}/${EPRIME}
 
-conjure solve --use-existing-models=${EPRIME} ${ESSENCE_FULL} ${PARAM_FULL} -o ${TARGET_DIR} \
+podman run -it --rm \
+    --network=none \
+    --cpus=2 \
+    --memory=8g \
+    "ghcr.io/conjure-cp/conjure:latest" \
+    conjure solve --use-existing-models=${EPRIME} ${ESSENCE_FULL} ${PARAM_FULL} -o ${TARGET_DIR} \
     --copy-solutions=off \
     --log-level LogNone \
     --savilerow-options "${SAVILEROW_OPTIONS}" \
