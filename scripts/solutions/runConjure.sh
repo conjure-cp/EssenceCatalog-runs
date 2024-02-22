@@ -58,7 +58,7 @@ cp ${EPRIME_SRC} ${TARGET_DIR}/${EPRIME}
 
 podman run -it --rm \
     --network=none \
-    `-v $PWD:/podmandir:z` \
+    -v "$PWD:/podmandir:z" \
     --cpus=2 \
     --memory=8g \
     "ghcr.io/conjure-cp/conjure:latest" \
