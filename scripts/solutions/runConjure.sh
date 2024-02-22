@@ -64,7 +64,7 @@ podman run -it --rm \
     --cpus=2 \
     --memory=8g \
     --timeout=${LIMIT_TIME_PADDED} \
-    "ghcr.io/conjure-cp/conjure:main" \
+    "ghcr.io/conjure-cp/conjure@sha256:7d71f1386e875c5ef9cd23139036593bf91af4a50ae4a67da5dbcd61224067ab" \
     conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \
     --copy-solutions=off \
     --log-level LogNone \
