@@ -61,7 +61,7 @@ podman run -it --rm \
     -v "$PWD:/podmandir:z" \
     --cpus=2 \
     --memory=8g \
-    "ghcr.io/conjure-cp/conjure:latest" \
+    "ghcr.io/conjure-cp/conjure:main" \
     conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \
     --copy-solutions=off \
     --log-level LogNone \
