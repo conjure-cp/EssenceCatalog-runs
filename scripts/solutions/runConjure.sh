@@ -62,7 +62,7 @@ podman run -it --rm \
     --cpus=2 \
     --memory=8g \
     "ghcr.io/conjure-cp/conjure:latest" \
-    conjure solve --use-existing-models=/podmandir/${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \
+    conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \
     --copy-solutions=off \
     --log-level LogNone \
     --savilerow-options "${SAVILEROW_OPTIONS}" \
