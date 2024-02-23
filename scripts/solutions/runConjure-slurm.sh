@@ -58,19 +58,33 @@ fi
 
 cp ${EPRIME_SRC} ${TARGET_DIR}/${EPRIME}
 
-podman run -it --rm \
-    --network=none \
-    -v "$PWD:/podmandir:z" \
-    --cpus=2 \
-    --memory=8g \
-    --timeout=${LIMIT_TIME_PADDED} \
-    "ghcr.io/conjure-cp/conjure@sha256:94a42ff880f38989625a53a03315e44313866a1eda76f268dccb941734d55e29" \
-    conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \
-    --copy-solutions=off \
-    --log-level LogNone \
-    --savilerow-options "${SAVILEROW_OPTIONS}" \
-    --solver "${SOLVER}" \
-    --solver-options "${SOLVER_OPTIONS}"
+IFS='/' read -ra PARAM_NAME <<< "$PARAM"
+IFS='/' read -ra EPRIME_NAME <<< "$EPRIME"
+mkdir -p slurm
+SLURM_FILE="slurm/${ESSENCE}_${SOLVER}_${PARAM_NAME[-1]}_${EPRIME_NAME[-1]}.sh"
+rm -f "${SLURM_FILE}"
+JOB="${EPRIME}-${ESSENCE}-${SOLVER}-${PARAM_NAME[-1]}-${EPRIME_NAME[-1]}"
+echo "#!/bin/bash" >> ${SLURM_FILE}
+echo "#SBATCH --job-name=${JOB}" >> ${SLURM_FILE}
+echo "#SBATCH -e ${SLURM_FILE}.error" >> ${SLURM_FILE}
+echo "#SBATCH -o ${SLURM_FILE}task-0.output" >> ${SLURM_FILE}
+echo "#SBATCH --cpus-per-task=8" >> ${SLURM_FILE}
+echo "#SBATCH --mem=8GB" >> ${SLURM_FILE}
+echo "#SBATCH --time=01:10:00" >> ${SLURM_FILE}
+echo "" >> ${SLURM_FILE}
+echo "podman run -it --rm \\" >> ${SLURM_FILE}
+echo "    --network=none \\" >> ${SLURM_FILE}
+echo "    -v "$PWD:/podmandir:z" \\" >> ${SLURM_FILE}
+echo "    --cpus=2 \\" >> ${SLURM_FILE}
+echo "    --memory=8g \\" >> ${SLURM_FILE}
+echo "    --timeout=${LIMIT_TIME_PADDED} \\" >> ${SLURM_FILE}
+echo "    \"ghcr.io/conjure-cp/conjure@sha256:94a42ff880f38989625a53a03315e44313866a1eda76f268dccb941734d55e29\" \\" >> ${SLURM_FILE}
+echo "    conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \\" >> ${SLURM_FILE}
+echo "    --copy-solutions=off \\" >> ${SLURM_FILE}
+echo "    --log-level LogNone \\" >> ${SLURM_FILE}
+echo "    --savilerow-options ${SAVILEROW_OPTIONS} \\" >> ${SLURM_FILE}
+echo "    --solver ${SOLVER} \\" >> ${SLURM_FILE}
+echo "    --solver-options ${SOLVER_OPTIONS}" >> ${SLURM_FILE}
 
 echo ${TARGET_DIR}
 rm -f ${TARGET_DIR}/*.eprime-minion         # no need to keep: generated minion file
@@ -80,5 +94,3 @@ rm -f ${TARGET_DIR}/*.eprime-fzn            # no need to keep
 rm -f ${TARGET_DIR}/*.eprime-param.fzn      # no need to keep
 rm -f ${TARGET_DIR}/*.eprime.mzn            # no need to keep
 
-# do not rm the eprime file yet, it may be needed by multiple parameter files
-# it will be removed by a call to clean_up.sh
