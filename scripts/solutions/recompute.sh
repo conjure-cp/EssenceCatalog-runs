@@ -19,7 +19,7 @@ scripts/solutions/gen_conjure_commands.sh
 scripts/solutions/gen_solutions.sh $nb_cores
 if [[ "${TYPE}" -eq "sbatch" ]]; then
 	script/solutions/run_sbatch.sh
+else
+	scripts/solutions/collect_info.sh
+	scripts/solutions/clean_up.sh
 fi
-scripts/solutions/collect_info.sh
-scripts/solutions/clean_up.sh
-
