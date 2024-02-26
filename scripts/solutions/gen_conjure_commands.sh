@@ -7,6 +7,12 @@ shopt -s nullglob
 ROOT_DIR=$(pwd)
 CMD_FILE="${ROOT_DIR}/scripts/solutions/conjure_commands.txt"
 
+if [[ -v RUN_TYPE ]]; then
+	SCRIPT="scripts/solutions/runConjure.sh"
+else
+	SCRIPT="scripts/solutions/runConjure-slurm.sh"
+fi
+
 rm -f ${CMD_FILE}
 touch ${CMD_FILE}
 
@@ -23,10 +29,10 @@ for prob in *; do
                 for eprime in *.eprime; do
                     eprime_base="${eprime%.*}"
                     for savilerow_mode in O2; do
-                        for solver in chuffed kissat or-tools1 or-tools4 cplex; do
+                        for solver in kissat or-tools1 or-tools8 cplex chuffed; do
                             INFO_FILE="${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}/savilerow-mode/${savilerow_mode}/solver/${solver}/${eprime_base}-${param_base}.eprime-info"
                             if ! [ -f "${INFO_FILE}" ]; then
-                                echo "scripts/solutions/runConjure.sh ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}
+                                echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}
                             fi
                         done
                     done

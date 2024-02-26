@@ -18,3 +18,4 @@ find problems -name '*.eprime-infor'  -delete
 
 # the eprimes are duplicated during solving. remove them here.
 rm -f problems/*/conjure-mode/*/savilerow-mode/*/solver/*/*.eprime
+rm -rf slurm
