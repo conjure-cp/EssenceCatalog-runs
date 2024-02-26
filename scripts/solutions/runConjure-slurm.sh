@@ -78,7 +78,7 @@ echo "" >> ${SLURM_FILE}
 echo "podman run -it --rm \\" >> ${SLURM_FILE}
 echo "    --network=none \\" >> ${SLURM_FILE}
 echo "    -v "$PWD:/podmandir:z" \\" >> ${SLURM_FILE}
-echo "    --cpus=2 \\" >> ${SLURM_FILE}
+echo "    --cpus=${CPUS} \\" >> ${SLURM_FILE}
 echo "    --memory=8g \\" >> ${SLURM_FILE}
 echo "    --timeout=${LIMIT_TIME_PADDED} \\" >> ${SLURM_FILE}
 echo "    \"ghcr.io/conjure-cp/conjure@sha256:94a42ff880f38989625a53a03315e44313866a1eda76f268dccb941734d55e29\" \\" >> ${SLURM_FILE}

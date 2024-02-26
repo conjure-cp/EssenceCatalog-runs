@@ -29,7 +29,7 @@ for prob in *; do
                 for eprime in *.eprime; do
                     eprime_base="${eprime%.*}"
                     for savilerow_mode in O2; do
-                        for solver in chuffed kissat or-tools1 or-tools4 cplex; do
+                        for solver in kissat or-tools1 or-tools8 cplex chuffed; do
                             INFO_FILE="${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}/savilerow-mode/${savilerow_mode}/solver/${solver}/${eprime_base}-${param_base}.eprime-info"
                             if ! [ -f "${INFO_FILE}" ]; then
                                 echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}
