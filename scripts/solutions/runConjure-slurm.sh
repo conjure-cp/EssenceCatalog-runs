@@ -33,6 +33,7 @@ else
     echo "SAVILEROW_MODE not recognised: ${SAVILEROW_MODE}"
     exit 1
 fi
+CPUS=2
 if [ "${SOLVER}" == "minion" ]; then
     SOLVER_OPTIONS="-cpulimit ${LIMIT_TIME} -varorder domoverwdeg -preprocess GAC"
 elif [ "${SOLVER}" == "lingeling" ]; then
@@ -46,9 +47,10 @@ elif [ "${SOLVER}" == "or-tools" ]; then
 elif [ "${SOLVER}" == "or-tools1" ]; then
     SOLVER="or-tools"
     SOLVER_OPTIONS="--time_limit=${LIMIT_TIME} --cp_random_seed 0 --fz_seed 0 --threads=1"
-elif [ "${SOLVER}" == "or-tools4" ]; then
+elif [ "${SOLVER}" == "or-tools8" ]; then
     SOLVER="or-tools"
-    SOLVER_OPTIONS="--time_limit=${LIMIT_TIME} --cp_random_seed 0 --fz_seed 0 --threads=4"
+    CPUS=8
+    SOLVER_OPTIONS="--time_limit=${LIMIT_TIME} --cp_random_seed 0 --fz_seed 0 --threads=8"
 elif [ "${SOLVER}" == "cplex" ]; then
     SOLVER_OPTIONS="--time-limit ${LIMIT_TIME}"
 else
@@ -62,13 +64,14 @@ IFS='/' read -ra PARAM_NAME <<< "$PARAM"
 IFS='/' read -ra EPRIME_NAME <<< "$EPRIME"
 mkdir -p slurm
 SLURM_FILE="slurm/${ESSENCE}_${SOLVER}_${PARAM_NAME[-1]}_${EPRIME_NAME[-1]}.sh"
+CURRENT_DIR="$(pwd)"
 rm -f "${SLURM_FILE}"
 JOB="${EPRIME}-${ESSENCE}-${SOLVER}-${PARAM_NAME[-1]}-${EPRIME_NAME[-1]}"
 echo "#!/bin/bash" >> ${SLURM_FILE}
 echo "#SBATCH --job-name=${JOB}" >> ${SLURM_FILE}
-echo "#SBATCH -e ${SLURM_FILE}.error" >> ${SLURM_FILE}
-echo "#SBATCH -o ${SLURM_FILE}task-0.output" >> ${SLURM_FILE}
-echo "#SBATCH --cpus-per-task=8" >> ${SLURM_FILE}
+echo "#SBATCH -e ${CURRENT_DIR}/${SLURM_FILE}.error" >> ${SLURM_FILE}
+echo "#SBATCH -o ${CURRENT_DIR}/${SLURM_FILE}task-0.output" >> ${SLURM_FILE}
+echo "#SBATCH --cpus-per-task=${CPUS}" >> ${SLURM_FILE}
 echo "#SBATCH --mem=8GB" >> ${SLURM_FILE}
 echo "#SBATCH --time=01:10:00" >> ${SLURM_FILE}
 echo "" >> ${SLURM_FILE}
@@ -82,9 +85,9 @@ echo "    \"ghcr.io/conjure-cp/conjure@sha256:94a42ff880f38989625a53a03315e44313
 echo "    conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \\" >> ${SLURM_FILE}
 echo "    --copy-solutions=off \\" >> ${SLURM_FILE}
 echo "    --log-level LogNone \\" >> ${SLURM_FILE}
-echo "    --savilerow-options ${SAVILEROW_OPTIONS} \\" >> ${SLURM_FILE}
+echo "    --savilerow-options \"${SAVILEROW_OPTIONS}\" \\" >> ${SLURM_FILE}
 echo "    --solver ${SOLVER} \\" >> ${SLURM_FILE}
-echo "    --solver-options ${SOLVER_OPTIONS}" >> ${SLURM_FILE}
+echo "    --solver-options \"${SOLVER_OPTIONS}"\" >> ${SLURM_FILE}
 
 echo ${TARGET_DIR}
 rm -f ${TARGET_DIR}/*.eprime-minion         # no need to keep: generated minion file
