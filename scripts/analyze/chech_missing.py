@@ -4,7 +4,7 @@ from sys import argv
 from devtools import pprint
 from json import dump
 
-def check_missing(data:pd.DataFrame|str, verbose:bool = True, save:bool = True, save_name:str = ""):
+def check_missing(data:'pd.DataFrame|str', verbose:bool = True, save:bool = True, save_name:str = ""):
 
     if save and save_name == "":
         raise Exception("Error: provide save file name if you want to save the recap")

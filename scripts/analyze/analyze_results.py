@@ -13,6 +13,8 @@ def parse_args() -> dict:
     }
 
     for arg in argv:
+        if arg == "--help":
+            return { "help":True }
         if arg == "--verbose" or arg == "-v":
             args["verbose"] = True
         elif arg == "--save" or arg == "-s":
@@ -23,7 +25,7 @@ def parse_args() -> dict:
             args["csv_name"] = arg.replace("--csv-name=", "")
         elif "--folder=" in arg:
             args["folder"] = arg.replace("--folder=", "")
-        else:
+        elif ".tsv" in arg:
             args["data"] = arg
 
     if args["save"] and not "folder" in args:
@@ -38,10 +40,26 @@ def parse_args() -> dict:
 def print_verbose(msg:str, verbose:bool):
     if verbose:
         print(msg)
+def print_help():
+    print("""
+usage: python analyze_results.py file.tsv [options]
+--help       shows this message
+--verbose/-v print to stdout the results of the scripts
+--save/-s    save the results of the scripts to file
+--json-name  save the json file result of the duplicate script to the corresponding file name (--save required)
+--csv-name   save the converted data into the corresponding csv file (--save required)
+--folder     save the plots images in the corresponding folder
+        """)
 
 def main():
-
     args = parse_args()
+    if "help" in args:
+        print_help()   
+        return
+    if not "data" in args:
+        print("invalid usage, please see --help for reference")
+        return
+
     verbose = args["verbose"]
     save = args["save"]
     if not isdir(args["folder"]):
