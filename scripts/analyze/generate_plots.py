@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Tuple
 import matplotlib.pyplot as plt
 import pandas as pd
 from itertools import combinations as make_combinations
@@ -16,7 +17,7 @@ def extract_combination_data(inst_data:dict[str,dict], combinations:list[str])->
         out.append(out_point)
     return out
 
-def make_stats(data:pd.DataFrame, folder)-> None:
+def make_stats(data:pd.DataFrame, folder:str, show:bool = False, save:bool = True)-> None:
     instances = np.unique(data["parameter"])    
     inst_data = {inst: {} for inst in instances}
     for i in range(len(data)):
@@ -44,12 +45,17 @@ def make_stats(data:pd.DataFrame, folder)-> None:
         else:
             bests[best['c']] +=1
         bests_all[best["i"]] = best
-   
+    
+    combinations = list(inst_data[list(inst_data.keys())[0]].keys())
+
     plt.figure(figsize=(10,10))
     plt.bar(list(bests.keys()), list(bests.values()))
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(join(folder,'winning_combination.png'))
+    if save:
+        plt.savefig(join(folder,'winning_combination.png'))
+    if show:
+        plt.show()
     plt.clf()
 
     solvers = np.unique(data["solver"]).tolist()
@@ -63,7 +69,10 @@ def make_stats(data:pd.DataFrame, folder)-> None:
     plt.bar(list(solv_data.keys()), list(solv_data.values()))
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(join(folder,'winning_solver.png'))
+    if save:
+        plt.savefig(join(folder,'winning_solver.png'))
+    if show:
+        plt.show()
     plt.clf()
 
     heuristics = np.unique(data["heuristic"]).tolist()
@@ -77,7 +86,10 @@ def make_stats(data:pd.DataFrame, folder)-> None:
     plt.bar(list(heur_data.keys()), list(heur_data.values()))
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(join(folder,'winning_heuristic.png'))
+    if save:
+        plt.savefig(join(folder,'winning_heuristic.png'))
+    if show:
+        plt.show()
     plt.clf()
 
     distances_total = {d: [] for d in np.unique(np.ravel([list(inst_data[key].keys()) for key in inst_data.keys()]))}
@@ -104,17 +116,26 @@ def make_stats(data:pd.DataFrame, folder)-> None:
     plt.boxplot(list(distances_total.values()), labels=list(distances_total.keys()))
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(join(folder,'distance_from_the_winner_combination.png')) 
+    if save:
+        plt.savefig(join(folder,'distance_from_the_winner_combination.png')) 
+    if show:
+        plt.show()
     plt.clf()
     plt.boxplot(list(distances_heuristic.values()), labels=list(distances_heuristic.keys()))
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(join(folder,'distance_from_the_winner_heuristic.png'))
+    if save:
+        plt.savefig(join(folder,'distance_from_the_winner_heuristic.png'))
+    if show:
+        plt.show()
     plt.clf()
     plt.boxplot(list(distances_solvers.values()), labels=list(distances_solvers.keys()))
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(join(folder,'distance_from_the_winner_solver.png'))
+    if save:
+        plt.savefig(join(folder,'distance_from_the_winner_solver.png'))
+    if show:
+        plt.show()
     plt.clf()
 
     total_time_total = {d: 0 for d in np.unique(np.ravel([list(inst_data[key].keys()) for key in inst_data.keys()]))}
@@ -135,44 +156,56 @@ def make_stats(data:pd.DataFrame, folder)-> None:
     plt.bar(list(total_time_total.keys()), list(total_time_total.values()))
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(join(folder,'total_solving_time_per_combination.png'))
+    if save:
+        plt.savefig(join(folder,'total_solving_time_per_combination.png'))
+    if show:
+        plt.show()
     plt.clf()
     plt.figure(figsize=(10,10))
     plt.bar(list(total_time_heuristic.keys()), list(total_time_heuristic.values()))
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(join(folder,'total_solving_time_per_heuristic.png'))
+    if save:
+        plt.savefig(join(folder,'total_solving_time_per_heuristic.png'))
+    if show:
+        plt.show()
     plt.clf()
     plt.figure(figsize=(10,10))
     plt.bar(list(total_time_solvers.keys()), list(total_time_solvers.values()))
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(join(folder,'total_solving_time_per_solver.png'))
-    plt.clf()
-    couples_combinations = list(make_combinations(combinations, 2))
-    n = len(couples_combinations)
-    num_rows = math.ceil(math.sqrt(n))
-    num_cols = math.ceil(n / num_rows)
+    if save:
+        plt.savefig(join(folder,'total_solving_time_per_solver.png'))
+    if show:
+        plt.clf()
 
-    # Create a figure and axis for each subplot
-    fig, axs = plt.subplots(num_rows, num_cols, figsize=(30, 30))
+    couples_combinations:list[Tuple] = list(make_combinations(combinations, 2))
+    n = len(combinations)
+    num_rows = n
+    num_cols = n
+
+    fig, axs = plt.subplots(num_rows, num_cols, figsize=(50, 50))
     if n == 1:
         axs = [axs]
-    else:
-        axs = np.ravel(axs)
+
 
     for i in range(n):
-        c1, c2 = couples_combinations[i]
-        couples_combinations[i] = (c1, c2, axs[i])
-
-    for c1, c2, ax in couples_combinations:
-        data_to_plot = pd.DataFrame(extract_combination_data(inst_data, [c1, c2]))
-        sns.scatterplot(ax=ax, data=data_to_plot, x=c1, y=c2, markers='x', alpha=.7)
-        xy = np.linspace(.1, 3600)
-        ax.plot(xy,xy, ls="--", c="#888888")
+        c1 = combinations[i]
+        for j in range(n):
+            if i == j:
+                continue
+            c2 = combinations[j]
+            data_to_plot = pd.DataFrame(extract_combination_data(inst_data, [c1, c2]))
+            ax = axs[i,j]
+            sns.scatterplot(ax=ax, data=data_to_plot, x=c1, y=c2, markers='x', alpha=.7)
+            xy = np.linspace(.1, 3600)
+            ax.plot(xy,xy, ls="--", c="#888888")
 
     fig.tight_layout()
-    plt.savefig(join(folder,'combination_against_combination.png'), dpi=600)
+    if save:
+        plt.savefig(join(folder,'combination_against_combination.png'), dpi=600)
+    if show:
+        plt.show()
 
 def main():
     if len(argv) < 2:
