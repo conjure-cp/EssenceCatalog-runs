@@ -3,6 +3,7 @@ import numpy as np
 from sys import argv
 from devtools import pprint
 from json import dump
+import math
 
 def check_missing(data:'pd.DataFrame|str', verbose:bool = True, save:bool = True, save_name:str = ""):
 
@@ -15,8 +16,7 @@ def check_missing(data:'pd.DataFrame|str', verbose:bool = True, save:bool = True
     inst_data = {inst: {} for inst in instances}
     for i in range(len(data)):
         row = data.iloc[i, :]
-        if row['solver'] != "or-tools":
-            inst_data[row["parameter"]][f"{row['heuristic']}_{row['solver']}"] = {"t":0, "o":0, "i": row["parameter"]}
+        inst_data[row["parameter"]][f"{row['heuristic']}_{row['solver']}"] = {"t":float(row["SolverTotalTime"]), "i": row["parameter"]}
     
     number_of_elements = np.unique([len(list(inst_data[inst].keys())) for inst in inst_data.keys()]).tolist()
     max_elements = max(number_of_elements)
@@ -46,6 +46,9 @@ def check_missing(data:'pd.DataFrame|str', verbose:bool = True, save:bool = True
 
     for inst in inst_data.keys():
         combs = list(inst_data[inst].keys())
+        for i in reversed(range(len(combs))):
+            if math.isnan(inst_data[inst][combs[i]]["t"]):
+                del combs[i]
 
         if len(combs) < max_elements:
             elem = {
