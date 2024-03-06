@@ -64,6 +64,9 @@ cp ${EPRIME_SRC} ${TARGET_DIR}/${EPRIME}
 IFS='/' read -ra PARAM_NAME <<< "$PARAM"
 IFS='/' read -ra EPRIME_NAME <<< "$EPRIME"
 mkdir -p slurm
+mkdir -p slurm/sh
+mkdir -p slurm/stderror
+mkdir -p slurm/stdout
 CURRENT_DIR="$(pwd)"
 SLURM_FILE_BASE="${ESSENCE}_${FULL_SOLVER}_${PARAM_NAME[-1]}_${EPRIME_NAME[-1]}"
 SLURM_FILE="slurm/sh/${SLURM_FILE_BASE}.sh"
