@@ -34,6 +34,7 @@ else
     exit 1
 fi
 CPUS=2
+FULL_SOLVER=$SOLVER
 if [ "${SOLVER}" == "minion" ]; then
     SOLVER_OPTIONS="-cpulimit ${LIMIT_TIME} -varorder domoverwdeg -preprocess GAC"
 elif [ "${SOLVER}" == "lingeling" ]; then
@@ -49,7 +50,7 @@ elif [ "${SOLVER}" == "or-tools1" ]; then
     SOLVER_OPTIONS="--time_limit=${LIMIT_TIME} --cp_random_seed 0 --fz_seed 0 --threads=1"
 elif [ "${SOLVER}" == "or-tools8" ]; then
     SOLVER="or-tools"
-    CPUS=8
+    CPUS=9
     SOLVER_OPTIONS="--time_limit=${LIMIT_TIME} --cp_random_seed 0 --fz_seed 0 --threads=8"
 elif [ "${SOLVER}" == "cplex" ]; then
     SOLVER_OPTIONS="--time-limit ${LIMIT_TIME}"
@@ -63,25 +64,30 @@ cp ${EPRIME_SRC} ${TARGET_DIR}/${EPRIME}
 IFS='/' read -ra PARAM_NAME <<< "$PARAM"
 IFS='/' read -ra EPRIME_NAME <<< "$EPRIME"
 mkdir -p slurm
-SLURM_FILE="slurm/${ESSENCE}_${SOLVER}_${PARAM_NAME[-1]}_${EPRIME_NAME[-1]}.sh"
+mkdir -p slurm/sh
+mkdir -p slurm/stderror
+mkdir -p slurm/stdout
 CURRENT_DIR="$(pwd)"
+SLURM_FILE_BASE="${ESSENCE}_${FULL_SOLVER}_${PARAM_NAME[-1]}_${EPRIME_NAME[-1]}"
+SLURM_FILE="slurm/sh/${SLURM_FILE_BASE}.sh"
+ERROR_FILE="${CURRENT_DIR}/slurm/stderror/${SLURM_FILE_BASE}.error"
+OUT_FILE="${CURRENT_DIR}/slurm/stdout/${SLURM_FILE_BASE}task.output"
+
 rm -f "${SLURM_FILE}"
-JOB="${EPRIME}-${ESSENCE}-${SOLVER}-${PARAM_NAME[-1]}-${EPRIME_NAME[-1]}"
+JOB="${EPRIME}-${ESSENCE}-${FULL_SOLVER}-${PARAM_NAME[-1]}-${EPRIME_NAME[-1]}"
 echo "#!/bin/bash" >> ${SLURM_FILE}
 echo "#SBATCH --job-name=${JOB}" >> ${SLURM_FILE}
-echo "#SBATCH -e ${CURRENT_DIR}/${SLURM_FILE}.error" >> ${SLURM_FILE}
-echo "#SBATCH -o ${CURRENT_DIR}/${SLURM_FILE}task-0.output" >> ${SLURM_FILE}
+echo "#SBATCH -e ${ERROR_FILE}" >> ${SLURM_FILE}
+echo "#SBATCH -o ${OUT_FILE}" >> ${SLURM_FILE}
 echo "#SBATCH --cpus-per-task=${CPUS}" >> ${SLURM_FILE}
-echo "#SBATCH --mem=8GB" >> ${SLURM_FILE}
+echo "#SBATCH --mem=9GB" >> ${SLURM_FILE}
 echo "#SBATCH --time=01:10:00" >> ${SLURM_FILE}
 echo "" >> ${SLURM_FILE}
 echo "podman run -it --rm \\" >> ${SLURM_FILE}
 echo "    --network=none \\" >> ${SLURM_FILE}
 echo "    -v "$PWD:/podmandir:z" \\" >> ${SLURM_FILE}
-echo "    --cpus=${CPUS} \\" >> ${SLURM_FILE}
-echo "    --memory=8g \\" >> ${SLURM_FILE}
 echo "    --timeout=${LIMIT_TIME_PADDED} \\" >> ${SLURM_FILE}
-echo "    \"ghcr.io/conjure-cp/conjure@sha256:94a42ff880f38989625a53a03315e44313866a1eda76f268dccb941734d55e29\" \\" >> ${SLURM_FILE}
+echo "    \"conjurecplex\" \\" >> ${SLURM_FILE}
 echo "    conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \\" >> ${SLURM_FILE}
 echo "    --copy-solutions=off \\" >> ${SLURM_FILE}
 echo "    --log-level LogNone \\" >> ${SLURM_FILE}
