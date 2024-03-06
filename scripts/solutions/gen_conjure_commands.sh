@@ -17,7 +17,9 @@ rm -f ${CMD_FILE}
 touch ${CMD_FILE}
 
 pushd EssenceCatalog/problems > /dev/null               # go through all problems in EssenceCatalog
-for prob in *; do
+for prob in csplib-prob023-MagicHexagon csplib-prob026-SportsTournamentScheduling; do
+    echo $prob
+    ls $prob
     pushd "${prob}" > /dev/null
     for essence in *.essence; do                        # go through all essence files for this problem, ideally there is only one
         essence_base="${essence%.*}"
