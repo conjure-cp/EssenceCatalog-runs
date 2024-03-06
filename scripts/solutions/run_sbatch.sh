@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd slurm > /dev/null
+pushd slurm/sh > /dev/null
 for run in *.sh; do
 	sbatch "${run}"
 done
