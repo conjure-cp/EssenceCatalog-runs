@@ -1,7 +1,4 @@
 #!/bin/bash
 
-pushd slurm/sh > /dev/null
-for run in *.sh; do
-	sbatch "${run}"
-done
-popd > /dev/null
+parallel --no-notice --shuf -j1 sbatch ::: slurm/sh/*.sh
+
