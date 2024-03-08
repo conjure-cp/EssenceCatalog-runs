@@ -9,11 +9,11 @@ if [[ -v RUN_TYPE ]]; then
     type="$RUN_TYPE"
 fi
 
-nb_cores=$1
+nb_tasks_to_submit=$1
 scripts/solutions/gen_conjure_commands.sh
-scripts/solutions/gen_solutions.sh $nb_cores
+scripts/solutions/gen_solutions.sh 0
 if [[ "${type}" == "sbatch" ]]; then
-	scripts/solutions/run_sbatch.sh
+	scripts/solutions/run_sbatch.sh ${nb_tasks_to_submit}
 else
 	scripts/solutions/collect_info.sh
 	scripts/solutions/clean_up.sh

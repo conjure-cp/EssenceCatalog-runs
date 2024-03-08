@@ -83,7 +83,7 @@ echo "#SBATCH --cpus-per-task=${CPUS}" >> ${SLURM_FILE}
 echo "#SBATCH --mem=9GB" >> ${SLURM_FILE}
 echo "#SBATCH --time=01:10:00" >> ${SLURM_FILE}
 echo "" >> ${SLURM_FILE}
-echo "podman run -it --rm \\" >> ${SLURM_FILE}
+echo "podman run --rm \\" >> ${SLURM_FILE}
 echo "    --network=none \\" >> ${SLURM_FILE}
 echo "    -v "$PWD:/podmandir:z" \\" >> ${SLURM_FILE}
 echo "    --timeout=${LIMIT_TIME_PADDED} \\" >> ${SLURM_FILE}
