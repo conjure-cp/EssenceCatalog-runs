@@ -18,7 +18,7 @@ EPRIME_SRC="problems/${PROBLEM}/conjure-mode/${CONJURE_MODE}/${EPRIME}"
 TARGET_DIR="problems/${PROBLEM}/conjure-mode/${CONJURE_MODE}/savilerow-mode/${SAVILEROW_MODE}/solver/${SOLVER}"
 mkdir -p "${TARGET_DIR}"
 
-LIMIT_TIME_PADDED=$(( LIMIT_TIME + 300 ))
+LIMIT_TIME_PADDED=$(( LIMIT_TIME * 2 ))
 
 SAVILEROW_OPTIONS="-timelimit ${LIMIT_TIME}"
 if [ "${SAVILEROW_MODE}" == "O0" ]; then
@@ -59,8 +59,6 @@ else
     exit 1
 fi
 
-cp ${EPRIME_SRC} ${TARGET_DIR}/${EPRIME}
-
 IFS='/' read -ra PARAM_NAME <<< "$PARAM"
 IFS='/' read -ra EPRIME_NAME <<< "$EPRIME"
 mkdir -p slurm
@@ -88,7 +86,7 @@ echo "    --network=none \\" >> ${SLURM_FILE}
 echo "    -v "$PWD:/podmandir:z" \\" >> ${SLURM_FILE}
 echo "    --timeout=${LIMIT_TIME_PADDED} \\" >> ${SLURM_FILE}
 echo "    \"localhost/conjure-cplex\" \\" >> ${SLURM_FILE}
-echo "    conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \\" >> ${SLURM_FILE}
+echo "    conjure solve --use-existing-models=/podmandir/${EPRIME_SRC} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \\" >> ${SLURM_FILE}
 echo "    --copy-solutions=off \\" >> ${SLURM_FILE}
 echo "    --log-level LogNone \\" >> ${SLURM_FILE}
 echo "    --savilerow-options \"${SAVILEROW_OPTIONS}\" \\" >> ${SLURM_FILE}
