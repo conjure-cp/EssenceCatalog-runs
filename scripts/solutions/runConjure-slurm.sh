@@ -18,7 +18,7 @@ EPRIME_SRC="problems/${PROBLEM}/conjure-mode/${CONJURE_MODE}/${EPRIME}"
 TARGET_DIR="problems/${PROBLEM}/conjure-mode/${CONJURE_MODE}/savilerow-mode/${SAVILEROW_MODE}/solver/${SOLVER}"
 mkdir -p "${TARGET_DIR}"
 
-LIMIT_TIME_PADDED=$(( LIMIT_TIME + 300 ))
+LIMIT_TIME_PADDED=$(( LIMIT_TIME * 2 ))
 
 SAVILEROW_OPTIONS="-timelimit ${LIMIT_TIME}"
 if [ "${SAVILEROW_MODE}" == "O0" ]; then
