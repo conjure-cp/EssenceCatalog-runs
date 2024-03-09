@@ -7,6 +7,8 @@ shopt -s nullglob
 ROOT_DIR=$(pwd)
 CMD_FILE="${ROOT_DIR}/scripts/solutions/conjure_commands.txt"
 
+nb_tasks_to_submit=$1
+
 if [[ -v RUN_TYPE ]]; then
 	SCRIPT="scripts/solutions/runConjure.sh"
 else
@@ -17,8 +19,8 @@ rm -f ${CMD_FILE}
 touch ${CMD_FILE}
 
 pushd EssenceCatalog/problems > /dev/null               # go through all problems in EssenceCatalog
-for prob in csplib-prob023-MagicHexagon csplib-prob026-SportsTournamentScheduling csplib-prob049-NumberPartitioningSimple ; do
-# for prob in csplib-prob006-GolombRulerDecision; do
+# for prob in csplib-prob023-MagicHexagon csplib-prob026-SportsTournamentScheduling csplib-prob049-NumberPartitioningSimple ; do
+for prob in csplib-prob001-CarSequencing; do
     echo "Generating commands for problem: $prob"
     pushd "${prob}" > /dev/null
     for essence in *.essence; do                        # go through all essence files for this problem, ideally there is only one
@@ -52,4 +54,8 @@ popd > /dev/null
 # -d consider only blanks and alphanumeric characters
 # -f ignore case
 LC_ALL=C sort -df ${CMD_FILE} -o ${CMD_FILE}
+
+sort -R ${CMD_FILE} -o ${CMD_FILE}
+head -n $nb_tasks_to_submit ${CMD_FILE} > ${CMD_FILE}.tmp
+mv ${CMD_FILE}.tmp ${CMD_FILE}
 
