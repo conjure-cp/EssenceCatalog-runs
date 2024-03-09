@@ -17,7 +17,7 @@ rm -f ${CMD_FILE}
 touch ${CMD_FILE}
 
 pushd EssenceCatalog/problems > /dev/null               # go through all problems in EssenceCatalog
-for prob in csplib-prob023-MagicHexagon csplib-prob026-SportsTournamentScheduling; do
+for prob in csplib-prob023-MagicHexagon csplib-prob026-SportsTournamentScheduling csplib-prob049-NumberPartitioningSimple ; do
 # for prob in csplib-prob006-GolombRulerDecision; do
     echo $prob
     ls $prob
