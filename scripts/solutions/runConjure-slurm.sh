@@ -82,6 +82,7 @@ echo "#SBATCH --mem=9GB" >> ${SLURM_FILE}
 echo "#SBATCH --time=02:00:00" >> ${SLURM_FILE}
 echo "" >> ${SLURM_FILE}
 echo "podman run --rm \\" >> ${SLURM_FILE}
+echo "    --hostname=$(hostname) \\" >> ${SLURM_FILE}
 echo "    --network=none \\" >> ${SLURM_FILE}
 echo "    -v "$PWD:/podmandir:z" \\" >> ${SLURM_FILE}
 echo "    --timeout=${LIMIT_TIME_PADDED} \\" >> ${SLURM_FILE}
