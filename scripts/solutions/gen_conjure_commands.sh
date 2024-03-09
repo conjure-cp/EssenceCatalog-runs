@@ -19,8 +19,7 @@ touch ${CMD_FILE}
 pushd EssenceCatalog/problems > /dev/null               # go through all problems in EssenceCatalog
 for prob in csplib-prob023-MagicHexagon csplib-prob026-SportsTournamentScheduling csplib-prob049-NumberPartitioningSimple ; do
 # for prob in csplib-prob006-GolombRulerDecision; do
-    echo $prob
-    ls $prob
+    echo "Generating commands for problem: $prob"
     pushd "${prob}" > /dev/null
     for essence in *.essence; do                        # go through all essence files for this problem, ideally there is only one
         essence_base="${essence%.*}"
