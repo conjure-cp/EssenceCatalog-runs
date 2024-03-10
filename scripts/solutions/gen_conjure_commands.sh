@@ -19,7 +19,7 @@ rm -f ${CMD_FILE}
 touch ${CMD_FILE}
 
 pushd EssenceCatalog/problems > /dev/null               # go through all problems in EssenceCatalog
-# for prob in csplib-prob023-MagicHexagon csplib-prob026-SportsTournamentScheduling csplib-prob049-NumberPartitioningSimple ; do
+# for prob in csplib-prob001-CarSequencing csplib-prob023-MagicHexagon csplib-prob026-SportsTournamentScheduling csplib-prob049-NumberPartitioningSimple ; do
 for prob in csplib-prob001-CarSequencing; do
     echo "Generating commands for problem: $prob"
     pushd "${prob}" > /dev/null
@@ -36,6 +36,7 @@ for prob in csplib-prob001-CarSequencing; do
                         for solver in kissat or-tools1 or-tools8 cplex chuffed; do
                             INFO_FILE="${ROOT_DIR}/problems/${prob}/conjure-mode/${conjure_mode}/savilerow-mode/${savilerow_mode}/solver/${solver}/${eprime_base}-${param_base}.stats.json"
                             if ! [ -f "${INFO_FILE}" ]; then
+                                # echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}"
                                 echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}
                             fi
                         done
@@ -55,6 +56,9 @@ popd > /dev/null
 # -f ignore case
 LC_ALL=C sort -df ${CMD_FILE} -o ${CMD_FILE}
 
+echo "Number of commands"
+wc -l ${CMD_FILE}
+echo "Running a random subset of $nb_tasks_to_submit"
 sort -R ${CMD_FILE} -o ${CMD_FILE}
 head -n $nb_tasks_to_submit ${CMD_FILE} > ${CMD_FILE}.tmp
 mv ${CMD_FILE}.tmp ${CMD_FILE}
