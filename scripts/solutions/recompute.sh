@@ -11,7 +11,7 @@ fi
 
 nb_tasks_to_submit=$1
 scripts/solutions/gen_conjure_commands.sh ${nb_tasks_to_submit}
-scripts/solutions/gen_solutions.sh 1
+scripts/solutions/gen_solutions.sh 0
 if [[ "${type}" == "sbatch" ]]; then
 	scripts/solutions/run_sbatch.sh
 else
