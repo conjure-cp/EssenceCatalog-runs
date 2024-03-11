@@ -38,6 +38,8 @@ for prob in csplib-prob001-CarSequencing; do
                             if ! [ -f "${INFO_FILE}" ]; then
                                 # echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}"
                                 echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}
+			    else
+                                echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}.skipped
                             fi
                         done
                     done
@@ -56,10 +58,11 @@ popd > /dev/null
 # -f ignore case
 LC_ALL=C sort -df ${CMD_FILE} -o ${CMD_FILE}
 
-echo "Number of commands"
-wc -l ${CMD_FILE}
+echo "Number of commands to run"
+wc -l ${CMD_FILE}*
 echo "Running a random subset of $nb_tasks_to_submit"
 sort -R ${CMD_FILE} -o ${CMD_FILE}
 head -n $nb_tasks_to_submit ${CMD_FILE} > ${CMD_FILE}.tmp
 mv ${CMD_FILE}.tmp ${CMD_FILE}
+rm ${CMD_FILE}.skipped
 
