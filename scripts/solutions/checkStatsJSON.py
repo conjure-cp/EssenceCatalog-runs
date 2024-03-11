@@ -16,11 +16,11 @@ for path in pathlist:
         stats = json.load(f)
         sr = ""
         try:
-            sr += "\n".join(stats["savileRowLogs"]["stdout"])
+            sr += "\n".join(stats["savilerowLogs"]["stdout"])
         except KeyError:
             pass
         try:
-            sr += "\n".join(stats["savileRowLogs"]["stderr"])
+            sr += "\n".join(stats["savilerowLogs"]["stderr"])
         except KeyError:
             pass
 
