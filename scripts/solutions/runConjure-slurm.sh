@@ -102,3 +102,5 @@ echo "rm -f ${TARGET_DIR}/*.eprime-infor" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/*.eprime-fzn" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/*.eprime-param.fzn" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/*.eprime.mzn" >> ${SLURM_FILE}
+
+sbatch ${SLURM_FILE}
