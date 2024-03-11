@@ -179,7 +179,6 @@ def make_stats(data:pd.DataFrame, folder:str, show:bool = False, save:bool = Tru
     if show:
         plt.clf()
 
-    couples_combinations:list[Tuple] = list(make_combinations(combinations, 2))
     n = len(combinations)
     num_rows = n
     num_cols = n
@@ -196,9 +195,15 @@ def make_stats(data:pd.DataFrame, folder:str, show:bool = False, save:bool = Tru
                 continue
             c2 = combinations[j]
             data_to_plot = pd.DataFrame(extract_combination_data(inst_data, [c1, c2]))
+            m1, m2 = np.max(data_to_plot.iloc[:,1]), np.max(data_to_plot.iloc[:,2])
+            max = np.max([m1, m2])
             ax = axs[i,j]
             sns.scatterplot(ax=ax, data=data_to_plot, x=c1, y=c2, markers='x', alpha=.7)
-            xy = np.linspace(.1, 3600)
+            xy = np.linspace(0, max)
+            ax.set_yscale('log')
+            ax.set_xscale('log')
+            ax.set_xlim(left=0.1, right=max + 1)
+            ax.set_ylim(bottom=0.1, top=max + 1)
             ax.plot(xy,xy, ls="--", c="#888888")
 
     fig.tight_layout()
@@ -209,7 +214,7 @@ def make_stats(data:pd.DataFrame, folder:str, show:bool = False, save:bool = Tru
 
 def main():
     if len(argv) < 2:
-        print("please provide a valid tsv file to parse")
+        print("please provide a valid csv file to parse")
         return
     folder = '.'
     if len(argv) == 3:
