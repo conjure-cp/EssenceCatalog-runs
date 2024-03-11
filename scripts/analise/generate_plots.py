@@ -1,10 +1,7 @@
 import numpy as np
-from typing import Tuple
 import matplotlib.pyplot as plt
 import pandas as pd
-from itertools import combinations as make_combinations
 import seaborn as sns
-import math
 from os.path import join
 from sys import argv
 
