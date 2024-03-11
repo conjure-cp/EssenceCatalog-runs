@@ -94,11 +94,10 @@ echo "    --savilerow-options \"${SAVILEROW_OPTIONS}\" \\" >> ${SLURM_FILE}
 echo "    --solver ${SOLVER} \\" >> ${SLURM_FILE}
 echo "    --solver-options \"${SOLVER_OPTIONS}"\" >> ${SLURM_FILE}
 
-echo ${TARGET_DIR}
-rm -f ${TARGET_DIR}/*.eprime-minion         # no need to keep: generated minion file
-rm -f ${TARGET_DIR}/*.eprime-dimacs         # no need to keep: generated sat file
-rm -f ${TARGET_DIR}/*.eprime-param          # no need to keep
-rm -f ${TARGET_DIR}/*.eprime-fzn            # no need to keep
-rm -f ${TARGET_DIR}/*.eprime-param.fzn      # no need to keep
-rm -f ${TARGET_DIR}/*.eprime.mzn            # no need to keep
-
+echo "rm -f ${TARGET_DIR}/*.eprime-minion" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/*.eprime-dimacs" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/*.eprime-param" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/*.eprime-infor" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/*.eprime-fzn" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/*.eprime-param.fzn" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/*.eprime.mzn" >> ${SLURM_FILE}
