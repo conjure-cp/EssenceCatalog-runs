@@ -97,6 +97,7 @@ echo "    --solver-options \"${SOLVER_OPTIONS}"\" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/*.eprime-minion" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/*.eprime-dimacs" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/*.eprime-param" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/*.eprime-solution" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/*.eprime-infor" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/*.eprime-fzn" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/*.eprime-param.fzn" >> ${SLURM_FILE}
