@@ -31,19 +31,17 @@ for path in pathlist:
             stats["status"] = "TimeOut"
             changed = True
 
-        if "undefined identifier" in sr and stats["status"] != "Error":
-            print(
-                f'Found (undefined identifier) -- {stats["status"]} -- {path_str}')
-            stats["status"] = "Error"
-            changed = True
+        messages = [
+            "undefined identifier",
+            "MiniZinc error: Memory violation detected and error message",
+            "Check failed: ParseFlatzincFile",
+            "parse error: unexpected end-of-file after parsing number of clauses",
+            "error: Cannot open file",
+            "kissat: error: can not read"
+        ]
 
-        if "MiniZinc error: Memory violation detected and error message" in sr and stats["status"] != "Error":
-            print(f'Found (MiniZinc error) -- {stats["status"]} -- {path_str}')
-            stats["status"] = "Error"
-            changed = True
-
-        if "Check failed: ParseFlatzincFile" in sr and stats["status"] != "Error":
-            print(f'Found (MiniZinc error) -- {stats["status"]} -- {path_str}')
+        if any([m in sr for m in messages]) and stats["status"] != "Error":
+            print(f'Found (should be Error, but is not) -- {stats["status"]} -- {path_str}')
             stats["status"] = "Error"
             changed = True
 
