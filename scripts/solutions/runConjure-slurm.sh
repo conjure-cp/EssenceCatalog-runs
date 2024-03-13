@@ -94,13 +94,16 @@ echo "    --savilerow-options \"${SAVILEROW_OPTIONS}\" \\" >> ${SLURM_FILE}
 echo "    --solver ${SOLVER} \\" >> ${SLURM_FILE}
 echo "    --solver-options \"${SOLVER_OPTIONS}"\" >> ${SLURM_FILE}
 
-echo "rm -f ${TARGET_DIR}/*.eprime-minion" >> ${SLURM_FILE}
-echo "rm -f ${TARGET_DIR}/*.eprime-dimacs" >> ${SLURM_FILE}
-echo "rm -f ${TARGET_DIR}/*.eprime-param" >> ${SLURM_FILE}
-echo "rm -f ${TARGET_DIR}/*.eprime-solution" >> ${SLURM_FILE}
-echo "rm -f ${TARGET_DIR}/*.eprime-infor" >> ${SLURM_FILE}
-echo "rm -f ${TARGET_DIR}/*.eprime-fzn" >> ${SLURM_FILE}
-echo "rm -f ${TARGET_DIR}/*.eprime-param.fzn" >> ${SLURM_FILE}
-echo "rm -f ${TARGET_DIR}/*.eprime.mzn" >> ${SLURM_FILE}
+EPRIME_BASE="${EPRIME%.*}"
+PARAM_BASE="${PARAM%.*}"
+
+echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-minion" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-dimacs" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-param" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-solution" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-infor" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-fzn" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-param.fzn" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime.mzn" >> ${SLURM_FILE}
 
 sbatch ${SLURM_FILE}
