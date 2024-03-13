@@ -70,3 +70,7 @@ for path in pathlist:
         with open(path_str, "w") as f2:
             print(f'Saved {path_str}')
             json.dump(stats, f2, indent=2)
+
+    if "ERROR: File not found" in sr and stats["savilerowLogs"]["exitCode"] == 1:
+        print(f"rm {path_str}")
+        os.remove(path_str)
