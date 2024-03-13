@@ -95,7 +95,9 @@ echo "    --solver ${SOLVER} \\" >> ${SLURM_FILE}
 echo "    --solver-options \"${SOLVER_OPTIONS}"\" >> ${SLURM_FILE}
 
 EPRIME_BASE="${EPRIME%.*}"
-PARAM_BASE="${PARAM%.*}"
+PARAM_BASE=${PARAM##*/}
+PARAM_BASE="${PARAM_BASE%.*}"
+echo "# PARAM ${PARAM_BASE}" >> $SLURM_FILE
 
 echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-minion" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-dimacs" >> ${SLURM_FILE}
