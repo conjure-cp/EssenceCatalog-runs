@@ -31,6 +31,12 @@ for path in pathlist:
             stats["status"] = "TimeOut"
             changed = True
 
+        if "ERROR: Out of Memory" in sr and stats["status"] != "MemOut":
+            print(
+                f'Found (should be MemOut) -- {stats["status"]} -- {path_str}')
+            stats["status"] = "MemOut"
+            changed = True
+
         messages = [
             "undefined identifier",
             "MiniZinc error: Memory violation detected and error message",
@@ -41,7 +47,8 @@ for path in pathlist:
         ]
 
         if any([m in sr for m in messages]) and stats["status"] != "Error":
-            print(f'Found (should be Error, but is not) -- {stats["status"]} -- {path_str}')
+            print(
+                f'Found (should be Error, but is not) -- {stats["status"]} -- {path_str}')
             stats["status"] = "Error"
             changed = True
 
