@@ -56,8 +56,6 @@ else
     exit 1
 fi
 
-cp ${EPRIME_SRC} ${TARGET_DIR}/${EPRIME}
-
 podman run -it --rm \
     --network=none \
     -v "$PWD:/podmandir:z" \
@@ -65,7 +63,7 @@ podman run -it --rm \
     --memory=8g \
     --timeout=${LIMIT_TIME_PADDED} \
     "ghcr.io/conjure-cp/conjure@sha256:94a42ff880f38989625a53a03315e44313866a1eda76f268dccb941734d55e29" \
-    conjure solve --use-existing-models=${EPRIME} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \
+    conjure solve --use-existing-models=/podmandir/${EPRIME_SRC} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \
     --copy-solutions=off \
     --log-level LogNone \
     --savilerow-options "${SAVILEROW_OPTIONS}" \
