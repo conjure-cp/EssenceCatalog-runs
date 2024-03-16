@@ -1,4 +1,6 @@
-
+"""
+Cheks the stats.json files for anything unexpected.
+"""
 from pathlib import Path
 import sys
 import json
@@ -12,7 +14,7 @@ for path in pathlist:
     path_str = str(path)
     stats = None
     # print(f'Parsing {path_str}')
-    with open(path_str) as f:
+    with open(path_str, "r", encoding = "utf8") as f:
         stats = json.load(f)
         sr = ""
         try:
@@ -43,7 +45,8 @@ for path in pathlist:
             "Check failed: ParseFlatzincFile",
             "parse error: unexpected end-of-file after parsing number of clauses",
             "error: Cannot open file",
-            "kissat: error: can not read"
+            "kissat: error: can not read",
+            "kissat: fatal error: maximum arena capacity"
         ]
 
         if any([m in sr for m in messages]) and stats["status"] != "Error":
@@ -67,7 +70,7 @@ for path in pathlist:
             print(sr)
 
     if changed:
-        with open(path_str, "w") as f2:
+        with open(path_str, "w", encoding="utf8") as f2:
             print(f'Saved {path_str}')
             json.dump(stats, f2, indent=2)
 
