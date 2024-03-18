@@ -10,7 +10,7 @@ find problems -name '*.eprime-dimacs' -delete
 find problems -name '*.eprime-minion' -delete
 find problems -name '*.eprime-param.fzn' -delete
 find problems -name '*.eprime-solution' -delete
-find problems -name '*.solution' -delete
+# find problems -name '*.solution' -delete
 
 # find problems -name '*.eprime-info'   -delete
 find problems -name '*.eprime-infor'  -delete
