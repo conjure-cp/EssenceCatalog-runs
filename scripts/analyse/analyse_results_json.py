@@ -1,23 +1,37 @@
 from load_jsons import load_jsons
-from chech_missing import check_missing
-from add_aggregate_stats import add_stats
-from generate_plots import make_stats
+from make_stats import make_stats
 from sys import argv
-from os.path import join, isdir
+from os.path import isdir
 from os import makedirs
-import pandas as pd
 from typing import Any
 
 def rebuild(data:list[dict]) -> list[dict]:
     out = []
     for datapoint in data:
+        solver = datapoint["solver"]
+        if solver == "or-tools":
+            continue
+            if "--threads=8" in datapoint["solverOptions"][0]:
+                solver = "or-tools-8"
+            else:
+                solver = "or-tools-1"
         out.append({
-            "parameter": datapoint["essenceParams"][0],
-            "heuristic": datapoint["useExistingModels"][0].split("/")[-1],
-            "solver": datapoint["solver"],
-            "totalTime": datapoint["totalTime"] if "totalTime" in datapoint else 3600,
-            "timeout": 1 if datapoint["status"] == "OK" else 0
+            "instance": datapoint["essenceParams"][0],
+            "model": datapoint["useExistingModels"][0].split("/")[-1],
+            "solver": solver,
+            "total_time": datapoint["totalTime"] if datapoint["status"] == "OK" else 36000,
+            "status": datapoint["status"],
+            "solver_options": datapoint["solverOptions"][0]
         })
+    return out
+
+def extract_combination_data(inst_data:dict[str,dict], combinations:list[str])-> list:
+    out = []
+    for key in inst_data:
+        out_point = {'inst': key}
+        for combination in combinations:
+            out_point[combination] = inst_data[key][combination]
+        out.append(out_point)
     return out
 
 def parse_args() -> dict:
@@ -66,10 +80,6 @@ def main():
     data = load_jsons(args["folder"], verbose=verbose)
     print_verbose("JSONs loaded", verbose)
     data = rebuild(data)
-    data = pd.DataFrame(data)
-    print_verbose("checking for missing", verbose)
-    missings = check_missing(data, verbose, save=False)
-    print_verbose("missing checked", verbose)
     
     print_verbose("making graphs", verbose)
     make_stats(data, args['stats-folder'])
