@@ -79,7 +79,7 @@ def main(problem_dir):
                 times.add(36000)
         if min(times) >= 36000:
             # all timeouts, ignore instances
-            pass
+            print(f"ALL TO: {param}", file=sys.stderr)
         else:
             vbs_time += min(times)
             min_times.append(min(times))
