@@ -7,6 +7,7 @@ import json
 
 
 def main(problem_dir):
+    """Given a problem class directory, print descriptive stats to stdout."""
 
     # indexed by (model, param, solver) --> (status, time)
     raw = {}
@@ -24,8 +25,12 @@ def main(problem_dir):
         stats = None
         with open(path_str, "r", encoding="utf8") as f:
             stats = json.load(f)
+
             model = stats["useExistingModels"][0]
+            model = model.split('/')[-1]
+
             param = stats["essenceParams"][0]
+
             solver_options = stats["solverOptions"][0]
             solver = stats["solver"]
 
@@ -46,39 +51,42 @@ def main(problem_dir):
                 options.add((model, solver))
                 # print(model, param, status, totalTime)
 
-    print(opts)
-    total_time_for_options = {}
+    # print(opts)
 
     # indexed by model, solver
+    total_time_for_options = {}
+
     for (model, solver) in options:
-        print(model, solver)
+        # print(model, solver)
         total_time_for_options[model, solver] = 0
         for param in params:
             (status, time) = raw[model, param, solver]
-            if status == "OK":
+            if status == "OK" and time <= 3600:
                 total_time_for_options[model, solver] += time
             else:
                 total_time_for_options[model, solver] += 36000
 
+    min_times = []
+    max_times = []
     vbs_time = 0
     for param in params:
         times = set()
         for (model, solver) in options:
             (status, time) = raw[model, param, solver]
-            if status == "OK":
+            if status == "OK" and time <= 3600:
                 times.add(time)
             else:
                 times.add(36000)
-        # if len(times) == 1:
-        #     # everything times out
-        #     print(param, times)
-        vbs_time += min(times)
-
-    print(total_time_for_options)
+        if min(times) >= 36000:
+            # all timeouts, ignore instances
+            pass
+        else:
+            vbs_time += min(times)
+            min_times.append(min(times))
+            max_times.append(max(times))
 
     for (model, solver) in options:
-        print(
-            ",".join([model, solver, str(total_time_for_options[model, solver])]))
+        print(",".join([model, solver, str(total_time_for_options[model, solver])]))
     print(",".join(["VBS", "VBS", str(vbs_time)]))
 
 
