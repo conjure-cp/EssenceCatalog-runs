@@ -14,7 +14,7 @@ for path in pathlist:
     path_str = str(path)
     stats = None
     # print(f'Parsing {path_str}')
-    with open(path_str, "r", encoding = "utf8") as f:
+    with open(path_str, "r", encoding="utf8") as f:
         stats = json.load(f)
         sr = ""
         try:
@@ -43,11 +43,12 @@ for path in pathlist:
             "undefined identifier",
             "MiniZinc error: Memory violation detected and error message",
             "Check failed: ParseFlatzincFile",
-            "parse error: unexpected end-of-file after parsing number of clauses",
+            "parse error: unexpected end-of-file after parsing number of clauses",  # kissat
             "error: Cannot open file",
-            "kissat: error: can not read",
-            "kissat: fatal error: maximum arena capacity",
-            "Error: syntax error, unexpected ]]"
+            "kissat: error: can not read",  # kissat
+            "kissat: fatal error: maximum arena capacity",  # kissat
+            "Error: syntax error, unexpected ]]",  # cplex
+            "*** Check failure stack trace: ***"  # or-tools
         ]
 
         if any([m in sr for m in messages]) and stats["status"] != "Error":
