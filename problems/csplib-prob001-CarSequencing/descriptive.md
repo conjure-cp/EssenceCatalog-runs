@@ -4,7 +4,7 @@
 
 
  | Model | Solver | Total time (seconds) | 
- | -- | -- | 
+ | -- | -- | -- |
  | 01_compact.eprime | chuffed | 10367831.069999972 | 
  | 01_compact.eprime | cplex | 61455015.55999984 | 
  | 01_compact.eprime | kissat | 28051232.540000033 | 
