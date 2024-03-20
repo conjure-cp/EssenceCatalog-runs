@@ -16,6 +16,8 @@ def main(problem_dir):
     options = set()
 
     # set of string
+    models = set()
+    solvers = set()
     params = set()
 
     opts = set()
@@ -47,6 +49,8 @@ def main(problem_dir):
                 if status == "OK":
                     total_time = stats["totalTime"]
                 raw[model, param, solver] = (status, total_time)
+                models.add(model)
+                solvers.add(solver)
                 params.add(param)
                 options.add((model, solver))
                 # print(model, param, status, totalTime)
@@ -55,35 +59,47 @@ def main(problem_dir):
 
     # indexed by model, solver
     total_time_for_options = {}
-
     for (model, solver) in options:
-        # print(model, solver)
         total_time_for_options[model, solver] = 0
-        for param in params:
-            (status, time) = raw[model, param, solver]
-            if status == "OK" and time <= 3600:
-                total_time_for_options[model, solver] += time
-            else:
-                total_time_for_options[model, solver] += 36000
 
+    # one entry per param
     min_times = []
+
+    # one entry per param
     max_times = []
-    vbs_time = 0
+
     for param in params:
         times = set()
         for (model, solver) in options:
             (status, time) = raw[model, param, solver]
             if status == "OK" and time <= 3600:
                 times.add(time)
+                total_time_for_options[model, solver] += time
             else:
                 times.add(36000)
+                total_time_for_options[model, solver] += 36000
         if min(times) >= 36000:
             # all timeouts, ignore instances
             print(f"ALL TO: {param}", file=sys.stderr)
         else:
-            vbs_time += min(times)
             min_times.append(min(times))
             max_times.append(max(times))
+
+    vbs_time = sum(min_times)
+
+    print("\n\n# Options\n\n")
+
+    print(f"- Number of models {len(models)}")
+    print(f"- Number of solvers {len(solvers)}")
+    print(f"- Number of params {len(params)}")
+
+    print("\n\n## Models\n\n")
+    for model in sorted(models):
+        print(f" - {model}")
+
+    print("\n\n## Solvers\n\n")
+    for solver in sorted(solvers):
+        print(f" - {solver}")
 
     print("\n\n# Total runtime with each option\n\n")
 
@@ -95,10 +111,10 @@ def main(problem_dir):
     print(" | " +
           " | ".join(["Model", "Solver", "Total time (seconds)"]) +
           " | ")
-    print(" | -- | -- | ")
+    print(" | -- | -- | -- | ")
     for (model, solver) in sorted(options):
         print(" | " +
-              " | ".join([model, solver, str(total_time_for_options[model, solver])]) +
+              " | ".join([model, solver, f"{total_time_for_options[model, solver]:.2f}"]) +
               " | ")
         if fastest is None or total_time_for_options[model, solver] <= fastest:
             fastest = total_time_for_options[model, solver]
@@ -107,7 +123,7 @@ def main(problem_dir):
             slowest = total_time_for_options[model, solver]
             slowest_option = (model, solver)
     print(" | " +
-          " | ".join(["VBS", "VBS", str(vbs_time)]) +
+          " | ".join(["VBS", "VBS", f"{vbs_time:.2f}"]) +
           " | ")
 
     print("\n\n## Some total runtime stats\n\n")
