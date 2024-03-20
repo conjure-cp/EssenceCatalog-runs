@@ -19,7 +19,7 @@ def main(problem_dir):
     params = set()
 
     opts = set()
-    pathlist = Path(problem_dir).glob('**/*.stats.json')
+    pathlist = Path(problem_dir).glob("**/*.stats.json")
     for path in pathlist:
         path_str = str(path)
         stats = None
@@ -27,7 +27,7 @@ def main(problem_dir):
             stats = json.load(f)
 
             model = stats["useExistingModels"][0]
-            model = model.split('/')[-1]
+            model = model.split("/")[-1]
 
             param = stats["essenceParams"][0]
 
@@ -85,9 +85,37 @@ def main(problem_dir):
             min_times.append(min(times))
             max_times.append(max(times))
 
-    for (model, solver) in options:
-        print(",".join([model, solver, str(total_time_for_options[model, solver])]))
-    print(",".join(["VBS", "VBS", str(vbs_time)]))
+    print("\n\n# Total runtime with each option\n\n")
+
+    fastest = None
+    fastest_option = None
+    slowest = None
+    slowest_option = None
+
+    print(" | " +
+          " | ".join(["Model", "Solver", "Total time (seconds)"]) +
+          " | ")
+    print(" | -- | -- | ")
+    for (model, solver) in sorted(options):
+        print(" | " +
+              " | ".join([model, solver, str(total_time_for_options[model, solver])]) +
+              " | ")
+        if fastest is None or total_time_for_options[model, solver] <= fastest:
+            fastest = total_time_for_options[model, solver]
+            fastest_option = (model, solver)
+        if slowest is None or total_time_for_options[model, solver] >= slowest:
+            slowest = total_time_for_options[model, solver]
+            slowest_option = (model, solver)
+    print(" | " +
+          " | ".join(["VBS", "VBS", str(vbs_time)]) +
+          " | ")
+
+    print("\n\n## Some total runtime stats\n\n")
+
+    print(f" - Fastest option is {fastest_option}, total runtime {fastest}")
+    print(f" - Slowest option is {slowest_option}, total runtime {slowest}")
+    print(f" - VBS total runtime {vbs_time}")
+    print(f" - VBS as a percentage of SBS is {vbs_time / fastest:.2%}")
 
 
 main(sys.argv[1])
