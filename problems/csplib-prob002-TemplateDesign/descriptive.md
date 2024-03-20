@@ -54,6 +54,6 @@
 
 
  - Fastest option is ('01_compact.eprime', 'chuffed'), total runtime 2.56
- - Slowest option is ('05_nochAllLevels_2_2.eprime', 'kissat'), total runtime 252000
+ - Slowest option is ('05_nochAllLevels_2_2.eprime', 'kissat'), total runtime 252000.00
  - VBS total runtime 2.48
- - VBS as a percentage of SBS is 96.88%
+ - VBS as a percentage of SBS is 96.87%

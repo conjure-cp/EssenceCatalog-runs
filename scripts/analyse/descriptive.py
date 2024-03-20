@@ -128,8 +128,8 @@ def main(problem_dir):
 
     print("\n\n## Some total runtime stats\n\n")
 
-    print(f" - Fastest option is {fastest_option}, total runtime {fastest}")
-    print(f" - Slowest option is {slowest_option}, total runtime {slowest}")
+    print(f" - Fastest option is {fastest_option}, total runtime {fastest:.2f}")
+    print(f" - Slowest option is {slowest_option}, total runtime {slowest:.2f}")
     print(f" - VBS total runtime {vbs_time}")
     print(f" - VBS as a percentage of SBS is {vbs_time / fastest:.2%}")
 
