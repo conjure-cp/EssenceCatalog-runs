@@ -5,4 +5,6 @@ parallel --no-notice \
         csplib-prob002-TemplateDesign \
         csplib-prob006-GolombRuler \
         csplib-prob007-AllIntervalSeries \
-        csplib-prob008-VesselLoading
+        csplib-prob008-VesselLoading \
+	csplib-prob010-SocialGolfers
+
