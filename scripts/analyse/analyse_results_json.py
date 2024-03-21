@@ -10,7 +10,6 @@ def rebuild(data:list[dict]) -> list[dict]:
     for datapoint in data:
         solver = datapoint["solver"]
         if solver == "or-tools":
-            continue
             if "--threads=8" in datapoint["solverOptions"][0]:
                 solver = "or-tools-8"
             else:

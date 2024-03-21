@@ -37,7 +37,7 @@ def make_stats(data:list[dict], folder:str):
     wins = {comb:0 for comb in combinations}
     wins["timeout"] = 0
     times = {comb:0 for comb in combinations}
-    times["virtual best"] = 0
+    times["virtual_best"] = 0
     distances = {comb:[] for comb in combinations} 
 
     for instance in instances:
@@ -54,7 +54,7 @@ def make_stats(data:list[dict], folder:str):
                 times[comb] -= instances_data[instance][comb]
         else:
             wins[min_time[0]] += 1
-            times["virtual best"] += min_time[1]
+            times["virtual_best"] += min_time[1]
         
             for comb in combinations:
                 if comb != min_time[0]:
@@ -85,16 +85,6 @@ def make_stats(data:list[dict], folder:str):
     if not exists(plot_folder):
         makedirs(plot_folder)
 
-    csv_out = [
-        {"solver":solver, 
-         "model":model, 
-         "wins": wins[f"{solver}-{model}"], 
-         "total_time":times[f"{solver}-{model}"]} 
-        for solver in solvers for model in models]
-    csv_out.append({"solver":"virtual best", "model":"virtual_best", "wins":len(instances_data), "total_time":times["virtual best"]})
-    csv_out = pd.DataFrame(csv_out)
-    csv_out.to_csv(join(folder, "summary.csv"), index=False)
-
     n = len(combinations)
     for i in range(n):
         c1 = combinations[i]
@@ -120,4 +110,57 @@ def make_stats(data:list[dict], folder:str):
             del fig
             plt.clf()
             plt.close()
+    
+    out_md = ""
+    out_md += "\n\n# Options\n\n"
+
+    out_md += f"- Number of models {len(models)}\n"
+    out_md += f"- Number of solvers {len(solvers)}\n"
+    out_md += f"- Number of params {len(instances)}\n"
+
+    out_md += "\n\n## Models\n\n\n"
+    for model in sorted(models):
+        out_md += f" - {model}\n"
+
+    out_md += "\n\n## Solvers\n\n\n"
+    for solver in sorted(solvers):
+        out_md += f" - {solver}\n"
+
+    out_md += "\n\n# Total runtime with each option\n\n\n"
+
+    fastest = None
+    fastest_option = None
+    slowest = None
+    slowest_option = None
+
+    out_md += " | " +\
+          " | ".join(["Model", "Solver", "Total time (seconds)", "number of wins"]) +\
+          " | \n"
+    out_md += " | -- | -- | -- | -- | \n"
+    for combination in sorted(combinations):
+        split_comb = combination.split("-")
+        solver = "-".join(split_comb[:-1])
+        model = split_comb[-1]
+        out_md += " | " +\
+              " | ".join([model, solver, f"{times[combination]:.2f}", str(wins[combination])]) +\
+              " | \n"
+        if fastest is None or times[combination] <= fastest:
+            fastest = times[combination]
+            fastest_option = combination
+        if slowest is None or times[combination] >= slowest:
+            slowest = times[combination]
+            slowest_option = combination
+    out_md += " | " +\
+          " | ".join(["VBS", "VBS", f"{times['virtual_best']:.2f}", str(len(instances))]) + \
+          " | \n"
+
+    out_md += "\n\n## Some total runtime stats\n\n"
+
+    out_md += f" - Fastest option is {fastest_option}, total runtime {fastest:.2f}\n"
+    out_md += f" - Slowest option is {slowest_option}, total runtime {slowest:.2f}\n"
+    out_md += f" - VBS total runtime {times['virtual_best']}\n"
+    out_md += f" - VBS as a percentage of SBS is {times['virtual_best'] / fastest:.2%}\n"
+    f = open(join(folder, "descriptive.md"), "w")
+    f.write(out_md)
+    f.close()
 
