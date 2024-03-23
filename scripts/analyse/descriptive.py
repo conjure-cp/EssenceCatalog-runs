@@ -59,7 +59,7 @@ def main(problem_dir):
                 # print(model, param, status, totalTime)
 
     if no_stats_json_files:
-        print("no_stats_json_files", file=sys.stderr)
+        print(f"no_stats_json_files - {problem_dir}", file=sys.stderr)
         sys.exit(0)
 
     # print(opts)
@@ -98,7 +98,7 @@ def main(problem_dir):
             completed_params += 1
             if min(times) >= 36000:
                 # all timeouts, ignore instances
-                print(f"ALL TO: {param}", file=sys.stderr)
+                # print(f"ALL TO: {param}", file=sys.stderr)
                 all_to_params += 1
             else:
                 min_times.append(min(times))
