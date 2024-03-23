@@ -19,10 +19,13 @@ def main(problem_dir):
     models = set()
     solvers = set()
     params = set()
-
     opts = set()
+
+    no_stats_json_files = True
+
     pathlist = Path(problem_dir).glob("**/*.stats.json")
     for path in pathlist:
+        no_stats_json_files = False
         path_str = str(path)
         stats = None
         with open(path_str, "r", encoding="utf8") as f:
@@ -54,6 +57,10 @@ def main(problem_dir):
                 params.add(param)
                 options.add((model, solver))
                 # print(model, param, status, totalTime)
+
+    if no_stats_json_files:
+        print("no_stats_json_files", file=sys.stderr)
+        sys.exit(0)
 
     # print(opts)
 
