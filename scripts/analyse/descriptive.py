@@ -68,22 +68,34 @@ def main(problem_dir):
     # one entry per param
     max_times = []
 
+    completed_params = 0
+    all_to_params = 0
+
     for param in params:
         times = set()
+        completed = True
         for (model, solver) in options:
-            (status, time) = raw[model, param, solver]
+            try:
+                (status, time) = raw[model, param, solver]
+            except KeyError:
+                (status, time) = ("OK", 0)
+                completed = False
             if status == "OK" and time <= 3600:
                 times.add(time)
                 total_time_for_options[model, solver] += time
             else:
                 times.add(36000)
                 total_time_for_options[model, solver] += 36000
-        if min(times) >= 36000:
-            # all timeouts, ignore instances
-            print(f"ALL TO: {param}", file=sys.stderr)
-        else:
-            min_times.append(min(times))
-            max_times.append(max(times))
+
+        if completed:
+            completed_params += 1
+            if min(times) >= 36000:
+                # all timeouts, ignore instances
+                print(f"ALL TO: {param}", file=sys.stderr)
+                all_to_params += 1
+            else:
+                min_times.append(min(times))
+                max_times.append(max(times))
 
     if len(min_times) == 0:
         vbs_time = "NA"
@@ -95,6 +107,8 @@ def main(problem_dir):
     print(f"- Number of models {len(models)}")
     print(f"- Number of solvers {len(solvers)}")
     print(f"- Number of params {len(params)}")
+    print(f"- Number of params (completed) {completed_params}")
+    print(f"- Number of params (all timed out) {all_to_params}")
 
     print("\n\n## Models\n\n")
     for model in sorted(models):
@@ -136,8 +150,10 @@ def main(problem_dir):
 
     print("\n\n## Some total runtime stats\n\n")
 
-    print(f" - Fastest option is {fastest_option}, total runtime {fastest:.2f}")
-    print(f" - Slowest option is {slowest_option}, total runtime {slowest:.2f}")
+    print(
+        f" - Fastest option is {fastest_option}, total runtime {fastest:.2f}")
+    print(
+        f" - Slowest option is {slowest_option}, total runtime {slowest:.2f}")
     print(f" - VBS total runtime {vbs_time:.2f}")
     print(f" - VBS as a percentage of SBS is {vbs_time / fastest:.2%}")
 
