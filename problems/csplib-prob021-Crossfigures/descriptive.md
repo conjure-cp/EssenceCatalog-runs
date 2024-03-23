@@ -6,6 +6,8 @@
 - Number of models 2
 - Number of solvers 4
 - Number of params 2
+- Number of params (completed) 2
+- Number of params (all timed out) 0
 
 
 ## Models

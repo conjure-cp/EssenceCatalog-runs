@@ -6,6 +6,8 @@
 - Number of models 4
 - Number of solvers 4
 - Number of params 133
+- Number of params (completed) 133
+- Number of params (all timed out) 0
 
 
 ## Models
@@ -44,7 +46,7 @@
  | 04_nochPrunedLevels_3.eprime | kissat | 1028.97 | 
  | 04_nochPrunedLevels_3.eprime | or-tools1 | 1642.49 | 
  | 04_nochPrunedLevels_4.eprime | chuffed | 412.39 | 
- | 04_nochPrunedLevels_4.eprime | cplex | 450.67 | 
+ | 04_nochPrunedLevels_4.eprime | cplex | 36445.50 | 
  | 04_nochPrunedLevels_4.eprime | kissat | 419.15 | 
  | 04_nochPrunedLevels_4.eprime | or-tools1 | 423.72 | 
  | VBS | VBS | 227.80 | 
@@ -54,6 +56,6 @@
 
 
  - Fastest option is ('01_compact.eprime', 'chuffed'), total runtime 229.83
- - Slowest option is ('03_sparse.eprime', 'or-tools1'), total runtime 2291.76
+ - Slowest option is ('04_nochPrunedLevels_4.eprime', 'cplex'), total runtime 36445.50
  - VBS total runtime 227.80
  - VBS as a percentage of SBS is 99.12%
