@@ -41,7 +41,7 @@ for path in pathlist:
 
         messages = [
             "undefined identifier",
-            "MiniZinc error: Memory violation detected and error message",
+            "MiniZinc error: Memory violation detected"
             "Check failed: ParseFlatzincFile",
             "parse error: unexpected end-of-file after parsing number of clauses",  # kissat
             "error: Cannot open file",
