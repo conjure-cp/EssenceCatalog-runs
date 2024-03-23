@@ -85,7 +85,10 @@ def main(problem_dir):
             min_times.append(min(times))
             max_times.append(max(times))
 
-    vbs_time = sum(min_times)
+    if len(min_times) == 0:
+        vbs_time = "NA"
+    else:
+        vbs_time = sum(min_times)
 
     print("\n\n# Options\n\n")
 
@@ -122,9 +125,14 @@ def main(problem_dir):
         if slowest is None or total_time_for_options[model, solver] >= slowest:
             slowest = total_time_for_options[model, solver]
             slowest_option = (model, solver)
-    print(" | " +
-          " | ".join(["VBS", "VBS", f"{vbs_time:.2f}"]) +
-          " | ")
+    if vbs_time == "NA":
+        print(" | " +
+              " | ".join(["VBS", "VBS", "NA"]) +
+              " | ")
+    else:
+        print(" | " +
+              " | ".join(["VBS", "VBS", f"{vbs_time:.2f}"]) +
+              " | ")
 
     print("\n\n## Some total runtime stats\n\n")
 
