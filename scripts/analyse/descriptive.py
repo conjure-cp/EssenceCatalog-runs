@@ -93,15 +93,19 @@ def main(problem_dir):
                 (status, time) = raw[model, param, solver]
                 if status == "OK" and time <= 3600:
                     times.add(time)
-                    total_time_for_options[model, solver] += time
                 else:
                     times.add(36000)
-                    total_time_for_options[model, solver] += 36000
             if min(times) >= 36000:
                 # all timeouts, ignore instances
                 # print(f"ALL TO: {param}", file=sys.stderr)
                 all_to_params += 1
             else:
+                for (model, solver) in options:
+                    (status, time) = raw[model, param, solver]
+                    if status == "OK" and time <= 3600:
+                        total_time_for_options[model, solver] += time
+                    else:
+                        total_time_for_options[model, solver] += 36000
                 min_times.append(min(times))
                 max_times.append(max(times))
 
@@ -117,6 +121,8 @@ def main(problem_dir):
     print(f"- Number of params {len(params)}")
     print(f"- Number of params (completed) {completed_params}")
     print(f"- Number of params (all timed out) {all_to_params}")
+    print(
+        f"- Number of params (analysed in this file) {completed_params - all_to_params}")
 
     print("\n\n## Models\n\n")
     for model in sorted(models):
