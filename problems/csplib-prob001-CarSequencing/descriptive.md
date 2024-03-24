@@ -6,6 +6,9 @@
 - Number of models 4
 - Number of solvers 4
 - Number of params 10214
+- Number of params (completed) 10214
+- Number of params (all timed out) 0
+- Number of params (analysed in this file) 10214
 
 
 ## Models
