@@ -79,23 +79,24 @@ def main(problem_dir):
     all_to_params = 0
 
     for param in params:
-        times = set()
         completed = True
         for (model, solver) in options:
             try:
-                (status, time) = raw[model, param, solver]
+                _ = raw[model, param, solver]
             except KeyError:
-                (status, time) = ("OK", 0)
                 completed = False
-            if status == "OK" and time <= 3600:
-                times.add(time)
-                total_time_for_options[model, solver] += time
-            else:
-                times.add(36000)
-                total_time_for_options[model, solver] += 36000
 
         if completed:
             completed_params += 1
+            times = set()
+            for (model, solver) in options:
+                (status, time) = raw[model, param, solver]
+                if status == "OK" and time <= 3600:
+                    times.add(time)
+                    total_time_for_options[model, solver] += time
+                else:
+                    times.add(36000)
+                    total_time_for_options[model, solver] += 36000
             if min(times) >= 36000:
                 # all timeouts, ignore instances
                 # print(f"ALL TO: {param}", file=sys.stderr)
