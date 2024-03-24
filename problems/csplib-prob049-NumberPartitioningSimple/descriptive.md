@@ -8,6 +8,7 @@
 - Number of params 19
 - Number of params (completed) 19
 - Number of params (all timed out) 0
+- Number of params (analysed in this file) 19
 
 
 ## Models

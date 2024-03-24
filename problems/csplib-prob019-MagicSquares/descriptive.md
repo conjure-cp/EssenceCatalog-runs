@@ -8,6 +8,7 @@
 - Number of params 19
 - Number of params (completed) 19
 - Number of params (all timed out) 7
+- Number of params (analysed in this file) 12
 
 
 ## Models
@@ -30,17 +31,17 @@
 
  | Model | Solver | Total time (seconds) | 
  | -- | -- | -- | 
- | 01_compact.eprime | chuffed | 540049.77 | 
- | 01_compact.eprime | cplex | 252035.22 | 
- | 01_compact.eprime | kissat | 338318.76 | 
- | 01_compact.eprime | or-tools1 | 306600.94 | 
+ | 01_compact.eprime | chuffed | 288049.77 | 
+ | 01_compact.eprime | cplex | 35.22 | 
+ | 01_compact.eprime | kissat | 86318.76 | 
+ | 01_compact.eprime | or-tools1 | 54600.94 | 
  | VBS | VBS | 33.51 | 
 
 
 ## Some total runtime stats
 
 
- - Fastest option is ('01_compact.eprime', 'cplex'), total runtime 252035.22
- - Slowest option is ('01_compact.eprime', 'chuffed'), total runtime 540049.77
+ - Fastest option is ('01_compact.eprime', 'cplex'), total runtime 35.22
+ - Slowest option is ('01_compact.eprime', 'chuffed'), total runtime 288049.77
  - VBS total runtime 33.51
- - VBS as a percentage of SBS is 0.01%
+ - VBS as a percentage of SBS is 95.14%

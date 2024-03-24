@@ -8,6 +8,7 @@
 - Number of params 7
 - Number of params (completed) 7
 - Number of params (all timed out) 0
+- Number of params (analysed in this file) 7
 
 
 ## Models
