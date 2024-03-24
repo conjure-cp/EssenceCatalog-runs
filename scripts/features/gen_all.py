@@ -9,7 +9,9 @@ def gen_all(eprime_file, param_folder, file_folder="features", save=True, verbos
     files = [f for f in os.listdir(param_folder) if os.path.isfile(os.path.join(param_folder, f)) and ".param" in f]
     for param in files:
         instance = os.path.join(param_folder, param)
-        gen_features(eprime_file, instance, save=save, verbose=verbose, file_name=f"{os.path.join(file_folder, param)}.json")
+        file_name = os.path.join(file_folder, f"{eprime_file.split('/')[-1]}_{param.replace('.param','.fnz2feat')}.json")
+        if not os.path.exists(file_name):
+            gen_features(eprime_file, instance, save=save, verbose=verbose, file_name=file_name)
 
 def parse_args():
     args: dict[str,Any] = {
