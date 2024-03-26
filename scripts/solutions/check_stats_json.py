@@ -51,7 +51,8 @@ def main(problem_dir):
                 "kissat: error: can not read",  # kissat
                 "kissat: fatal error: maximum arena capacity",  # kissat
                 "Error: syntax error, unexpected ]]",  # cplex
-                "*** Check failure stack trace: ***"  # or-tools
+                "*** Check failure stack trace: ***",  # or-tools
+                "Error: evaluation error: Index set mismatch."
             ]
 
             if any(m in sr for m in messages) and stats["status"] != "Error":
