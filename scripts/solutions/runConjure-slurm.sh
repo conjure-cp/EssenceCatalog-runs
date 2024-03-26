@@ -78,7 +78,7 @@ echo "#SBATCH --job-name=${JOB}" >> ${SLURM_FILE}
 echo "#SBATCH -e ${ERROR_FILE}" >> ${SLURM_FILE}
 echo "#SBATCH -o ${OUT_FILE}" >> ${SLURM_FILE}
 echo "#SBATCH --cpus-per-task=${CPUS}" >> ${SLURM_FILE}
-echo "#SBATCH --mem=9GB" >> ${SLURM_FILE}
+echo "#SBATCH --mem=16GB" >> ${SLURM_FILE}
 echo "#SBATCH --time=02:05:00" >> ${SLURM_FILE}
 echo "" >> ${SLURM_FILE}
 echo "podman run --rm \\" >> ${SLURM_FILE}
@@ -87,7 +87,12 @@ echo "    --network=none \\" >> ${SLURM_FILE}
 echo "    -v "$PWD:/podmandir:z" \\" >> ${SLURM_FILE}
 echo "    --timeout=${LIMIT_TIME_PADDED} \\" >> ${SLURM_FILE}
 echo "    \"localhost/conjure-cplex\" \\" >> ${SLURM_FILE}
-echo "    conjure solve --use-existing-models=/podmandir/${EPRIME_SRC} /podmandir/${ESSENCE_FULL} /podmandir/${PARAM_FULL} -o /podmandir/${TARGET_DIR} \\" >> ${SLURM_FILE}
+echo "    conjure solve \\" >> ${SLURM_FILE}
+echo "    --use-existing-models=/podmandir/${EPRIME_SRC} \\" >> ${SLURM_FILE}
+echo "    /podmandir/${ESSENCE_FULL} \\" >> ${SLURM_FILE}
+echo "    /podmandir/${PARAM_FULL} \\" >> ${SLURM_FILE}
+echo "    -o /podmandir/${TARGET_DIR} \\" >> ${SLURM_FILE}
+echo "    --runsolver-memory-limit=16384 \\" >> ${SLURM_FILE}
 echo "    --copy-solutions=off \\" >> ${SLURM_FILE}
 echo "    --log-level LogNone \\" >> ${SLURM_FILE}
 echo "    --savilerow-options \"${SAVILEROW_OPTIONS}\" \\" >> ${SLURM_FILE}
