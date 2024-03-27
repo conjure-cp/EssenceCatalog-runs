@@ -6,9 +6,10 @@
 - Number of models 4
 - Number of solvers 4
 - Number of params 319
-- Number of params (completed) 319
-- Number of params (all timed out) 157
-- Number of params (analysed in this file) 162
+- Number of params      319 (completed)
+- Number of params      313 (at least one timed out)
+- Number of params      157 (all timed out)
+- Number of params      162 (analysed in this file)
 
 
 ## Models
@@ -56,8 +57,8 @@
 ## Some total runtime stats
 
 
- - Fastest option is ('01_compact.eprime', 'or-tools1'), total runtime 306772.58
- - Slowest option is ('06_chPrunedLevels_1_1_2_1.eprime', 'cplex'), total runtime 5584512.20
+ - Fastest option is ('01_compact.eprime', 'or-tools1'), total runtime 306772.58 seconds
+ - Slowest option is ('06_chPrunedLevels_1_1_2_1.eprime', 'cplex'), total runtime 5584512.20 seconds
  - Slowest option took 18.20 times as long as SBS
- - VBS total runtime 45068.09
+ - VBS total runtime 45068.09 seconds
  - VBS as a percentage of SBS is 14.69%

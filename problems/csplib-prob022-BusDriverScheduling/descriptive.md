@@ -6,9 +6,10 @@
 - Number of models 4
 - Number of solvers 4
 - Number of params 1
-- Number of params (completed) 1
-- Number of params (all timed out) 0
-- Number of params (analysed in this file) 1
+- Number of params        1 (completed)
+- Number of params        0 (at least one timed out)
+- Number of params        0 (all timed out)
+- Number of params        1 (analysed in this file)
 
 
 ## Models
@@ -56,8 +57,8 @@
 ## Some total runtime stats
 
 
- - Fastest option is ('01_compact.eprime', 'chuffed'), total runtime 0.23
- - Slowest option is ('03_sparse.eprime', 'cplex'), total runtime 0.84
+ - Fastest option is ('01_compact.eprime', 'chuffed'), total runtime 0.23 seconds
+ - Slowest option is ('03_sparse.eprime', 'cplex'), total runtime 0.84 seconds
  - Slowest option took 3.65 times as long as SBS
- - VBS total runtime 0.23
+ - VBS total runtime 0.23 seconds
  - VBS as a percentage of SBS is 100.00%

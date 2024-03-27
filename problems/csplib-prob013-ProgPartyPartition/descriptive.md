@@ -6,9 +6,10 @@
 - Number of models 1
 - Number of solvers 4
 - Number of params 150
-- Number of params (completed) 150
-- Number of params (all timed out) 150
-- Number of params (analysed in this file) 0
+- Number of params      150 (completed)
+- Number of params      150 (at least one timed out)
+- Number of params      150 (all timed out)
+- Number of params        0 (analysed in this file)
 
 
 ## Models
@@ -41,5 +42,5 @@
 ## Some total runtime stats
 
 
- - Fastest option is ('01_compact.eprime', 'or-tools1'), total runtime 0.00
- - Slowest option is ('01_compact.eprime', 'or-tools1'), total runtime 0.00
+ - Fastest option is ('01_compact.eprime', 'or-tools1'), total runtime 0.00 seconds
+ - Slowest option is ('01_compact.eprime', 'or-tools1'), total runtime 0.00 seconds

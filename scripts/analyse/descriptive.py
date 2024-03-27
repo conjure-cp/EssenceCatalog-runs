@@ -80,6 +80,7 @@ def main(problem_dir):
 
     completed_params = 0
     all_to_params = 0
+    some_to_params = 0
 
     for param in params:
         completed = True
@@ -98,6 +99,8 @@ def main(problem_dir):
                     times.add(time)
                 else:
                     times.add(36000)
+            if max(times) >= 36000:
+                some_to_params += 1
             if min(times) >= 36000:
                 # all timeouts, ignore instances
                 # print(f"ALL TO: {param}", file=sys.stderr)
@@ -122,10 +125,10 @@ def main(problem_dir):
     print(f"- Number of models {len(models)}")
     print(f"- Number of solvers {len(solvers)}")
     print(f"- Number of params {len(params)}")
-    print(f"- Number of params (completed) {completed_params}")
-    print(f"- Number of params (all timed out) {all_to_params}")
-    print(
-        f"- Number of params (analysed in this file) {completed_params - all_to_params}")
+    print(f"- Number of params {completed_params:8d} (completed)")
+    print(f"- Number of params {some_to_params:8d} (at least one timed out)")
+    print(f"- Number of params {all_to_params:8d} (all timed out)")
+    print(f"- Number of params {completed_params - all_to_params:8d} (analysed in this file)")
 
     print("\n\n## Models\n\n")
     for model in sorted(models):
