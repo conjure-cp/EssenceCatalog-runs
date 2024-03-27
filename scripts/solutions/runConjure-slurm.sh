@@ -112,5 +112,6 @@ echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-infor" >> ${SLURM_
 echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-fzn" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-param.fzn" >> ${SLURM_FILE}
 echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime.mzn" >> ${SLURM_FILE}
+echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.runsolver-info" >> ${SLURM_FILE}
 
 sbatch ${SLURM_FILE}
