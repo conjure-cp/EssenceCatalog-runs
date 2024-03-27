@@ -3,13 +3,13 @@
 # Options
 
 
-- Number of models 2
-- Number of solvers 4
-- Number of params 2
-- Number of params        2 (completed)
-- Number of params        0 (at least one timed out)
-- Number of params        0 (all timed out)
-- Number of params        2 (analysed in this file)
+- Number of models         2
+- Number of solvers        4
+- Number of params         2
+- Number of params         2 (completed)
+- Number of params         0 (at least one timed out)
+- Number of params         0 (all timed out)
+- Number of params         2 (analysed in this file)
 
 
 ## Models

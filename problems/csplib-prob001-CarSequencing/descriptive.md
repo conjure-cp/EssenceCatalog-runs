@@ -3,13 +3,13 @@
 # Options
 
 
-- Number of models 4
-- Number of solvers 4
-- Number of params 10214
-- Number of params    10214 (completed)
-- Number of params    10214 (at least one timed out)
-- Number of params        0 (all timed out)
-- Number of params    10214 (analysed in this file)
+- Number of models         4
+- Number of solvers        4
+- Number of params     10214
+- Number of params     10214 (completed)
+- Number of params     10214 (at least one timed out)
+- Number of params         0 (all timed out)
+- Number of params     10214 (analysed in this file)
 
 
 ## Models
