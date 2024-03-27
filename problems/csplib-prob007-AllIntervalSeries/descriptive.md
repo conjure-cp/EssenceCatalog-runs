@@ -7,8 +7,8 @@
 - Number of solvers        4
 - Number of params        10
 - Number of params        10 (completed)
-- Number of params         0 (at least one timed out)
-- Number of params         0 (all timed out)
+- Number of params         0 (at least one option failed to solve)
+- Number of params         0 (all options failed to solve)
 - Number of params        10 (analysed in this file)
 
 

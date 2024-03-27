@@ -126,8 +126,8 @@ def main(problem_dir):
     print(f"- Number of solvers {len(solvers):8d}")
     print(f"- Number of params  {len(params):8d}")
     print(f"- Number of params  {completed_params:8d} (completed)")
-    print(f"- Number of params  {some_to_params:8d} (at least one timed out)")
-    print(f"- Number of params  {all_to_params:8d} (all timed out)")
+    print(f"- Number of params  {some_to_params:8d} (at least one option failed to solve)")
+    print(f"- Number of params  {all_to_params:8d} (all options failed to solve)")
     print(f"- Number of params  {completed_params - all_to_params:8d} (analysed in this file)")
 
     print("\n\n## Models\n\n")
