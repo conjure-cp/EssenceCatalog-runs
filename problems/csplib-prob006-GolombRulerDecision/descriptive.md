@@ -5,10 +5,10 @@
 
 - Number of models 4
 - Number of solvers 4
-- Number of params 285
-- Number of params (completed) 279
-- Number of params (all timed out) 120
-- Number of params (analysed in this file) 159
+- Number of params 319
+- Number of params (completed) 319
+- Number of params (all timed out) 157
+- Number of params (analysed in this file) 162
 
 
 ## Models
@@ -34,29 +34,30 @@
 
  | Model | Solver | Total time (seconds) | 
  | -- | -- | -- | 
- | 01_compact.eprime | chuffed | 339994.18 | 
- | 01_compact.eprime | cplex | 378475.77 | 
- | 01_compact.eprime | kissat | 2335118.99 | 
- | 01_compact.eprime | or-tools1 | 306443.21 | 
- | 04_nochPrunedLevels_2.eprime | chuffed | 4789400.78 | 
- | 04_nochPrunedLevels_2.eprime | cplex | 4789326.84 | 
- | 04_nochPrunedLevels_2.eprime | kissat | 4789226.63 | 
- | 04_nochPrunedLevels_2.eprime | or-tools1 | 4789374.94 | 
- | 06_chPrunedLevels_1_1_1_2.eprime | chuffed | 418751.22 | 
- | 06_chPrunedLevels_1_1_1_2.eprime | cplex | 1860078.63 | 
- | 06_chPrunedLevels_1_1_1_2.eprime | kissat | 2301510.95 | 
- | 06_chPrunedLevels_1_1_1_2.eprime | or-tools1 | 306599.83 | 
- | 06_chPrunedLevels_1_1_2_1.eprime | chuffed | 4462241.71 | 
- | 06_chPrunedLevels_1_1_2_1.eprime | cplex | 5583492.43 | 
- | 06_chPrunedLevels_1_1_2_1.eprime | kissat | 4707938.55 | 
- | 06_chPrunedLevels_1_1_2_1.eprime | or-tools1 | 4428649.10 | 
- | VBS | VBS | 44932.95 | 
+ | 01_compact.eprime | chuffed | 340331.58 | 
+ | 01_compact.eprime | cplex | 378789.61 | 
+ | 01_compact.eprime | kissat | 2335435.96 | 
+ | 01_compact.eprime | or-tools1 | 306772.58 | 
+ | 04_nochPrunedLevels_2.eprime | chuffed | 4789537.26 | 
+ | 04_nochPrunedLevels_2.eprime | cplex | 4789474.78 | 
+ | 04_nochPrunedLevels_2.eprime | kissat | 4789363.85 | 
+ | 04_nochPrunedLevels_2.eprime | or-tools1 | 4789514.58 | 
+ | 06_chPrunedLevels_1_1_1_2.eprime | chuffed | 419079.56 | 
+ | 06_chPrunedLevels_1_1_1_2.eprime | cplex | 1860406.48 | 
+ | 06_chPrunedLevels_1_1_1_2.eprime | kissat | 2301846.11 | 
+ | 06_chPrunedLevels_1_1_1_2.eprime | or-tools1 | 306936.27 | 
+ | 06_chPrunedLevels_1_1_2_1.eprime | chuffed | 4462969.71 | 
+ | 06_chPrunedLevels_1_1_2_1.eprime | cplex | 5584512.20 | 
+ | 06_chPrunedLevels_1_1_2_1.eprime | kissat | 4708946.61 | 
+ | 06_chPrunedLevels_1_1_2_1.eprime | or-tools1 | 4429398.04 | 
+ | VBS | VBS | 45068.09 | 
 
 
 ## Some total runtime stats
 
 
- - Fastest option is ('01_compact.eprime', 'or-tools1'), total runtime 306443.21
- - Slowest option is ('06_chPrunedLevels_1_1_2_1.eprime', 'cplex'), total runtime 5583492.43
- - VBS total runtime 44932.95
- - VBS as a percentage of SBS is 14.66%
+ - Fastest option is ('01_compact.eprime', 'or-tools1'), total runtime 306772.58
+ - Slowest option is ('06_chPrunedLevels_1_1_2_1.eprime', 'cplex'), total runtime 5584512.20
+ - Slowest option took 18.20 times as long as SBS
+ - VBS total runtime 45068.09
+ - VBS as a percentage of SBS is 14.69%
