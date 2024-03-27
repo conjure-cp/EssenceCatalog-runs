@@ -167,12 +167,12 @@ def main(problem_dir):
 
     print("\n\n## Some total runtime stats\n\n")
 
-    print(f" - Fastest option is {fastest_option}, total runtime {fastest:.2f}")
-    print(f" - Slowest option is {slowest_option}, total runtime {slowest:.2f}")
+    print(f" - Fastest option is {fastest_option}, total runtime {fastest:.2f} seconds")
+    print(f" - Slowest option is {slowest_option}, total runtime {slowest:.2f} seconds")
     if fastest > 0:
         print(f" - Slowest option took {slowest / fastest:.2f} times as long as SBS")
     if vbs_time != "NA":
-        print(f" - VBS total runtime {vbs_time:.2f}")
+        print(f" - VBS total runtime {vbs_time:.2f} seconds")
         print(f" - VBS as a percentage of SBS is {vbs_time / fastest:.2%}")
 
 
