@@ -29,7 +29,10 @@ def main(problem_dir):
         path_str = str(path)
         stats = None
         with open(path_str, "r", encoding="utf8") as f:
-            stats = json.load(f)
+            try:
+                stats = json.load(f, strict=False)
+            except json.decoder.JSONDecodeError as e:
+                sys.exit(f"MALFORMED JSON: {path_str}\n\n{e}")
 
             model = stats["useExistingModels"][0]
             model = model.split("/")[-1]

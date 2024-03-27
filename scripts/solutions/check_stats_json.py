@@ -18,7 +18,11 @@ def main(problem_dir):
         stats = None
         # print(f'Parsing {path_str}')
         with open(path_str, "r", encoding="utf8") as f:
-            stats = json.load(f)
+            try:
+                stats = json.load(f, strict=False)
+            except json.decoder.JSONDecodeError as e:
+                sys.exit(f"MALFORMED JSON: {path_str}\n\n{e}")
+
             sr = ""
             try:
                 sr += "\n".join(stats["savilerowLogs"]["stdout"])
