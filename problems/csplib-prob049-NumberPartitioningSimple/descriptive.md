@@ -58,5 +58,6 @@
 
  - Fastest option is ('04_nochPrunedLevels_2_2.eprime', 'cplex'), total runtime 24.32
  - Slowest option is ('04_nochPrunedLevels_1_2.eprime', 'cplex'), total runtime 612000.64
+ - Slowest option took 25164.50 times as long as SBS
  - VBS total runtime 18.53
  - VBS as a percentage of SBS is 76.19%

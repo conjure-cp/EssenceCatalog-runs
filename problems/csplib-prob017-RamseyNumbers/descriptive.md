@@ -6,8 +6,8 @@
 - Number of models 4
 - Number of solvers 4
 - Number of params 231
-- Number of params (completed) 230
-- Number of params (all timed out) 63
+- Number of params (completed) 231
+- Number of params (all timed out) 64
 - Number of params (analysed in this file) 167
 
 
@@ -58,5 +58,6 @@
 
  - Fastest option is ('04_nochPrunedLevels_2.eprime', 'kissat'), total runtime 32609.16
  - Slowest option is ('03_sparse.eprime', 'cplex'), total runtime 2383032.75
+ - Slowest option took 73.08 times as long as SBS
  - VBS total runtime 25195.73
  - VBS as a percentage of SBS is 77.27%

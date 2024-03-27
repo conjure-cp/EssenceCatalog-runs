@@ -48,5 +48,6 @@
 
  - Fastest option is ('06_chPrunedLevels.eprime', 'kissat'), total runtime 16975.14
  - Slowest option is ('06_chPrunedLevels.eprime', 'cplex'), total runtime 3312272.02
+ - Slowest option took 195.12 times as long as SBS
  - VBS total runtime 15756.65
  - VBS as a percentage of SBS is 92.82%

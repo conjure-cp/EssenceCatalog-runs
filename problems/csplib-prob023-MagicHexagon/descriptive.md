@@ -43,5 +43,6 @@
 
  - Fastest option is ('01_compact.eprime', 'chuffed'), total runtime 2.34
  - Slowest option is ('01_compact.eprime', 'cplex'), total runtime 4.26
+ - Slowest option took 1.82 times as long as SBS
  - VBS total runtime 2.13
  - VBS as a percentage of SBS is 91.03%
