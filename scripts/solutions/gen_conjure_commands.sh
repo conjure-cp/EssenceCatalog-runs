@@ -37,7 +37,7 @@ for prob in csplib-* ; do
                             if ! [ -f "${INFO_FILE}" ]; then
                                 # echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}"
                                 echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}
-			    else
+                            else
                                 echo "${SCRIPT} ${prob} ${essence} ${param} ${conjure_mode} ${savilerow_mode} ${eprime} ${solver}" >> ${CMD_FILE}.skipped
                             fi
                         done
@@ -67,6 +67,6 @@ else
     head -n $nb_tasks_to_submit ${CMD_FILE} > ${CMD_FILE}.tmp
     mv ${CMD_FILE}.tmp ${CMD_FILE}
 fi
-rm ${CMD_FILE}.skipped
+rm -f ${CMD_FILE}.skipped
 
 
