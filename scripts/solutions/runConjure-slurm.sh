@@ -79,7 +79,7 @@ echo "#SBATCH -e ${ERROR_FILE}" >> ${SLURM_FILE}
 echo "#SBATCH -o ${OUT_FILE}" >> ${SLURM_FILE}
 echo "#SBATCH --cpus-per-task=${CPUS}" >> ${SLURM_FILE}
 echo "#SBATCH --mem=16GB" >> ${SLURM_FILE}
-echo "#SBATCH --time=02:05:00" >> ${SLURM_FILE}
+echo "#SBATCH --time=02:10:00" >> ${SLURM_FILE}
 echo "" >> ${SLURM_FILE}
 echo "podman run --rm \\" >> ${SLURM_FILE}
 echo "    --hostname=$(hostname) \\" >> ${SLURM_FILE}
@@ -93,6 +93,7 @@ echo "    /podmandir/${ESSENCE_FULL} \\" >> ${SLURM_FILE}
 echo "    /podmandir/${PARAM_FULL} \\" >> ${SLURM_FILE}
 echo "    -o /podmandir/${TARGET_DIR} \\" >> ${SLURM_FILE}
 echo "    --runsolver-memory-limit=16384 \\" >> ${SLURM_FILE}
+echo "    --runsolver-wall-time-limit=7200 \\" >> ${SLURM_FILE}
 echo "    --copy-solutions=off \\" >> ${SLURM_FILE}
 echo "    --log-level LogNone \\" >> ${SLURM_FILE}
 echo "    --savilerow-options \"${SAVILEROW_OPTIONS}\" \\" >> ${SLURM_FILE}
