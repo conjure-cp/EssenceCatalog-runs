@@ -5,10 +5,10 @@
 
 - Number of models         4
 - Number of solvers        4
-- Number of params        90
-- Number of params        29 (completed)
-- Number of params        18 (at least one option failed to solve)
-- Number of params         3 (all options failed to solve)
+- Number of params       150
+- Number of params       122 (completed)
+- Number of params       111 (at least one option failed to solve)
+- Number of params        96 (all options failed to solve)
 - Number of params        26 (analysed in this file)
 
 
