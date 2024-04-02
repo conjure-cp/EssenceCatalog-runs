@@ -31,35 +31,40 @@ def main(problem_dir):
         with open(path_str, "r", encoding="utf8") as f:
             try:
                 stats = json.load(f, strict=False)
+
+                model = stats["useExistingModels"][0]
+                model = model.split("/")[-1]
+
+                param = stats["essenceParams"][0]
+
+                solver_options = stats["solverOptions"][0]
+                solver = stats["solver"]
+
+                if solver == "or-tools":
+                    opts.add(solver_options)
+                    if "--threads=1" in solver_options:
+                        solver = "or-tools1"
+                    else:
+                        solver = "or-tools8"
+
+                if solver != "or-tools8":
+                    status = stats["status"]
+                    total_time = None
+                    if status == "OK":
+                        total_time = stats["totalTime"]
+                    raw[model, param, solver] = (status, total_time)
+                    models.add(model)
+                    solvers.add(solver)
+                    params.add(param)
+                    options.add((model, solver))
+                    # print(model, param, status, totalTime)
+
             except json.decoder.JSONDecodeError as e:
                 sys.exit(f"MALFORMED JSON: {path_str}\n\n{e}")
 
-            model = stats["useExistingModels"][0]
-            model = model.split("/")[-1]
+            except KeyError as e:
+                sys.exit(f"MISSING FIELD IN JSON: {path_str}\n\n{e}")
 
-            param = stats["essenceParams"][0]
-
-            solver_options = stats["solverOptions"][0]
-            solver = stats["solver"]
-
-            if solver == "or-tools":
-                opts.add(solver_options)
-                if "--threads=1" in solver_options:
-                    solver = "or-tools1"
-                else:
-                    solver = "or-tools8"
-
-            if solver != "or-tools8":
-                status = stats["status"]
-                total_time = None
-                if status == "OK":
-                    total_time = stats["totalTime"]
-                raw[model, param, solver] = (status, total_time)
-                models.add(model)
-                solvers.add(solver)
-                params.add(param)
-                options.add((model, solver))
-                # print(model, param, status, totalTime)
 
     if no_stats_json_files:
         print(f"no_stats_json_files - {problem_dir}", file=sys.stderr)
