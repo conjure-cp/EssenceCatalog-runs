@@ -46,7 +46,7 @@ def main(problem_dir):
                 stats["status"] = "MemOut"
                 changed = True
 
-            messages = [
+            error_messages = [
                 "undefined identifier",
                 "MiniZinc error: Memory violation detected",
                 "Check failed: ParseFlatzincFile",
@@ -59,10 +59,20 @@ def main(problem_dir):
                 "Error: evaluation error: Index set mismatch."
             ]
 
-            if any(m in sr for m in messages) and stats["status"] != "Error":
+            if any(m in sr for m in error_messages) and stats["status"] != "Error":
                 print(
                     f'Found (should be Error, but is not) -- {stats["status"]} -- {path_str}')
                 stats["status"] = "Error"
+                changed = True
+
+            invalid_messages = [
+                "ERROR: In statement: where false",
+            ]
+
+            if any(m in sr for m in invalid_messages) and stats["status"] != "Invalid":
+                print(
+                    f'Found (should be Invalid, but is not) -- {stats["status"]} -- {path_str}')
+                stats["status"] = "Invalid"
                 changed = True
 
             sr = sr.replace("Solver exited with error code:0 and error message",
