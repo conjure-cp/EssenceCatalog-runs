@@ -34,58 +34,33 @@ def main(problem_dir):
                 pass
 
             changed = False
-            if "time out: time limit reached" in sr and stats["status"] != "TimeOut":
-                print(
-                    f'Found (time limit reached) -- {stats["status"]} -- {path_str}')
-                stats["status"] = "TimeOut"
-                changed = True
 
-            if "ERROR: Out of Memory" in sr and stats["status"] != "MemOut":
-                print(
-                    f'Found (should be MemOut) -- {stats["status"]} -- {path_str}')
-                stats["status"] = "MemOut"
-                changed = True
+            error_messages = {
+                "TimeOut": [
+                    "time out: time limit reached"],
+                "Error": [
+                    "undefined identifier",
+                    "MiniZinc error: Memory violation detected",
+                    "Check failed: ParseFlatzincFile",
+                    "parse error: unexpected end-of-file after parsing number of clauses",  # kissat
+                    "error: Cannot open file",
+                    "kissat: error: can not read",  # kissat
+                    "kissat: fatal error: maximum arena capacity",  # kissat
+                    "Error: syntax error, unexpected ]]",  # cplex
+                    "*** Check failure stack trace: ***",  # or-tools
+                    "Error: evaluation error: Index set mismatch."],
+                "Invalid": [
+                    "ERROR: In statement: where false"],
+                "MemOut": [
+                    "ERROR: Out of Memory",
+                    "Maximum memory exceeded"]
+            }
 
-            error_messages = [
-                "undefined identifier",
-                "MiniZinc error: Memory violation detected",
-                "Check failed: ParseFlatzincFile",
-                "parse error: unexpected end-of-file after parsing number of clauses",  # kissat
-                "error: Cannot open file",
-                "kissat: error: can not read",  # kissat
-                "kissat: fatal error: maximum arena capacity",  # kissat
-                "Error: syntax error, unexpected ]]",  # cplex
-                "*** Check failure stack trace: ***",  # or-tools
-                "Error: evaluation error: Index set mismatch."
-            ]
-
-            if any(m in sr for m in error_messages) and stats["status"] != "Error":
-                print(
-                    f'Found (should be Error, but is not) -- {stats["status"]} -- {path_str}')
-                stats["status"] = "Error"
-                changed = True
-
-            invalid_messages = [
-                "ERROR: In statement: where false"
-            ]
-
-            if any(m in sr for m in invalid_messages) and stats["status"] != "Invalid":
-                print(
-                    f'Found (should be Invalid, but is not) -- {stats["status"]} -- {path_str}')
-                stats["status"] = "Invalid"
-                changed = True
-
-
-            memout_messages = [
-                "Maximum memory exceeded"
-            ]
-
-            if any(m in sr for m in memout_messages) and stats["status"] != "MemOut":
-                print(
-                    f'Found (should be MemOut, but is not) -- {stats["status"]} -- {path_str}')
-                stats["status"] = "MemOut"
-                changed = True
-
+            for expected_status, messages in error_messages.items():
+                if any(m in sr for m in messages) and stats["status"] != expected_status:
+                    print(f'Found (should be {expected_status}, but is not) -- {stats["status"]} -- {path_str}')
+                    stats["status"] = expected_status
+                    changed = True
 
             sr = sr.replace("Solver exited with error code:0 and error message",
                             "IGNORED1")
