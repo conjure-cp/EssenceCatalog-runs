@@ -66,7 +66,7 @@ def main(problem_dir):
                 changed = True
 
             invalid_messages = [
-                "ERROR: In statement: where false",
+                "ERROR: In statement: where false"
             ]
 
             if any(m in sr for m in invalid_messages) and stats["status"] != "Invalid":
@@ -74,6 +74,18 @@ def main(problem_dir):
                     f'Found (should be Invalid, but is not) -- {stats["status"]} -- {path_str}')
                 stats["status"] = "Invalid"
                 changed = True
+
+
+            memout_messages = [
+                "Maximum memory exceeded"
+            ]
+
+            if any(m in sr for m in memout_messages) and stats["status"] != "MemOut":
+                print(
+                    f'Found (should be MemOut, but is not) -- {stats["status"]} -- {path_str}')
+                stats["status"] = "MemOut"
+                changed = True
+
 
             sr = sr.replace("Solver exited with error code:0 and error message",
                             "IGNORED1")
