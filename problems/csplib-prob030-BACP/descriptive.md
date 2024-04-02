@@ -5,11 +5,11 @@
 
 - Number of models         4
 - Number of solvers        4
-- Number of params       285
-- Number of params       154 (completed)
-- Number of params       154 (at least one option failed to solve)
-- Number of params         0 (all options failed to solve)
-- Number of params       154 (analysed in this file)
+- Number of params       457
+- Number of params       457 (completed)
+- Number of params       457 (at least one option failed to solve)
+- Number of params         1 (all options failed to solve)
+- Number of params       456 (analysed in this file)
 
 
 ## Models
@@ -35,30 +35,30 @@
 
  | Model | Solver | Total time (seconds) | 
  | -- | -- | -- | 
- | 01_compact.eprime | chuffed | 1789862.58 | 
- | 01_compact.eprime | cplex | 5544000.00 | 
- | 01_compact.eprime | kissat | 1164.21 | 
- | 01_compact.eprime | or-tools1 | 77188.62 | 
- | 02_compact.eprime | chuffed | 1789239.74 | 
- | 02_compact.eprime | cplex | 279.47 | 
- | 02_compact.eprime | kissat | 1100.33 | 
- | 02_compact.eprime | or-tools1 | 109590.36 | 
- | 05_nochAllLevels_2.eprime | chuffed | 1851899.70 | 
- | 05_nochAllLevels_2.eprime | cplex | 5544000.00 | 
- | 05_nochAllLevels_2.eprime | kissat | 9566.56 | 
- | 05_nochAllLevels_2.eprime | or-tools1 | 182961.46 | 
- | 07_chAllLevels_1_1_1_1_1_1_2.eprime | chuffed | 1901679.43 | 
- | 07_chAllLevels_1_1_1_1_1_1_2.eprime | cplex | 5544000.00 | 
- | 07_chAllLevels_1_1_1_1_1_1_2.eprime | kissat | 2200.25 | 
- | 07_chAllLevels_1_1_1_1_1_1_2.eprime | or-tools1 | 110494.89 | 
- | VBS | VBS | 254.94 | 
+ | 01_compact.eprime | chuffed | 5186888.26 | 
+ | 01_compact.eprime | cplex | 16416000.00 | 
+ | 01_compact.eprime | kissat | 3457.78 | 
+ | 01_compact.eprime | or-tools1 | 269755.14 | 
+ | 02_compact.eprime | chuffed | 5072621.54 | 
+ | 02_compact.eprime | cplex | 850.93 | 
+ | 02_compact.eprime | kissat | 4416.54 | 
+ | 02_compact.eprime | or-tools1 | 269649.10 | 
+ | 05_nochAllLevels_2.eprime | chuffed | 5257204.22 | 
+ | 05_nochAllLevels_2.eprime | cplex | 16416000.00 | 
+ | 05_nochAllLevels_2.eprime | kissat | 316890.89 | 
+ | 05_nochAllLevels_2.eprime | or-tools1 | 485059.16 | 
+ | 07_chAllLevels_1_1_1_1_1_1_2.eprime | chuffed | 5401676.61 | 
+ | 07_chAllLevels_1_1_1_1_1_1_2.eprime | cplex | 16416000.00 | 
+ | 07_chAllLevels_1_1_1_1_1_1_2.eprime | kissat | 5123.40 | 
+ | 07_chAllLevels_1_1_1_1_1_1_2.eprime | or-tools1 | 439618.65 | 
+ | VBS | VBS | 773.27 | 
 
 
 ## Some total runtime stats
 
 
- - Fastest option is ('02_compact.eprime', 'cplex'), total runtime 279.47 seconds
- - Slowest option is ('07_chAllLevels_1_1_1_1_1_1_2.eprime', 'cplex'), total runtime 5544000.00 seconds
- - Slowest option took 19837.55 times as long as SBS
- - VBS total runtime 254.94 seconds
- - VBS as a percentage of SBS is 91.22%
+ - Fastest option is ('02_compact.eprime', 'cplex'), total runtime 850.93 seconds
+ - Slowest option is ('07_chAllLevels_1_1_1_1_1_1_2.eprime', 'cplex'), total runtime 16416000.00 seconds
+ - Slowest option took 19291.83 times as long as SBS
+ - VBS total runtime 773.27 seconds
+ - VBS as a percentage of SBS is 90.87%
