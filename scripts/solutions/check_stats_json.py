@@ -48,7 +48,9 @@ def main(problem_dir):
                     "kissat: fatal error: maximum arena capacity",  # kissat
                     "Error: syntax error, unexpected ]]",  # cplex
                     "*** Check failure stack trace: ***",  # or-tools
-                    "Error: evaluation error: Index set mismatch."],
+                    "Error: evaluation error: Index set mismatch.",
+                    "Savile Row killed by: java.lang.AssertionError",
+                    "java.lang.ClassCastException"],
                 "Invalid": [
                     "ERROR: In statement: where false"],
                 "MemOut": [
