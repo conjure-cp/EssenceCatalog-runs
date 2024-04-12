@@ -37,7 +37,8 @@ def main(problem_dir):
 
             error_messages = {
                 "TimeOut": [
-                    "time out: time limit reached"],
+                    "time out: time limit reached",
+                    "Received SIGTERM or SIGINT, killing child"],
                 "Error": [
                     "undefined identifier",
                     "MiniZinc error: Memory violation detected",
