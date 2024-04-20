@@ -5,7 +5,7 @@
 
 - Number of models         4
 - Number of solvers        4
-- Number of params      2252
+- Number of params      4709
 - Number of params         0 (completed)
 - Number of params         0 (at least one option failed to solve)
 - Number of params         0 (all options failed to solve)
