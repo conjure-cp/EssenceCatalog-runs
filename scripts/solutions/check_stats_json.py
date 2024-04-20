@@ -37,7 +37,8 @@ def main(problem_dir):
 
             error_messages = {
                 "TimeOut": [
-                    "time out: time limit reached"],
+                    "time out: time limit reached",
+                    "Received SIGTERM or SIGINT, killing child"],
                 "Error": [
                     "undefined identifier",
                     "MiniZinc error: Memory violation detected",
@@ -50,7 +51,9 @@ def main(problem_dir):
                     "*** Check failure stack trace: ***",  # or-tools
                     "Error: evaluation error: Index set mismatch.",
                     "Savile Row killed by: java.lang.AssertionError",
-                    "java.lang.ClassCastException"],
+                    "java.lang.ClassCastException",
+                    "ERROR: File not found"  # savilerow
+                ],
                 "Invalid": [
                     "ERROR: In statement: where false"],
                 "MemOut": [
@@ -63,6 +66,9 @@ def main(problem_dir):
                     print(f'Found (should be {expected_status}, but is not) -- {stats["status"]} -- {path_str}')
                     stats["status"] = expected_status
                     changed = True
+
+            if "ERROR: File not found" in sr:
+                print(f"FILENOTFOUND: {path_str}")
 
             sr = sr.replace("Solver exited with error code:0 and error message",
                             "IGNORED1")
