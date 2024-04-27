@@ -66,7 +66,7 @@ mkdir -p slurm/sh
 mkdir -p slurm/stderror
 mkdir -p slurm/stdout
 CURRENT_DIR="$(pwd)"
-SLURM_FILE_BASE="${ESSENCE}_${FULL_SOLVER}_${PARAM_NAME[-1]}_${EPRIME_NAME[-1]}"
+SLURM_FILE_BASE="${PROBLEM}_${FULL_SOLVER}_${PARAM_NAME[-1]}_${EPRIME_NAME[-1]}"
 SLURM_FILE="slurm/sh/${SLURM_FILE_BASE}.sh"
 ERROR_FILE="${CURRENT_DIR}/slurm/stderror/${SLURM_FILE_BASE}.error"
 OUT_FILE="${CURRENT_DIR}/slurm/stdout/${SLURM_FILE_BASE}task.output"
