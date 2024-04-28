@@ -1,0 +1,145 @@
+language ESSENCE' 1.0
+
+given k: int(2..)
+given n: int(1..)
+letting seqLength be k * n
+find seq_ExplicitBounded_Length: int(seqLength)
+find seq_ExplicitBounded_Values: matrix indexed by [int(1..seqLength)] of int(1..n)
+branching on [seq_ExplicitBounded_Length, seq_ExplicitBounded_Values]
+such that
+    seq_ExplicitBounded_Values[1] < seq_ExplicitBounded_Values[seqLength],
+    1 <= seqLength,
+    and([sum([toInt(seq_ExplicitBounded_Values[q4] = i) | q4 : int(1..seqLength), q4 <= seqLength]) = k
+             | i : int(1..n)]),
+    and([or([and([seq_ExplicitBounded_Values[start + (i - 1) * (number + 1)] = number /\
+                  start + (i - 1) * (number + 1) <= seqLength
+                      | i : int(1..k)])
+                 | start : int(1..seqLength)])
+             | number : int(1..n)])
+
+$ Conjure's
+$ {"finds": [{"Name": "seq"}], "givens": [{"Name": "k"}, {"Name": "n"}], "enumGivens": [], "enumLettings": [],
+$  "lettings":
+$      [[{"Name": "seqLength"},
+$        {"Op":
+$             {"MkOpProduct":
+$                  {"AbstractLiteral":
+$                       {"AbsLitMatrix":
+$                            [{"DomainInt":
+$                                  [{"TagInt": []},
+$                                   [{"RangeBounded":
+$                                         [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                          {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                             [{"Reference":
+$                                   [{"Name": "k"},
+$                                    {"DeclNoRepr":
+$                                         ["Given", {"Name": "k"},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}}]]},
+$                                          {"NoRegion": []}]}]},
+$                              {"Reference":
+$                                   [{"Name": "n"},
+$                                    {"DeclNoRepr":
+$                                         ["Given", {"Name": "n"},
+$                                          {"DomainInt":
+$                                               [{"TagInt": []},
+$                                                [{"RangeLowerBounded":
+$                                                      {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]},
+$                                          {"NoRegion": []}]}]}]]}}}}]],
+$  "unnameds": [], "strategyQ": {"PickFirst": []}, "strategyA": {"Compact": []},
+$  "trailCompact":
+$      [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1],
+$       [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
+$  "nameGenState": [["q", 5]], "nbExtraGivens": 0,
+$  "representations":
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}}]]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "seq"},
+$        {"DomainSequence":
+$             [{"Sequence_ExplicitBounded": []},
+$              [{"SizeAttr_Size":
+$                    {"Reference":
+$                         [{"Name": "seqLength"},
+$                          {"Alias":
+$                               {"Op":
+$                                    {"MkOpProduct":
+$                                         {"AbstractLiteral":
+$                                              {"AbsLitMatrix":
+$                                                   [{"DomainInt":
+$                                                         [{"TagInt": []},
+$                                                          [{"RangeBounded":
+$                                                                [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                                                                 {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}]}]]},
+$                                                    [{"Reference":
+$                                                          [{"Name": "k"},
+$                                                           {"DeclHasRepr":
+$                                                                ["Given", {"Name": "k"},
+$                                                                 {"DomainInt":
+$                                                                      [{"TagInt": []},
+$                                                                       [{"RangeLowerBounded":
+$                                                                             {"Constant":
+$                                                                                  {"ConstantInt":
+$                                                                                       [{"TagInt": []}, 2]}}}]]}]}]},
+$                                                     {"Reference":
+$                                                          [{"Name": "n"},
+$                                                           {"DeclHasRepr":
+$                                                                ["Given", {"Name": "n"},
+$                                                                 {"DomainInt":
+$                                                                      [{"TagInt": []},
+$                                                                       [{"RangeLowerBounded":
+$                                                                             {"Constant":
+$                                                                                  {"ConstantInt":
+$                                                                                       [{"TagInt": []},
+$                                                                                        1]}}}]]}]}]}]]}}}}}]}},
+$               "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference":
+$                                [{"Name": "n"},
+$                                 {"DeclHasRepr":
+$                                      ["Given", {"Name": "n"},
+$                                       {"DomainInt":
+$                                            [{"TagInt": []},
+$                                             [{"RangeLowerBounded":
+$                                                   {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}]}]}]}]]}]}]],
+$  "representationsTree":
+$      [[{"Name": "k"}, [{"rootLabel": null, "subForest": []}]], [{"Name": "n"}, [{"rootLabel": null, "subForest": []}]],
+$       [{"Name": "seq"},
+$        [{"rootLabel": {"Sequence_ExplicitBounded": []}, "subForest": [{"rootLabel": null, "subForest": []}]}]]],
+$  "originalDomains":
+$      [[{"Name": "k"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 2]}}}]]}],
+$       [{"Name": "n"},
+$        {"DomainInt": [{"TagInt": []}, [{"RangeLowerBounded": {"Constant": {"ConstantInt": [{"TagInt": []}, 1]}}}]]}],
+$       [{"Name": "seq"},
+$        {"DomainSequence":
+$             [[], [{"SizeAttr_Size": {"Reference": [{"Name": "seqLength"}, null]}}, "JectivityAttr_None"],
+$              {"DomainInt":
+$                   [{"TagInt": []},
+$                    [{"RangeBounded":
+$                          [{"Constant": {"ConstantInt": [{"TagInt": []}, 1]}},
+$                           {"Reference": [{"Name": "n"}, null]}]}]]}]}]],
+$  "trailGeneralised":
+$      [[-3568295217273440988, 4890158625604012341], [5216950305752731992, 366976286424237645],
+$       [9060677996837328795, -5959179212207520413], [5950303025824350721, -6488055082365402204],
+$       [-7772693994384573730, -8095579116534679680], [8919675453560259999, 388332983360652027],
+$       [25389366551526247, -8095579116534679680], [9093291089041930778, 6905250658452326395],
+$       [-393646737542274908, -6480168369500863923], [1780130932567204065, 1894765072249504947],
+$       [7305242314111699509, 9004737967983036545], [-2353991209068710715, -8095579116534679680],
+$       [-7749006694522795007, 3599705076278625464], [1145247934284566107, -4282133198364102020],
+$       [7552800487644307201, 5540799875973308556], [5430559976034296998, -8751875180692259475],
+$       [-7700013191622713060, 3478420428265882728], [2844522955887103474, -8438055240862190397],
+$       [-9124723398134091417, -8893209156230023317], [1801749743976351344, 8843873366162231899],
+$       [4310402495819988771, 3385449777103898536], [5771347678778356913, -8095579116534679680],
+$       [8194885253489582985, 3768100223788740343], [8049429327867617969, -3942381882696477446],
+$       [-8616916143773212807, 7123523746294280866], [6702204211018686428, -8619366792047459850],
+$       [3917903422079133690, -5979213335619615581], [8882169078873254711, 1068700198003755196],
+$       [4192386359078956055, -3391255664199465872]],
+$  "trailVerbose": [], "trailRewrites": []}
