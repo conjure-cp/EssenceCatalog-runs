@@ -78,7 +78,7 @@ echo "#SBATCH -e ${ERROR_FILE}" >> ${SLURM_FILE}
 echo "#SBATCH -o ${OUT_FILE}" >> ${SLURM_FILE}
 echo "#SBATCH --cpus-per-task=${CPUS}" >> ${SLURM_FILE}
 echo "#SBATCH --mem=14GB" >> ${SLURM_FILE}
-echo "#SBATCH --time=01:15:00" >> ${SLURM_FILE}
+echo "#SBATCH --time=02:00:00" >> ${SLURM_FILE}
 echo "" >> ${SLURM_FILE}
 echo "podman run --rm \\" >> ${SLURM_FILE}
 echo "    --hostname=$(hostname) \\" >> ${SLURM_FILE}
