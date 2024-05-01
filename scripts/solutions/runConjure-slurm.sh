@@ -63,13 +63,12 @@ IFS='/' read -ra PARAM_NAME <<< "$PARAM"
 IFS='/' read -ra EPRIME_NAME <<< "$EPRIME"
 mkdir -p slurm
 mkdir -p slurm/sh
-mkdir -p slurm/stderror
-mkdir -p slurm/stdout
 CURRENT_DIR="$(pwd)"
 SLURM_FILE_BASE="${PROBLEM}_${FULL_SOLVER}_${PARAM_NAME[-1]}_${EPRIME_NAME[-1]}"
 SLURM_FILE="slurm/sh/${SLURM_FILE_BASE}.sh"
-ERROR_FILE="${CURRENT_DIR}/slurm/stderror/${SLURM_FILE_BASE}.error"
-OUT_FILE="${CURRENT_DIR}/slurm/stdout/${SLURM_FILE_BASE}task.output"
+
+ERROR_FILE="${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.stderr"
+OUT_FILE="${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.stdout"
 
 rm -f "${SLURM_FILE}"
 JOB="${EPRIME}-${ESSENCE}-${FULL_SOLVER}-${PARAM_NAME[-1]}-${EPRIME_NAME[-1]}"
