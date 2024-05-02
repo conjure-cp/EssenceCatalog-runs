@@ -67,6 +67,10 @@ CURRENT_DIR="$(pwd)"
 SLURM_FILE_BASE="${PROBLEM}_${FULL_SOLVER}_${PARAM_NAME[-1]}_${EPRIME_NAME[-1]}"
 SLURM_FILE="slurm/sh/${SLURM_FILE_BASE}.sh"
 
+EPRIME_BASE="${EPRIME%.*}"
+PARAM_BASE=${PARAM##*/}
+PARAM_BASE="${PARAM_BASE%.*}"
+
 ERROR_FILE="${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.stderr"
 OUT_FILE="${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.stdout"
 
@@ -99,9 +103,6 @@ echo "    --savilerow-options \"${SAVILEROW_OPTIONS}\" \\" >> ${SLURM_FILE}
 echo "    --solver ${SOLVER} \\" >> ${SLURM_FILE}
 echo "    --solver-options \"${SOLVER_OPTIONS}"\" >> ${SLURM_FILE}
 
-EPRIME_BASE="${EPRIME%.*}"
-PARAM_BASE=${PARAM##*/}
-PARAM_BASE="${PARAM_BASE%.*}"
 echo "# PARAM ${PARAM_BASE}" >> $SLURM_FILE
 
 echo "rm -f ${TARGET_DIR}/${EPRIME_BASE}-${PARAM_BASE}.eprime-minion" >> ${SLURM_FILE}
