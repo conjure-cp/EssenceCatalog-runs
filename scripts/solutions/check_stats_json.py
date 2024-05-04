@@ -52,7 +52,8 @@ def main(problem_dir):
                     "Error: evaluation error: Index set mismatch.",
                     "Savile Row killed by: java.lang.AssertionError",
                     "java.lang.ClassCastException",
-                    "ERROR: File not found"  # savilerow
+                    "ERROR: File not found",  # savilerow
+                    "ERROR: Failed when writing SAT encoding to file.",  # savilerow
                 ],
                 "Invalid": [
                     "ERROR: In statement: where false"],
@@ -63,12 +64,12 @@ def main(problem_dir):
 
             for expected_status, messages in error_messages.items():
                 if any(m in sr for m in messages) and stats["status"] != expected_status:
-                    print(f'Found (should be {expected_status}, but is not) -- {stats["status"]} -- {path_str}')
+                    print(f'Found ({expected_status}, should be {stats["status"]} -- {path_str}')
                     stats["status"] = expected_status
                     changed = True
 
             if "ERROR: File not found" in sr:
-                print(f"FILENOTFOUND: {path_str}")
+                print(f"FILE NOT FOUND: {path_str}")
 
             sr = sr.replace("Solver exited with error code:0 and error message",
                             "IGNORED1")

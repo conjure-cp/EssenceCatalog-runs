@@ -15,16 +15,25 @@ def main(problem_dir):
     # set of (model, solver)
     options = set()
 
+    all_params = set()
+
     # set of string
     models = set()
     solvers = set()
     params = set()
-    opts = set()
 
     no_stats_json_files = True
 
-    pathlist = Path(problem_dir).glob("**/*.stats.json")
-    for path in pathlist:
+    problem_dir_ec_params = f"EssenceCatalog/{problem_dir}/params"
+
+    path_list = Path(problem_dir_ec_params).glob("**/*.param")
+    for path in path_list:
+        path = str(path)
+        path = path[len(problem_dir_ec_params)+1:]
+        all_params.add(f"/podmandir/{problem_dir}/params/{path}")
+
+    path_list = Path(problem_dir).glob("**/*.stats.json")
+    for path in path_list:
         no_stats_json_files = False
         path_str = str(path)
         stats = None
@@ -41,7 +50,6 @@ def main(problem_dir):
                 solver = stats["solver"]
 
                 if solver == "or-tools":
-                    opts.add(solver_options)
                     if "--threads=1" in solver_options:
                         solver = "or-tools1"
                     else:
@@ -65,12 +73,9 @@ def main(problem_dir):
             except KeyError as e:
                 sys.exit(f"MISSING FIELD IN JSON: {path_str}\n\n{e}")
 
-
     if no_stats_json_files:
         print(f"no_stats_json_files - {problem_dir}", file=sys.stderr)
         sys.exit(0)
-
-    # print(opts)
 
     # indexed by model, solver
     total_time_for_options = {}
@@ -131,8 +136,10 @@ def main(problem_dir):
     print(f"- Number of solvers {len(solvers):8d}")
     print(f"- Number of params  {len(params):8d}")
     print(f"- Number of params  {completed_params:8d} (completed)")
-    print(f"- Number of params  {some_to_params:8d} (at least one option failed to solve)")
-    print(f"- Number of params  {all_to_params:8d} (all options failed to solve)")
+    print(
+        f"- Number of params  {some_to_params:8d} (at least one option failed to solve)")
+    print(
+        f"- Number of params  {all_to_params:8d} (all options failed to solve)")
     print(f"- Number of params  {completed_params - all_to_params:8d} (analysed in this file)")
 
     print("\n\n## Models\n\n")
@@ -175,13 +182,24 @@ def main(problem_dir):
 
     print("\n\n## Some total runtime stats\n\n")
 
-    print(f" - Fastest option is {fastest_option}, total runtime {fastest:.2f} seconds")
-    print(f" - Slowest option is {slowest_option}, total runtime {slowest:.2f} seconds")
+    print(
+        f" - Fastest option is {fastest_option}, total runtime {fastest:.2f} seconds")
+    print(
+        f" - Slowest option is {slowest_option}, total runtime {slowest:.2f} seconds")
     if fastest > 0:
         print(f" - Slowest option took {slowest / fastest:.2f} times as long as SBS")
     if vbs_time != "NA":
         print(f" - VBS total runtime {vbs_time:.2f} seconds")
         print(f" - VBS as a percentage of SBS is {vbs_time / fastest:.2%}")
+
+    sorted_options = sorted(options)
+    missing_txt = [f"Missing: {param} - {model} - {solver}"
+                   for param in params
+                   for model, solver in sorted_options
+                   if (model, param, solver) not in raw]
+    if len(missing_txt) > 0:
+        print(f"\n\n## Missing runs {len(missing_txt)}\n\n")
+#        print("\n".join(missing_txt))
 
 
 main(sys.argv[1])
