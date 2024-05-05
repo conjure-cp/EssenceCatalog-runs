@@ -5,11 +5,11 @@
 
 - Number of models         4
 - Number of solvers        4
-- Number of params       131
-- Number of params         0 (completed)
-- Number of params         0 (at least one option failed to solve)
+- Number of params       155
+- Number of params       155 (completed)
+- Number of params       151 (at least one option failed to solve)
 - Number of params         0 (all options failed to solve)
-- Number of params         0 (analysed in this file)
+- Number of params       155 (analysed in this file)
 
 
 ## Models
@@ -35,27 +35,30 @@
 
  | Model | Solver | Total time (seconds) | 
  | -- | -- | -- | 
- | 01_compact.eprime | chuffed | 0.00 | 
- | 01_compact.eprime | cplex | 0.00 | 
- | 01_compact.eprime | kissat | 0.00 | 
- | 01_compact.eprime | or-tools1 | 0.00 | 
- | 03_sparse.eprime | chuffed | 0.00 | 
- | 03_sparse.eprime | cplex | 0.00 | 
- | 03_sparse.eprime | kissat | 0.00 | 
- | 03_sparse.eprime | or-tools1 | 0.00 | 
- | 04_nochPrunedLevels_3.eprime | chuffed | 0.00 | 
- | 04_nochPrunedLevels_3.eprime | cplex | 0.00 | 
- | 04_nochPrunedLevels_3.eprime | kissat | 0.00 | 
- | 04_nochPrunedLevels_3.eprime | or-tools1 | 0.00 | 
- | 04_nochPrunedLevels_4.eprime | chuffed | 0.00 | 
- | 04_nochPrunedLevels_4.eprime | cplex | 0.00 | 
- | 04_nochPrunedLevels_4.eprime | kissat | 0.00 | 
- | 04_nochPrunedLevels_4.eprime | or-tools1 | 0.00 | 
- | VBS | VBS | NA | 
+ | 01_compact.eprime | chuffed | 4182009.44 | 
+ | 01_compact.eprime | cplex | 124.94 | 
+ | 01_compact.eprime | kissat | 5328034.79 | 
+ | 01_compact.eprime | or-tools1 | 4084.30 | 
+ | 03_sparse.eprime | chuffed | 5149241.69 | 
+ | 03_sparse.eprime | cplex | 1271686.61 | 
+ | 03_sparse.eprime | kissat | 5438831.71 | 
+ | 03_sparse.eprime | or-tools1 | 5013142.70 | 
+ | 04_nochPrunedLevels_3.eprime | chuffed | 5148747.26 | 
+ | 04_nochPrunedLevels_3.eprime | cplex | 1299549.39 | 
+ | 04_nochPrunedLevels_3.eprime | kissat | 5437227.40 | 
+ | 04_nochPrunedLevels_3.eprime | or-tools1 | 4842546.86 | 
+ | 04_nochPrunedLevels_4.eprime | chuffed | 5148700.20 | 
+ | 04_nochPrunedLevels_4.eprime | cplex | 1298860.62 | 
+ | 04_nochPrunedLevels_4.eprime | kissat | 5437776.97 | 
+ | 04_nochPrunedLevels_4.eprime | or-tools1 | 4938493.05 | 
+ | VBS | VBS | 99.42 | 
 
 
 ## Some total runtime stats
 
 
- - Fastest option is ('04_nochPrunedLevels_4.eprime', 'or-tools1'), total runtime 0.00 seconds
- - Slowest option is ('04_nochPrunedLevels_4.eprime', 'or-tools1'), total runtime 0.00 seconds
+ - Fastest option is ('01_compact.eprime', 'cplex'), total runtime 124.94 seconds
+ - Slowest option is ('03_sparse.eprime', 'kissat'), total runtime 5438831.71 seconds
+ - Slowest option took 43531.55 times as long as SBS
+ - VBS total runtime 99.42 seconds
+ - VBS as a percentage of SBS is 79.57%
