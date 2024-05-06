@@ -45,7 +45,7 @@
  | 05_nochAllLevels_2.eprime | or-tools1 | 111098467.49 | 
  | 07_chAllLevels_1_1_1_2.eprime | chuffed | 92014534.94 | 
  | 07_chAllLevels_1_1_1_2.eprime | cplex | 111564117.37 | 
- | 07_chAllLevels_1_1_1_2.eprime | kissat | 83632886.52 | 
+ | 07_chAllLevels_1_1_1_2.eprime | kissat | 83597023.92 | 
  | 07_chAllLevels_1_1_1_2.eprime | or-tools1 | 95593184.44 | 
  | 07_chAllLevels_1_1_2_1.eprime | chuffed | 103963743.17 | 
  | 07_chAllLevels_1_1_2_1.eprime | cplex | 111636113.19 | 

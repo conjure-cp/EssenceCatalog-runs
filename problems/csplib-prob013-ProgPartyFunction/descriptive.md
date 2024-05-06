@@ -46,19 +46,19 @@
  | 04_nochPrunedLevels_3.eprime | chuffed | 223440.54 | 
  | 04_nochPrunedLevels_3.eprime | cplex | 756058.41 | 
  | 04_nochPrunedLevels_3.eprime | kissat | 256000.80 | 
- | 04_nochPrunedLevels_3.eprime | or-tools1 | 238573.66 | 
+ | 04_nochPrunedLevels_3.eprime | or-tools1 | 271057.55 | 
  | 04_nochPrunedLevels_4.eprime | chuffed | 256981.40 | 
  | 04_nochPrunedLevels_4.eprime | cplex | 756057.43 | 
  | 04_nochPrunedLevels_4.eprime | kissat | 221391.79 | 
- | 04_nochPrunedLevels_4.eprime | or-tools1 | 173832.11 | 
- | VBS | VBS | 22443.00 | 
+ | 04_nochPrunedLevels_4.eprime | or-tools1 | 76507.08 | 
+ | VBS | VBS | 22463.27 | 
 
 
 ## Some total runtime stats
 
 
- - Fastest option is ('04_nochPrunedLevels_4.eprime', 'or-tools1'), total runtime 173832.11 seconds
+ - Fastest option is ('04_nochPrunedLevels_4.eprime', 'or-tools1'), total runtime 76507.08 seconds
  - Slowest option is ('03_sparse.eprime', 'cplex'), total runtime 756062.22 seconds
- - Slowest option took 4.35 times as long as SBS
- - VBS total runtime 22443.00 seconds
- - VBS as a percentage of SBS is 12.91%
+ - Slowest option took 9.88 times as long as SBS
+ - VBS total runtime 22463.27 seconds
+ - VBS as a percentage of SBS is 29.36%

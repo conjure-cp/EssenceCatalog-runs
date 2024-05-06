@@ -49,7 +49,7 @@
  | 06_chPrunedLevels.eprime | or-tools1 | 87636150.75 | 
  | 07_chAllLevels_1_1_2.eprime | chuffed | 48349315.32 | 
  | 07_chAllLevels_1_1_2.eprime | cplex | 258444203.54 | 
- | 07_chAllLevels_1_1_2.eprime | kissat | 77416438.44 | 
+ | 07_chAllLevels_1_1_2.eprime | kissat | 77346944.03 | 
  | 07_chAllLevels_1_1_2.eprime | or-tools1 | 131855516.90 | 
  | VBS | VBS | 221300.44 | 
 
