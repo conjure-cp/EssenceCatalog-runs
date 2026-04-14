@@ -1,5 +1,8 @@
 """
 Generate some descriptive stats for a given problem class.
+
+For example: parallel --no-notice --eta --joblog joblog.tsv "mkdir -p {1}/samples ; python3 scripts/analyse/sample.py {1} {2} > {1}/samples/{2}.md" ::: problems/csplib-prob001-CarSequencing problems/csplib-prob045-CoveringArray problems/csplib-prob010-SocialGolfers :::  10 20 30 40 50 60 70 80 90
+
 """
 from pathlib import Path
 import sys
